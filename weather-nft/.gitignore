@@ -1,0 +1,5 @@
+.notes
+node_modules
+.DS*
+build
+.env
