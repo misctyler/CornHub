@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>cornhub</title>
+  <meta name="author" content="">
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+
+<body>
+
+  <button onclick="connect()">Connect wallet</button>
+  <button onclick="approveCorn()">Approve Corn</button>
+  <button onclick="burnCorn()">burnCorn</button>
+  <button onclick="approvePopCorn()">Approve PopCorn</button>
+  <button onclick="mintNFT()">Mint NFT</button>
+
+<p>
+1) Connect your wallet (assumes metamask or other types of injected wallets) <br>
+2) Click Approve Corn to approve the contract to transfer your Tokens <br>
+3) Click Burn Corn to burn all Corn Tokens for PopCorn <br>
+4) Click Approve PopCorn to approve the contract to transfer your Tokens <br>
+5) Click Mint NFT to exchange all PopCorn tokens for a CornHub NFT <br>
+</p>
+
+  <script src="https://cdn.ethers.io/lib/ethers-5.2.umd.min.js"
+        type="application/javascript"></script>
+  <script src="./script.js"></script>
+</body>
+
+</html>
