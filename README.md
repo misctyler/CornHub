@@ -19,7 +19,7 @@ Welcome to CornHub PopCorn Machine, a super basic smart contract website that le
 
 ## About
 
-The CornHub PopCorn Machine is built on the Ethereum blockchain using Solidity smart contracts. It is a fun and experimental project that aims to explore the possibilities of decentralized finance and non-fungible tokens.
+The CornHub PopCorn Machine is built on the Polygon blockchain using Solidity smart contracts. It is a fun and experimental project that aims to explore the possibilities of decentralized finance and non-fungible tokens.
 
 - CornHub Treasury address; 0x9bcD90E35A0fCC6aDA241acaBA9A376368B56dF5 
 - CORN token contract; 0xa0c45509036c422ea7c4d4fcac26a9925531d8c3
