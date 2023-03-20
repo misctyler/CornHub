@@ -1,8 +1,3 @@
-const cornAddress    = "0xa0c45509036c422ea7c4d4fcac26a9925531d8c3"
-const popCornAddress = "0x6531547b44784dDD8A934fB9fEB92ba582dfeD15"
-const popCornAddress = "0x6531547b44784dDD8A934fB9fEB92ba582dfeD15"
-const popCornMachine = "0x1193d3f5d97e9a8a3B4511a718Eda88C21722B44"
-
 const usdcAddress = "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48"
 const betAddress = "0xa4bfb9ae4999a97c5f93bEE59E4D126C904989aD"
 
