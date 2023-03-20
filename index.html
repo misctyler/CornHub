@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html>
-
 <head>
   <meta charset="utf-8">
   <title>cornhub</title>
@@ -10,20 +9,14 @@
 </head>
 
 <body>
-
   <button onclick="connect()">Connect wallet</button>
   <button onclick="approve()">Approve Corn</button>
   <button onclick="approve2()">Approve PopCorn</button>
-
 <p>
 1) Connect your wallet (assumes metamask or other types of injected wallets) <br>
 2) Hit Approve Corn to approve the PopCorn Machine to transfer your CORN Tokens <br>
 3) Hit Approve PopCorn to approve the PopCorn Machine to transfer your POPCORN Tokens <br>
 </p>
- 
-<label for="quantity">Amount to Burn:</label>
-<input type="number" id="quantity" name="quantity" min="1" max="5"><br>
-  
   <button onclick="burncorn(1)">Burn 1 Corn</button>
   <button onclick="burncorn(3)">Burn 3 Corn</button>
   <button onclick="burncorn(5)">Burn 5 Corn</button><br>
@@ -36,11 +29,8 @@ More Popcorn == Better NFT <br>
  <button onclick="mintnft(3)">Mint Silver </button>
  <button onclick="mintnft(5)">Mint Gold </button><br>
 </p>
-
-
   <script src="https://cdn.ethers.io/lib/ethers-5.2.umd.min.js"
         type="application/javascript"></script>
   <script src="./script.js"></script>
 </body>
-
 </html>
