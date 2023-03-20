@@ -16,15 +16,14 @@ async function setup() {
         signer
     )
     
-    const popcorn = new ethers.Contract(
-        popcornAddress,
+    const bet = new ethers.Contract(
+        betAddress,
         [
-            "function approve(address, uint) external",
+            "function betUsdc() external",
         ],
         signer
     )
-    
-    return { signer, corn, popcorn }
+    return { signer, usdc, bet }
 }
 
 async function connect(){
@@ -38,9 +37,9 @@ async function approve() {
     } catch (e) { alert(e) }
 }
 
-async function approve2() {
-    const { popcorn } = await setup()
+async function enterBet() {
+    const { bet } = await setup()
     try {
-        await popcorn.approve(popCornMachine, "80000000000000000000000")
+        await bet.betUsdc()
     } catch (e) { alert(e) }
 }
