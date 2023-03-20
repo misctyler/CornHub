@@ -13,11 +13,26 @@
 
   <button onclick="connect()">Connect wallet</button>
   <button onclick="approve()">Approve Corn</button>
-  <button onclick="enterBet()">Approve PopCorn</button>
+  <button onclick="approve2()">Approve PopCorn</button>
 
 <p>
-1) 
+1) Connect your wallet (assumes metamask or other types of injected wallets) <br>
+2) Hit Approve Corn to approve the PopCorn Machine to transfer your CORN Tokens <br>
+3) Hit Approve PopCorn to approve the PopCorn Machine to transfer your POPCORN Tokens <br>
 </p>
+ 
+<label for="quantity">Amount to Burn:</label>
+<input type="number" id="quantity" name="quantity" min="1" max="5"><br>
+  
+  <button onclick="burncorn()">Burn Corn</button>
+  <button onclick="mintnft()">Mint NFT</button><br>
+<p>
+4) Burn CORN kernels for POPCORN <br>
+6) Burn POPCORN to Mint NFT <br>
+More Popcorn == Better NFT <br> 
+[1]:Bronze [3]:Silver [5]:Gold <br>
+</p>
+
 
   <script src="https://cdn.ethers.io/lib/ethers-5.2.umd.min.js"
         type="application/javascript"></script>
