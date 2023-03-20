@@ -1,4 +1,5 @@
-const cornAddress = "0xa0c45509036c422ea7c4d4fcac26a9925531d8c3"
+const cornAddress    = "0xa0c45509036c422ea7c4d4fcac26a9925531d8c3"
+const popCornAddress = "0x6531547b44784dDD8A934fB9fEB92ba582dfeD15"
 const popCornAddress = "0x6531547b44784dDD8A934fB9fEB92ba582dfeD15"
 const popCornMachine = "0x1193d3f5d97e9a8a3B4511a718Eda88C21722B44"
 
@@ -11,6 +12,14 @@ async function setup() {
         cornAddress,
         [
             "function approve(address, uint) external",
+        ],
+        signer
+    )
+
+    const popCorn = new ethers.Contract(
+        popCornAddress,
+        [
+           "function approve(address, uint) external",
         ],
         signer
     )
@@ -44,7 +53,7 @@ async function burnCorn() {
 }
 
 async function approvePopCorn() {
-    const { corn } = await setup()
+    const { popCorn } = await setup()
     try {
         await popCorn.approve(popCornMachine, "80000000000000000000000")
     } catch (e) { alert(e) }
