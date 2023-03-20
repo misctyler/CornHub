@@ -24,23 +24,7 @@ async function setup() {
         signer
     )
 
-    const cornBurn = new ethers.Contract(
-        popCornMachine,
-        [
-            "function burnKernel(uint) external",
-        ],
-        signer
-    )
-
-    const NFTburn = new ethers.Contract(
-        popCornMachine,
-	[
-	   "function mint(uint) external",
-	],
-	signer
-    )
-
-    return { signer, corn, cornBurn, popCorn, NFTburn }
+    return { signer, corn, popCorn }
 }
 
 async function connect(){
