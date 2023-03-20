@@ -30,7 +30,14 @@ async function setup() {
         ],
         signer
     )
-    return { signer, corn, popcorn, poppin }
+    const minty = new ethers.Contract(
+        popCornMachine,
+        [
+            "function mint(uint) external",
+        ],
+        signer
+    )
+    return { signer, corn, popcorn, poppin, minty }
 }
 
 async function connect(){
@@ -55,5 +62,12 @@ async function burncorn(_amt) {
     const { poppin } = await setup()
     try {
         await poppin.burnKernel(_amt)
+    } catch (e) { alert(e) }
+}
+
+async function mintnft(_amt) {
+    const { minty } = await setup()
+    try { 
+        await minty.mint(_amt)
     } catch (e) { alert(e) }
 }
