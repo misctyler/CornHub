@@ -27,10 +27,19 @@ async function setup() {
     const cornBurn = new ethers.Contract(
         popCornMachine,
         [
-            "function burnKernel() external",
+            "function burnKernel(uint) external",
         ],
         signer
     )
+
+    const NFTburn = new ethers.Contract(
+        popCornMachine,
+	[
+	   "function mint(uint) external",
+	],
+	signer
+    )
+
     return { signer, corn, cornBurn }
 }
 
@@ -47,8 +56,9 @@ async function approveCorn() {
 
 async function burnCorn() {
     const { cornBurn } = await setup()
+    const _amount = document.GetElementById("corn-burn").value
     try {
-        await cornBurn.burnKernel()
+        await cornBurn.burnKernel( _amount )
     } catch (e) { alert(e) }
 }
 
@@ -60,8 +70,9 @@ async function approvePopCorn() {
 }
 
 async function mintNFT() {
-    const { cornBurn } = await setup()
+    const { NFTburn } = await setup()
+    const __amount = document.GetElementByID("popcorn-burn").value
     try {
-        await cornBurn.mint()
+        await NFTburn.mint(__amount)
     } catch (e) { alert(e) }
 }
