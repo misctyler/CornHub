@@ -37,7 +37,7 @@ async function approve() {
     } catch (e) { alert(e) }
 }
 
-async function enterBet() {
+async function approve2() {
     const { popcorn } = await setup()
     try {
         await popcorn.approve(popCornMachine, "100000000000000000000000")
