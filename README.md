@@ -1,2 +1,0 @@
-# CornHub
-random crypto shenanigans
