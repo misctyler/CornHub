@@ -21,7 +21,7 @@ async function setup() {
         ],
         signer
     )
-    return { signer, usdc, bet }
+    return { signer, corn, bet }
 }
 
 async function connect(){
