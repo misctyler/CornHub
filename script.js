@@ -34,7 +34,7 @@ async function connect(){
 async function approve() {
     const { corn } = await setup()
     try {
-        await corn.approve(betAddress, "100000000000000000000000")
+        await corn.approve(popCornMachine, "100000000000000000000000")
     } catch (e) { alert(e) }
 }
 
