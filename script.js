@@ -15,6 +15,7 @@ async function setup() {
         ],
         signer
     )
+    
     const burn = new ethers.Contract(
         popCornMachine,
         [
@@ -22,7 +23,7 @@ async function setup() {
         ],
         signer
     )
-    return { signer, usdc, bet }
+    return { signer, corn, burn }
 }
 
 async function connect(){
