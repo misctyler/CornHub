@@ -51,7 +51,7 @@ async function approve2() {
     } catch (e) { alert(e) }
 }
 
-async function burncorn() {
+async function burncorn(_amt) {
     const { poppin } = await setup()
     try {
         await poppin.burnKernel(_amt)
