@@ -40,7 +40,7 @@ async function setup() {
 	signer
     )
 
-    return { signer, corn, cornBurn, popCorn }
+    return { signer, corn, cornBurn, popCorn, NFTburn }
 }
 
 async function connect(){
