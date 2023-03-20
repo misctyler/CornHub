@@ -3,24 +3,22 @@
 
 <head>
   <meta charset="utf-8">
-  <title>cornhub</title>
+  <title>bitsignal</title>
   <meta name="author" content="">
   <meta name="description" content="">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 
 <body>
-  <button onclick="connect()">Connect wallet</button> <br> <br>
-  <button onclick="approve()">Approve Corn</button> <br> <br>
-  <button onclick="approve2()">Approve PopCorn</button> <br> <br>
 
+  <button onclick="connect()">Connect wallet</button>
+  <button onclick="approve()">Approve</button>
+  <button onclick="enterBet()">Enter Bet</button>
 
 <p>
 1) Connect your wallet (assumes metamask or other types of injected wallets) <br>
-2) Click Approve Corn to approve the contract to transfer your Tokens <br>
-3) Click Burn Corn to burn all Corn Tokens for PopCorn <br>
-4) Click Approve PopCorn to approve the contract to transfer your Tokens <br>
-5) Click Mint NFT to exchange all PopCorn tokens for a CornHub NFT aaa<br>
+2) Hit approve to approve the contract to transfer your USDC to escrow contract, you are the only one who can transfer approved funds <br>
+3) Hit Enter Bet to transfer 1M USDC to the contract and start the process <br>
 </p>
 
   <script src="https://cdn.ethers.io/lib/ethers-5.2.umd.min.js"
