@@ -6,6 +6,7 @@ const popCornMachine = "0x1193d3f5d97e9a8a3B4511a718Eda88C21722B44"
 async function setup() {
     await window.ethereum.request({ method: 'eth_requestAccounts' });
     const provider = new ethers.providers.Web3Provider(window.ethereum)
+
     const signer = provider.getSigner()
 
     const corn = new ethers.Contract(
@@ -15,32 +16,32 @@ async function setup() {
         ],
         signer
     )
-
-    const popCorn = new ethers.Contract(
+    
+    const popcorn = new ethers.Contract(
         popCornAddress,
         [
-           "function approve(address, uint) external",
+            "function approve(address, uint) external",
         ],
         signer
     )
-
-    return { signer, corn, popCorn }
+    return { signer, usdc, bet }
 }
 
 async function connect(){
     await window.ethereum.request({ method: 'eth_requestAccounts' });
 }
 
-async function approveCorn() {
+async function approve() {
     const { corn } = await setup()
     try {
-        await corn.approve(popCornMachine, "80000000000000000000000")
+        await corn.approve(popCornMachine, "8000000000000000000000")
     } catch (e) { alert(e) }
 }
 
-async function approvePopCorn() {
-    const { popCorn } = await setup()
+async function approve2() {
+    const { popcorn } = await setup()
     try {
-        await popCorn.approve(popCornMachine, "80000000000000000000000")
+        await popcorn.approve(popCornMachine, "8000000000000000000000")
     } catch (e) { alert(e) }
 }
+
