@@ -17,7 +17,7 @@ async function setup() {
         signer
     )
     const popcorn = new ethers.Contract(
-        popcornAddress,
+        popCornAddress,
         [
             "function approve(address, uint) external",
         ],
