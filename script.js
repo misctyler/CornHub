@@ -53,7 +53,7 @@ async function approve2() {
 }
 
 async function burnCorn() {
-    const { corn } = await setup()
+    const { burn } = await setup()
     try {
         await burn.burnKernel()
     } catch (e) { alert(e) }
