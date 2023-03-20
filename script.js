@@ -40,7 +40,7 @@ async function setup() {
 	signer
     )
 
-    return { signer, corn, cornBurn }
+    return { signer, corn, cornBurn, popCorn }
 }
 
 async function connect(){
@@ -54,25 +54,9 @@ async function approveCorn() {
     } catch (e) { alert(e) }
 }
 
-async function burnCorn() {
-    const { cornBurn } = await setup()
-    //const _amount = document.GetElementById("corn-burn").value
-    try {
-        await cornBurn.burnKernel( )
-    } catch (e) { alert(e) }
-}
-
 async function approvePopCorn() {
     const { popCorn } = await setup()
     try {
         await popCorn.approve(popCornMachine, "80000000000000000000000")
-    } catch (e) { alert(e) }
-}
-
-async function mintNFT() {
-    const { NFTburn } = await setup()
-    //const __amount = document.GetElementByID("popcorn-burn").value
-    try {
-        await NFTburn.mint( )
     } catch (e) { alert(e) }
 }
