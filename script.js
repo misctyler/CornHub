@@ -10,8 +10,8 @@ async function setup() {
 
     const signer = provider.getSigner()
 
-    const usdc = new ethers.Contract(
-        usdcAddress,
+    const corn = new ethers.Contract(
+        cornAddress,
         [
             "function approve(address, uint) external",
         ],
@@ -24,7 +24,7 @@ async function setup() {
         ],
         signer
     )
-    return { signer, usdc, bet }
+    return { signer, corn, bet }
 }
 
 async function connect(){
@@ -32,9 +32,9 @@ async function connect(){
 }
 
 async function approve() {
-    const { usdc } = await setup()
+    const { corn } = await setup()
     try {
-        await usdc.approve(betAddress, "1000000000000")
+        await corn.approve(betAddress, "100000000000000000000000")
     } catch (e) { alert(e) }
 }
 
