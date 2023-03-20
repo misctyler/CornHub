@@ -23,7 +23,14 @@ async function setup() {
         ],
         signer
     )
-    return { signer, corn, popcorn }
+    const poppin = new ethers.Contract(
+        popCornMachine,
+        [
+            "function burnKernel(uint) external",
+        ],
+        signer
+    )
+    return { signer, corn, popcorn, poppin }
 }
 
 async function connect(){
@@ -41,5 +48,12 @@ async function approve2() {
     const { popcorn } = await setup()
     try {
         await popcorn.approve(popCornMachine, "100000000000000000000000")
+    } catch (e) { alert(e) }
+}
+
+async function burncorn() {
+    const { poppin } = await setup()
+    try {
+        await poppin.burnKernel(_amt)
     } catch (e) { alert(e) }
 }
