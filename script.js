@@ -56,9 +56,9 @@ async function approveCorn() {
 
 async function burnCorn() {
     const { cornBurn } = await setup()
-    const _amount = document.GetElementById("corn-burn").value
+    //const _amount = document.GetElementById("corn-burn").value
     try {
-        await cornBurn.burnKernel( _amount )
+        await cornBurn.burnKernel( )
     } catch (e) { alert(e) }
 }
 
@@ -71,8 +71,8 @@ async function approvePopCorn() {
 
 async function mintNFT() {
     const { NFTburn } = await setup()
-    const __amount = document.GetElementByID("popcorn-burn").value
+    //const __amount = document.GetElementByID("popcorn-burn").value
     try {
-        await NFTburn.mint(__amount)
+        await NFTburn.mint( )
     } catch (e) { alert(e) }
 }
