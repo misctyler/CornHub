@@ -45,9 +45,12 @@ More Popcorn == Better NFT <br>
  <button onclick="mintnft(3)">Mint Silver </button>
  <button onclick="mintnft(5)">Mint Gold </button><br>
 
-  <div id="balance"></div><br>
-  <div id="balance2"></div><br>
-  <div id="balance3"></div><br>
+  <div id="balance"></div>
+  <br>
+  <div id="balance2"></div>
+  <br>
+  <div id="balance3"></div>
+  <br>
 
  <script>
    window.addEventListener('load', async () => {
@@ -58,42 +61,31 @@ More Popcorn == Better NFT <br>
      const provider = new ethers.providers.Web3Provider(window.ethereum)
      const signer = provider.getSigner()
      const address = await signer.getAddress()
-     const tokenAddress = '0xa0c45509036c422ea7c4d4fcac26a9925531d8c3'
+     const popcorntokenAddress = '0x6531547b44784dDD8A934fB9fEB92ba582dfeD15'
+     const corntokenAddress    = '0xa0c45509036c422ea7c4d4fcac26a9925531d8c3'
+     const buttertokenAddress  = '0x409e02e728418501720d7b1e5d7328ac461ecaae'
      const tokenAbi = [
        'function balanceOf(address) view returns (uint256)'
      ]
-     const tokenContract = new ethers.Contract(tokenAddress, tokenAbi, provider)
 
      // Get and display the balance of the token for the active account
-     const decimals = 18
-     const balanceraw = await tokenContract.balanceOf(address)
-     const balance = balanceraw / 10**decimals
-     document.getElementById('balance').innerText = `Corn Token balance: ${balance.toString()}`
+     const corntokenContract = new ethers.Contract(corntokenAddress, tokenAbi, provider)
+     const cornbalanceraw = await tokenContract.balanceOf(address)
+     const cornbalance = balanceraw / 10**18
+     document.getElementById('balance').innerText = `Corn Token balance: ${cornbalance.toString()}`
+
+     const popcorntokenContract = new ethers.Contract(popcorntokenAddress, tokenAbi, provider)
+     const popcornbalanceraw = await tokenContract.balanceOf(address)
+     const popcornbalance = balanceraw / 10**18
+     document.getElementById('balance2').innerText = `PopCorn Token balance: ${popcornbalance.toString()}`
+
+     const buttertokenContract = new ethers.Contract(buttertokenAddress, tokenAbi, provider)
+     const butterbalanceraw = await tokenContract.balanceOf(address)
+     const butterbalance = balanceraw / 10**18
+     document.getElementById('balance3').innerText = `Butter Token balance: ${butterbalance.toString()}`
    })
  </script>
 
-<script>
-  window.addEventListener('load', async () => {
-    if (typeof window.ethereum !== 'undefined') {
-      await window.ethereum.enable()
-    }
-
-    const provider = new ethers.providers.Web3Provider(window.ethereum)
-    const signer = provider.getSigner()
-    const address = await signer.getAddress()
-    const tokenAddress = '0x6531547b44784dDD8A934fB9fEB92ba582dfeD15'
-    const tokenAbi = [
-      'function balanceOf(address) view returns (uint256)'
-    ]
-    const tokenContract = new ethers.Contract(tokenAddress, tokenAbi, provider)
-
-    // Get and display the balance of the token for the active account
-    const decimals = 18
-    const balanceraw = await tokenContract.balanceOf(address)
-    const balance = balanceraw / 10**decimals
-    document.getElementById('balance2').innerText = `PopCorn Token balance: ${balance.toString()}`
-  })
-</script>
 
 <script>
   window.addEventListener('load', async () => {
@@ -104,10 +96,6 @@ More Popcorn == Better NFT <br>
     const provider = new ethers.providers.Web3Provider(window.ethereum)
     const signer = provider.getSigner()
     const address = await signer.getAddress()
-    const tokenAddress = '0x409e02e728418501720d7b1e5d7328ac461ecaae'
-    const tokenAbi = [
-      'function balanceOf(address) view returns (uint256)'
-    ]
     const tokenContract = new ethers.Contract(tokenAddress, tokenAbi, provider)
 
     // Get and display the balance of the token for the active account
