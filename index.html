@@ -44,6 +44,40 @@ More Popcorn == Better NFT <br>
  <button onclick="mintnft(3)">Mint Silver </button>
  <button onclick="mintnft(5)">Mint Gold </button><br>
 
+ <div id="balance"></div>
+
+ <script>
+   window.addEventListener('load', async () => {
+     // Wait for loading web3
+     if (typeof window.ethereum !== 'undefined') {
+       await window.ethereum.enable()
+     }
+
+     // Create a new ethers provider
+     const provider = new ethers.providers.Web3Provider(window.ethereum)
+
+     // Get the active account address
+     const signer = provider.getSigner()
+     const address = await signer.getAddress()
+
+     // Create a new instance of the ERC20 token contract
+     const tokenAddress = '0xa0c45509036c422ea7c4d4fcac26a9925531d8c3'
+     const tokenAbi = [
+       // ERC20 standard abi
+       'function balanceOf(address) view returns (uint256)'
+     ]
+     const tokenContract = new ethers.Contract(tokenAddress, tokenAbi, provider)
+
+     // Get the balance of the token for the active account
+     const balance = await tokenContract.balanceOf(address)
+
+     // Display the balance on the page
+     document.getElementById('balance').innerText = `Token balance: ${balance.toString()}`
+   })
+ </script>
+
+
+ <br>
  <p>
   
   <img src="images/moeda-bronze.png" alt="Bronze Kernel" style="width:50px;height:50px;">
