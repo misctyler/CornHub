@@ -15,21 +15,16 @@
   <img src="images/teste-f-branco-1.png" alt="CornHub Banner" style="width:100%;max-width:500px;height:auto;"><br>
  </a> <br>
 
- <div id="countdown"></div>
+ <p> Next Auto Pets Tournament is happening in: </p> <div id="countdown"></div>
  <script>
 
- // Set the date and time to countdown to (in this example, March 31, 2023, 12:00:00)
- var countDownDate = new Date("Mar 31, 2023 12:00:00").getTime();
+ // Set the date and time to countdown to
+ var countDownDate = new Date("Apr 3, 2023 8:00:00").getTime();
  
  // Update the countdown every second
  var x = setInterval(function() {
- 
-   // Get the current date and time
-   var now = new Date().getTime();
- 
-   // Calculate the time remaining until the countdown date and time
-   var distance = countDownDate - now;
- 
+   var now = new Date().getTime(); // Get the current date and time
+   var distance = countDownDate - now; // Calculate the time remaining until the countdown date and time
    // Calculate the days, hours, minutes, and seconds remaining
    var days = Math.floor(distance / (1000 * 60 * 60 * 24));
    var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
@@ -39,15 +34,13 @@
    // Display the countdown in the "countdown" div
    document.getElementById("countdown").innerHTML = days + "d " + hours + "h "
    + minutes + "m " + seconds + "s ";
- 
-   // If the countdown is over, display "EXPIRED"
    if (distance < 0) {
      clearInterval(x);
      document.getElementById("countdown").innerHTML = "EXPIRED";
    }
  }, 1000);
 </script>
- <br>
+<br>
 
  <style>
     table {
@@ -75,6 +68,8 @@
     </tr>
 </table>
 <br>
+
+<img src="images/autopets.jpg" alt="AutoPets App" style="width:100%;max-width:500px;height:auto;">
 
 <h1>Super Auto Pets Weekly Tournaments - FAQ</h1>
 <p>Welcome to the Super Auto Pets Weekly Tournaments! 
