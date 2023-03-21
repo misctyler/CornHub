@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>CornHub Intl. </title>
+  <title>CornHub Intl. - Auto Pets Division</title>
   <meta name="author" content="">
   <meta name="description" content="">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -14,6 +14,40 @@
  <a href="https://misctyler.github.io/CornHub/">
   <img src="images/teste-f-branco-1.png" alt="CornHub Banner" style="width:100%;max-width:500px;height:auto;"><br>
  </a> <br>
+
+ <div id="countdown"></div>
+ <script>
+
+ // Set the date and time to countdown to (in this example, March 31, 2023, 12:00:00)
+ var countDownDate = new Date("Mar 31, 2023 12:00:00").getTime();
+ 
+ // Update the countdown every second
+ var x = setInterval(function() {
+ 
+   // Get the current date and time
+   var now = new Date().getTime();
+ 
+   // Calculate the time remaining until the countdown date and time
+   var distance = countDownDate - now;
+ 
+   // Calculate the days, hours, minutes, and seconds remaining
+   var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+   var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+   var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+   var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+ 
+   // Display the countdown in the "countdown" div
+   document.getElementById("countdown").innerHTML = days + "d " + hours + "h "
+   + minutes + "m " + seconds + "s ";
+ 
+   // If the countdown is over, display "EXPIRED"
+   if (distance < 0) {
+     clearInterval(x);
+     document.getElementById("countdown").innerHTML = "EXPIRED";
+   }
+ }, 1000);
+</script>
+ <br>
 
  <style>
     table {
@@ -48,7 +82,7 @@
     Here's everything you need to know to participate:</p>
 <h2>What is Super Auto Pets?</h2>
 <p>Super Auto Pets is a chill auto battler game that you can play on PC or mobile. 
-    In the game, you collect and evolve pets, and use them to battle against other players' pets.</p>
+    In the game, you collect and evolve a team of pets, and use them to battle against other players' pets.</p>
 <h2>How do the weekly tournaments work?</h2>
 <p>We will place a weekly tournament every Sunday or Monday evening. We will play one game with 10 lives using the weekly pet pack. 
     There are no team restrictions, so feel free to bring your best pets and strategies to the game!</p>
