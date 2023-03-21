@@ -29,7 +29,7 @@ The CornHub PopCorn Machine is built on the Polygon blockchain using Solidity sm
 
 ## Contributing
 
-We welcome contributions from the community! If you have any ideas for improving the CornHub PopCorn Machine or want to report a bug, please submit an issue or pull request on GitHub.
+We welcome contributions from the community on snapshot https://snapshot.org/#/cornhub.eth! If you have any ideas for improving the CornHub PopCorn Machine or want to report a bug, please submit an issue or pull request on GitHub.
 
 ## License
 
