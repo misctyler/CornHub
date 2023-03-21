@@ -7,7 +7,16 @@ async function setup() {
     await window.ethereum.request({ method: 'eth_requestAccounts' });
     const provider = new ethers.providers.Web3Provider(window.ethereum)
 
+    const abi = require('./ABI_corn.json'); 
+    const contract = new ethers.Contract(cornAddress, abi, provider);
+    
     const signer = provider.getSigner()
+    async function getBalance() {
+        const connectedAccount = await signer.getAddress();
+        const balance = await contract.balanceOf(connectedAccount);
+        document.getElementById("balance").textContent = ethers.utils.formatUnits(balance, 18);
+      }
+      getBalance();
 
     const corn = new ethers.Contract(
         cornAddress,
