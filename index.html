@@ -13,18 +13,17 @@
 
 <body>
   <a href="https://misctyler.github.io/CornHub/">
-    <img src="images/teste-f-branco-1.png" alt="CornHub Banner" style="width:100%;max-width:500px;height:auto;"><br>
+    <img src="images/teste-f-branco-1.png" alt="CornHub Banner" style="width:100%;max-width:500px;height:auto;">
+    <br>
    </a>
-   
+   <div id="balance"></div>
+   <div id="balance2"></div>
+   <div id="balance3"></div>
   <button onclick="connect()">Connect wallet</button>
   <button onclick="approve()">Approve Corn</button>
   <button onclick="approve2()">Approve PopCorn</button>
-
 <p>
   <br>
-    <div id="balance"></div>
-    <div id="balance2"></div>
-    <div id="balance3"></div>
   <img src="images/polygon-matic-logo.png" alt="polygon" style="width:100%;max-width:25px;height:auto;"> 
   *** Please Only Connect using Polygon (matic) network *** 
   <img src="images/polygon-matic-logo.png" alt="polygon" style="width:100%;max-width:25px;height:auto;">
@@ -33,30 +32,24 @@
 2) Hit Approve Corn to approve the PopCorn Machine to transfer your CORN Tokens <br>
 3) Hit Approve PopCorn to approve the PopCorn Machine to transfer your POPCORN Tokens <br>
 </p>
-
   <button onclick="burncorn(1)">Burn 1 Corn</button>
   <button onclick="burncorn(3)">Burn 3 Corn</button>
   <button onclick="burncorn(5)">Burn 5 Corn</button><br>
-
 <p>
 4) Burn CORN kernels for POPCORN <br>
 6) Burn POPCORN to Mint NFT <br>
 More Popcorn == Better NFT <br> 
 [1]:Bronze [3]:Silver [5]:Gold <br>
 </p>
-
  <button onclick="mintnft(1)">Mint Bronze </button>
  <button onclick="mintnft(3)">Mint Silver </button>
  <button onclick="mintnft(5)">Mint Gold </button><br>
-
-
 
  <script>
    window.addEventListener('load', async () => {
      if (typeof window.ethereum !== 'undefined') {
        await window.ethereum.enable()
      }
-
      const provider = new ethers.providers.Web3Provider(window.ethereum)
      const signer = provider.getSigner()
      const address = await signer.getAddress()
@@ -65,8 +58,6 @@ More Popcorn == Better NFT <br>
        'function balanceOf(address) view returns (uint256)'
      ]
      const tokenContract = new ethers.Contract(tokenAddress, tokenAbi, provider)
-
-     // Get and display the balance of the token for the active account
      const decimals = 18
      const balanceraw = await tokenContract.balanceOf(address)
      const balance = balanceraw / 10**decimals
@@ -79,7 +70,6 @@ More Popcorn == Better NFT <br>
     if (typeof window.ethereum !== 'undefined') {
       await window.ethereum.enable()
     }
-
     const provider = new ethers.providers.Web3Provider(window.ethereum)
     const signer = provider.getSigner()
     const address = await signer.getAddress()
@@ -88,8 +78,6 @@ More Popcorn == Better NFT <br>
       'function balanceOf(address) view returns (uint256)'
     ]
     const tokenContract = new ethers.Contract(tokenAddress, tokenAbi, provider)
-
-    // Get and display the balance of the token for the active account
     const decimals = 18
     const balanceraw = await tokenContract.balanceOf(address)
     const balance = balanceraw / 10**decimals
@@ -102,7 +90,6 @@ More Popcorn == Better NFT <br>
     if (typeof window.ethereum !== 'undefined') {
       await window.ethereum.enable()
     }
-
     const provider = new ethers.providers.Web3Provider(window.ethereum)
     const signer = provider.getSigner()
     const address = await signer.getAddress()
@@ -111,8 +98,6 @@ More Popcorn == Better NFT <br>
       'function balanceOf(address) view returns (uint256)'
     ]
     const tokenContract = new ethers.Contract(tokenAddress, tokenAbi, provider)
-
-    // Get and display the balance of the token for the active account
     const decimals = 18
     const balanceraw = await tokenContract.balanceOf(address)
     const balance = balanceraw / 10**decimals
