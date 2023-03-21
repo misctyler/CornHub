@@ -24,9 +24,9 @@ decimals = token_contract.functions.decimals().call()
 balance_base_unit = balance / 10 ** decimals
 print(f"Address {address} has a balance of {balance_base_unit} tokens")
 
-latest_block = w3.eth.get_block('latest')['number']
-address_list = set()
-transfer_filter = token_contract.events.Transfer.create_filter(fromBlock=0, toBlock=latest_block)
-for event in transfer_filter.get_all_entries():
-    if event['args']['to'] == corn_token:
-        address_list.add(event['args']['to'])
+# latest_block = w3.eth.get_block('latest')['number']
+# address_list = set()
+# transfer_filter = token_contract.events.Transfer.create_filter(fromBlock=0, toBlock=latest_block)
+# for event in transfer_filter.get_all_entries():
+#     if event['args']['to'] == corn_token:
+#         address_list.add(event['args']['to'])
