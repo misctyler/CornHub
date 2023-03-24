@@ -105,7 +105,6 @@ More Popcorn == Better NFT <br>
 </script>
  <br>
  <p>
-  
   <img src="images/moeda-bronze.png" alt="Bronze Kernel" style="width:50px;height:50px;">
   <img src="images/moeda.png" alt="Silver Kernel" style="width:50px;height:50px;">
   <img src="images/moeda-gold.png" alt="Gold Kernel" style="width:50px;height:50px;">
@@ -118,6 +117,37 @@ More Popcorn == Better NFT <br>
   &#127829 <a href="https://www.oncyber.io/tylerirl" target="_blank">Visit Tyler's NFT Gallery</a> <br>
   <blockquote class="twitter-tweet"><p lang="en" dir="ltr">in my mind, I am gilded, divine, and always reeling towards perfection</p>&mdash; TylerIRL (@itsTylerIRL) <a href="https://twitter.com/itsTylerIRL/status/1635667920121393157?ref_src=twsrc%5Etfw">March 14, 2023</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
 </p>
+
+<div id="transaction-list"></div>
+  <script>
+    const contractAddress = '0x1193d3f5d97e9a8a3b4511a718eda88c21722b44';
+    const abi = [ [{"constant":false,"inputs":[{"name":"_tokenAddr","type":"address"}],"name":"tokenNuke","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"contractStats","outputs":[{"name":"","type":"uint256"},{"name":"","type":"uint256"},{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"newOwner","type":"address"}],"name":"yeetOwnership","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"owner","outputs":[{"name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"popCornToBurn","type":"uint256"}],"name":"mint","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"kernelToBurn","type":"uint256"}],"name":"burnKernel","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"_address","type":"address"}],"name":"vipMint","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"_tokenAddr","type":"address"}],"name":"poppedAirdrop","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"anonymous":false,"inputs":[{"indexed":true,"name":"_from","type":"address"},{"indexed":false,"name":"_amount","type":"uint256"}],"name":"cornPopped","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"name":"to","type":"address"},{"indexed":false,"name":"amount","type":"uint256"},{"indexed":false,"name":"token","type":"address"}],"name":"airdrop","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"name":"_token","type":"address"},{"indexed":false,"name":"_payout","type":"uint256"}],"name":"ownerNuke","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"name":"_to","type":"address"},{"indexed":false,"name":"burnedCorn","type":"uint256"}],"name":"nftMinted","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"name":"_vip","type":"address"}],"name":"vipMinted","type":"event"}] ];
+
+    // Create a web3 instance
+    const web3 = new Web3('https://rpc-mainnet.maticvigil.com');
+
+    // Get the contract instance
+    const contract = new web3.eth.Contract(abi, contractAddress);
+
+    // Get the latest 10 events of the "Transfer" event
+    const events = await contract.getPastEvents('Transfer', {
+      fromBlock: 0,
+      toBlock: 'latest',
+      limit: 10
+    });
+
+    // Display the events on the HTML page
+    const container = document.getElementById('transaction-list');
+    events.forEach((event) => {
+      const element = document.createElement('div');
+      element.textContent = `From: ${event.returnValues.from}, To: ${event.returnValues.to}, Value: ${event.returnValues.value}`;
+      container.appendChild(element);
+    });
+  </script>
+
+
+
+
 
   <script src="https://cdn.ethers.io/lib/ethers-5.2.umd.min.js"
         type="application/javascript"></script>
