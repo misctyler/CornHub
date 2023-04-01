@@ -100,7 +100,7 @@ More Popcorn == Better NFT <br>
     const decimals = 18
     const balanceraw = await tokenContract.balanceOf(address)
     /* const balance = balanceraw / 10**decimal */
-    const balance = typeof balanceraw === 'number' ? balanceraw / 10**decimals : 'NOT CONNECTED / WRONG NETWORK'
+    const balance = typeof balanceraw === 'NaN' ? 'NOT CONNECTED / WRONG NETWORK ' : balanceraw / 10**decimals
     document.getElementById('balance3').innerText = `Butter Token balance: ${balance.toString()}`
   })
 </script>
