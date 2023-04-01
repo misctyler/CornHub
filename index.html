@@ -99,7 +99,8 @@ More Popcorn == Better NFT <br>
     const tokenContract = new ethers.Contract(tokenAddress, tokenAbi, provider)
     const decimals = 18
     const balanceraw = await tokenContract.balanceOf(address)
-    const balance = balanceraw / 10**decimals
+    const balance = balanceraw / 10**decimal
+    const balance = typeof balanceraw === 'number' ? balanceraw / 10**decimals : 'NOT CONNECTED / WRONG NETWORK'
     document.getElementById('balance3').innerText = `Butter Token balance: ${balance.toString()}`
   })
 </script>
