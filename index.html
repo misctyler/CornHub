@@ -59,7 +59,8 @@ More Popcorn == Better NFT <br>
      const tokenContract = new ethers.Contract(tokenAddress, tokenAbi, provider)
      const decimals = 18
      const balanceraw = await tokenContract.balanceOf(address)
-     const balance = balanceraw / 10**decimals
+     /* const balance = balanceraw / 10**decimal */
+     const balance = typeof balanceraw === 'NaN' ? 'NOT CONNECTED / WRONG NETWORK ' : balanceraw / 10**decimals
      document.getElementById('balance').innerText = `Corn Token balance: ${balance.toString()}`
    })
  </script>
@@ -79,7 +80,8 @@ More Popcorn == Better NFT <br>
     const tokenContract = new ethers.Contract(tokenAddress, tokenAbi, provider)
     const decimals = 18
     const balanceraw = await tokenContract.balanceOf(address)
-    const balance = balanceraw / 10**decimals
+    /* const balance = balanceraw / 10**decimal */
+    const balance = typeof balanceraw === 'NaN' ? 'NOT CONNECTED / WRONG NETWORK ' : balanceraw / 10**decimals
     document.getElementById('balance2').innerText = `PopCorn Token balance: ${balance.toString()}`
   })
 </script>
