@@ -84,19 +84,23 @@ while x < 5556:
     subtype_value = ''
     holder_address = contract.functions.ownerOf(token_id).call()
     holder_owned = contract.functions.balanceOf(holder_address).call()
+    balance_wei = w3.eth.get_balance(holder_address)
+    balance_eth = w3.from_wei(balance_wei, 'ether')
+    formatted_eth = "{:,.0f}".format(balance_eth)
     for attribute in data['attributes']:
         if attribute['trait_type'] == 'Archetype':
             archetype_value = attribute['value']
         if attribute['trait_type'] == 'Subtype':
             subtype_value = attribute['value']
             break
-    print('The holder of ',archetype_value,' ', subtype_value,' ID ', token_id, 'is', holder_address, ' and owns ',holder_owned,' other posters')
+    print('The holder of ',archetype_value,' ', subtype_value,' ID ', token_id, 'is', holder_address, ' and owns ',holder_owned,' other posters and ',balance_eth,' ETH')
     results_df = results_df.append({
         'token_id': token_id, 
         'archetype': archetype_value, 
         'subtype':subtype_value,
         'holder_address': holder_address, 
-        'holder_owned':holder_owned}, ignore_index=True)
+        'holder_owned':holder_owned,
+        'eth_held':balance_eth}, ignore_index=True)
     x = x + 1
 
 results_df.to_excel('results.xlsx',index=False)
