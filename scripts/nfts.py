@@ -74,10 +74,9 @@ abi = '''
 "outputs":[{"internalType":"string","name":"","type":"string"}],"stateMutability":"view","type":"function"}]
 '''
 contract = w3.eth.contract(address=contract_address, abi=abi)
-results_df = pd.DataFrame(columns=['token_id', 'archetype','subtype','holder_address','holder_owned'])
+results = pd.DataFrame(columns=['token_id', 'archetype','subtype','holder_address','holder_owned'])
 x = 1
 while x < 5556:
-#for token_id in token_ids:
     token_id = x
     response = requests.get(f'https://schizoposters.xyz/api/tokens/metadata/{token_id}')
     data = response.json()
@@ -93,8 +92,9 @@ while x < 5556:
         if attribute['trait_type'] == 'Subtype':
             subtype_value = attribute['value']
             break
-    print('The holder of ',archetype_value,' ', subtype_value,' ID ', token_id, 'is', holder_address, ' and owns ',holder_owned,' other posters and ',balance_eth,' ETH')
-    results_df = results_df.append({
+    print('The holder of ',archetype_value,' ', subtype_value,' ID ', 
+    token_id, 'is', holder_address, ' and owns ',holder_owned,' other posters and ',balance_eth,' ETH')
+    results = results.append({
         'token_id': token_id, 
         'archetype': archetype_value, 
         'subtype':subtype_value,
@@ -103,4 +103,4 @@ while x < 5556:
         'eth_held':balance_eth}, ignore_index=True)
     x = x + 1
 
-results_df.to_excel('results.xlsx',index=False)
+results.to_excel('results.xlsx',index=False)
