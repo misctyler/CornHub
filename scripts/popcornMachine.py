@@ -22,7 +22,7 @@ while count < len(addresses):
     data.append(row)
 
     def check_erc20_bal(x,y):
-        with open('/home/tyler/CornHub/scripts/ABI_corn.json', 'r') as f:
+        with open('/Users/pragma/VIP/CornHub/scripts/ABI_corn.json', 'r') as f: 
             abi = json.load(f)
         ticker = y
         token_contract = w3.eth.contract(address=x, abi=abi)

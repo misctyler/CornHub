@@ -94,13 +94,14 @@ while x < 5556:
             break
     print('The holder of ',archetype_value,' ', subtype_value,' ID ', 
     token_id, 'is', holder_address, ' and owns ',holder_owned,' other posters and ',balance_eth,' ETH')
-    results = results.append({
-        'token_id': token_id, 
-        'archetype': archetype_value, 
-        'subtype':subtype_value,
-        'holder_address': holder_address, 
-        'holder_owned':holder_owned,
-        'eth_held':balance_eth}, ignore_index=True)
+    results_new = pd.DataFrame({
+         token_id, 
+        archetype_value, 
+        subtype_value,
+        holder_address, 
+        holder_owned,
+        balance_eth})
+    results = pd.concat([results, results_new])
     x = x + 1
 
 results.to_excel('results.xlsx',index=False)
