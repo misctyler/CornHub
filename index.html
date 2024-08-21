@@ -9,6 +9,26 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" type="image/png" href="images/favicon-32x32.png" sizes="32x32" />
   <link rel="icon" type="image/png" href="images/favicon-16x16.png" sizes="16x16" />
+  <style>
+    .modern-button {
+      background-color: #4CAF50;
+      border: none;
+      color: white;
+      padding: 15px 32px;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 16px;
+      margin: 4px 2px;
+      cursor: pointer;
+      border-radius: 8px;
+      transition: all 0.3s ease;
+    }
+    .modern-button:hover {
+      background-color: #45a049;
+      box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
+    }
+  </style>
 </head>
 
 <body>
@@ -49,9 +69,9 @@
    <div id="balance2"></div>
    <div id="balance3"></div>
    <br>
-  <button onclick="connect()">Connect wallet</button>
-  <button onclick="approve()">Approve Corn</button>
-  <button onclick="approve2()">Approve PopCorn</button>
+  <button class="modern-button" onclick="connect()">Connect wallet</button>
+  <button class="modern-button" onclick="approve()">Approve Corn</button>
+  <button class="modern-button" onclick="approve2()">Approve PopCorn</button>
 <p>
   <img src="images/polygon-matic-logo.png" alt="polygon" style="width:100%;max-width:25px;height:auto;"> 
   *** Please Only Connect using Polygon (matic) network *** 
@@ -61,18 +81,18 @@
 2) Hit Approve Corn to approve the PopCorn Machine to transfer your CORN Tokens <br>
 3) Hit Approve PopCorn to approve the PopCorn Machine to transfer your POPCORN Tokens <br>
 </p>
-  <button onclick="burncorn(1)">Burn 1 Corn</button>
-  <button onclick="burncorn(3)">Burn 3 Corn</button>
-  <button onclick="burncorn(5)">Burn 5 Corn</button><br>
+  <button class="modern-button" onclick="burncorn(1)">Burn 1 Corn</button>
+  <button class="modern-button" onclick="burncorn(3)">Burn 3 Corn</button>
+  <button class="modern-button" onclick="burncorn(5)">Burn 5 Corn</button><br>
 <p>
 4) Burn CORN kernels for POPCORN <br>
 6) Burn POPCORN to Mint NFT <br>
 More Popcorn == Better NFT <br> 
 [1]:Bronze [3]:Silver [5]:Gold <br>
 </p>
- <button onclick="mintnft(1)">Mint Bronze </button>
- <button onclick="mintnft(3)">Mint Silver </button>
- <button onclick="mintnft(5)">Mint Gold </button><br>
+ <button class="modern-button" onclick="mintnft(1)">Mint Bronze </button>
+ <button class="modern-button" onclick="mintnft(3)">Mint Silver </button>
+ <button class="modern-button" onclick="mintnft(5)">Mint Gold </button><br>
 
  <script>
    window.addEventListener('load', async () => {
