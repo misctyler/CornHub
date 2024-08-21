@@ -1,32 +1,49 @@
-
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>CornHub Intl. </title>
+  <title>CornHub Intl.</title>
   <meta name="author" content="">
   <meta name="description" content="">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="icon" type="image/png" href="images/favicon-32x32.png" sizes="32x32" />
-  <link rel="icon" type="image/png" href="images/favicon-16x16.png" sizes="16x16" />
+  <link rel="icon" type="image/png" href="images/favicon-32x32.png" sizes="32x32">
+  <link rel="icon" type="image/png" href="images/favicon-16x16.png" sizes="16x16">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
   <style>
+    :root {
+      --primary-color: #4CAF50;
+      --hover-color: #45a049;
+    }
+    body {
+      background-color: #f5f5f5;
+      font-family: 'Roboto', sans-serif;
+      line-height: 1.6;
+      color: #333;
+    }
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
     .modern-button {
-      background-color: #4CAF50;
+      background-color: var(--primary-color);
       border: none;
       color: white;
-      padding: 15px 32px;
+      padding: 12px 24px;
       text-align: center;
       text-decoration: none;
       display: inline-block;
       font-size: 16px;
       margin: 4px 2px;
       cursor: pointer;
-      border-radius: 8px;
+      border-radius: 4px;
       transition: all 0.3s ease;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
     }
     .modern-button:hover {
-      background-color: #45a049;
-      box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
+      background-color: var(--hover-color);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+      transform: translateY(-2px);
     }
   </style>
 </head>
