@@ -205,9 +205,9 @@
 More Popcorn == Better NFT <br> 
 [1]:Bronze [3]:Silver [5]:Gold <br>
 </p>
- <button class="modern-button" onclick="mintnft(1)">Mint Bronze </button>
- <button class="modern-button" onclick="mintnft(3)">Mint Silver </button>
- <button class="modern-button" onclick="mintnft(5)">Mint Gold </button><br>
+ <button id="mint-bronze" class="modern-button" onclick="mintnft(1)">Mint Bronze </button>
+ <button id="mint-silver" class="modern-button" onclick="mintnft(3)">Mint Silver </button>
+ <button id="mint-gold" class="modern-button" onclick="mintnft(5)">Mint Gold </button><br>
 
  <script>
    window.addEventListener('load', async () => {
@@ -238,7 +238,8 @@ More Popcorn == Better NFT <br>
      const popCornTokenAddress = '0x6531547b44784dDD8A934fB9fEB92ba582dfeD15';
      const popCornTokenContract = new ethers.Contract(popCornTokenAddress, cornTokenAbi, provider);
      const popCornBalance = await popCornTokenContract.balanceOf(address);
-     document.getElementById('balance2').innerText = parseFloat(ethers.utils.formatUnits(popCornBalance, 18)).toFixed(3);
+     const popCornBalanceFormatted = parseFloat(ethers.utils.formatUnits(popCornBalance, 18)).toFixed(3);
+     document.getElementById('balance2').innerText = popCornBalanceFormatted;
 
      // Update Butter Token balance
      const butterTokenAddress = '0x409e02e728418501720d7b1e5d7328ac461ecaae';
@@ -249,6 +250,9 @@ More Popcorn == Better NFT <br>
 
      // Update button colors based on Corn balance
      updateButtonColors(cornBalanceFormatted);
+
+     // Update mint button colors based on PopCorn balance
+     updateMintButtonColors(popCornBalanceFormatted);
    }
 
    function updateButtonColors(cornBalance) {
@@ -272,6 +276,30 @@ More Popcorn == Better NFT <br>
        burn5Button.style.backgroundColor = 'var(--corn-yellow)';
      } else {
        burn5Button.style.backgroundColor = '';
+     }
+   }
+
+   function updateMintButtonColors(popCornBalance) {
+     const mintBronzeButton = document.getElementById('mint-bronze');
+     const mintSilverButton = document.getElementById('mint-silver');
+     const mintGoldButton = document.getElementById('mint-gold');
+
+     if (popCornBalance >= 1) {
+       mintBronzeButton.style.backgroundColor = 'var(--corn-yellow)';
+     } else {
+       mintBronzeButton.style.backgroundColor = '';
+     }
+
+     if (popCornBalance >= 3) {
+       mintSilverButton.style.backgroundColor = 'var(--corn-yellow)';
+     } else {
+       mintSilverButton.style.backgroundColor = '';
+     }
+
+     if (popCornBalance >= 5) {
+       mintGoldButton.style.backgroundColor = 'var(--corn-yellow)';
+     } else {
+       mintGoldButton.style.backgroundColor = '';
      }
    }
 
