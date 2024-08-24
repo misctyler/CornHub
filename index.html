@@ -239,7 +239,8 @@ More Popcorn == Better NFT <br>
      const butterTokenAddress = '0x409e02e728418501720d7b1e5d7328ac461ecaae';
      const butterTokenContract = new ethers.Contract(butterTokenAddress, cornTokenAbi, provider);
      const butterBalance = await butterTokenContract.balanceOf(address);
-     document.getElementById('balance3').innerText = parseFloat(ethers.utils.formatUnits(butterBalance, 18)).toFixed(3);
+     const butterBalanceFormatted = (parseFloat(ethers.utils.formatUnits(butterBalance, 18)) / 1000).toFixed(0) + 'k';
+     document.getElementById('balance3').innerText = butterBalanceFormatted;
    }
 
    function updateConnectButton(isConnected) {
