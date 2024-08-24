@@ -188,26 +188,32 @@
      </tr>
    </table>
    <br>
-  <button id="connect-button" class="modern-button" onclick="connect()">Connect Wallet</button>
-  <button class="modern-button" onclick="approve()">Approve Corn</button>
-  <button class="modern-button" onclick="approve2()">Approve PopCorn</button>
+   <div class="button-grid">
+     <div class="button-row">
+       <button id="connect-button" class="modern-button" onclick="connect()">Connect Wallet</button>
+       <button class="modern-button" onclick="approve()">Approve Corn</button>
+       <button class="modern-button" onclick="approve2()">Approve PopCorn</button>
+     </div>
+     <div class="button-row">
+       <button id="burn-1-corn" class="modern-button" onclick="burncorn(1)">Burn 1 Corn</button>
+       <button id="burn-3-corn" class="modern-button" onclick="burncorn(3)">Burn 3 Corn</button>
+       <button id="burn-5-corn" class="modern-button" onclick="burncorn(5)">Burn 5 Corn</button>
+     </div>
+     <div class="button-row">
+       <button id="mint-bronze" class="modern-button" onclick="mintnft(1)">Mint Bronze</button>
+       <button id="mint-silver" class="modern-button" onclick="mintnft(3)">Mint Silver</button>
+       <button id="mint-gold" class="modern-button" onclick="mintnft(5)">Mint Gold</button>
+     </div>
+   </div>
 <p>
 1) Connect your wallet (assumes metamask or other types of injected wallets) <br>
 2) Hit Approve Corn to approve the PopCorn Machine to transfer your CORN Tokens <br>
 3) Hit Approve PopCorn to approve the PopCorn Machine to transfer your POPCORN Tokens <br>
-</p>
-  <button id="burn-1-corn" class="modern-button" onclick="burncorn(1)">Burn 1 Corn</button>
-  <button id="burn-3-corn" class="modern-button" onclick="burncorn(3)">Burn 3 Corn</button>
-  <button id="burn-5-corn" class="modern-button" onclick="burncorn(5)">Burn 5 Corn</button><br>
-<p>
 4) Burn CORN kernels for POPCORN <br>
 6) Burn POPCORN to Mint NFT <br>
 More Popcorn == Better NFT <br> 
 [1]:Bronze [3]:Silver [5]:Gold <br>
 </p>
- <button id="mint-bronze" class="modern-button" onclick="mintnft(1)">Mint Bronze </button>
- <button id="mint-silver" class="modern-button" onclick="mintnft(3)">Mint Silver </button>
- <button id="mint-gold" class="modern-button" onclick="mintnft(5)">Mint Gold </button><br>
 
  <script>
    window.addEventListener('load', async () => {
