@@ -184,7 +184,7 @@
      </tr>
    </table>
    <br>
-  <button id="connect-button" class="modern-button" onclick="connect()" style="display: none;">Connect Wallet</button>
+  <button id="connect-button" class="modern-button" onclick="connect()">Connect Wallet</button>
   <button class="modern-button" onclick="approve()">Approve Corn</button>
   <button class="modern-button" onclick="approve2()">Approve PopCorn</button>
 <p>
@@ -209,15 +209,11 @@ More Popcorn == Better NFT <br>
    window.addEventListener('load', async () => {
      if (typeof window.ethereum !== 'undefined') {
        const accounts = await window.ethereum.request({ method: 'eth_accounts' });
-       if (accounts.length === 0) {
-         document.getElementById('connect-button').style.display = 'inline-block';
-       } else {
+       if (accounts.length > 0) {
          await window.ethereum.enable();
          updateBalances();
          updateConnectButton(true);
        }
-     } else {
-       document.getElementById('connect-button').style.display = 'inline-block';
      }
    });
 
@@ -249,11 +245,13 @@ More Popcorn == Better NFT <br>
    function updateConnectButton(isConnected) {
      const connectButton = document.getElementById('connect-button');
      if (isConnected) {
-       connectButton.textContent = 'Connected!';
-       connectButton.classList.add('connected');
+       connectButton.textContent = 'Wallet Connected';
+       connectButton.style.backgroundColor = '#F4D03F';
+       connectButton.style.color = '#333';
      } else {
        connectButton.textContent = 'Connect Wallet';
-       connectButton.classList.remove('connected');
+       connectButton.style.backgroundColor = '';
+       connectButton.style.color = '';
      }
    }
 
