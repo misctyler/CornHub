@@ -196,9 +196,9 @@
 2) Hit Approve Corn to approve the PopCorn Machine to transfer your CORN Tokens <br>
 3) Hit Approve PopCorn to approve the PopCorn Machine to transfer your POPCORN Tokens <br>
 </p>
-  <button class="modern-button" onclick="burncorn(1)">Burn 1 Corn</button>
-  <button class="modern-button" onclick="burncorn(3)">Burn 3 Corn</button>
-  <button class="modern-button" onclick="burncorn(5)">Burn 5 Corn</button><br>
+  <button id="burn-1-corn" class="modern-button" onclick="burncorn(1)">Burn 1 Corn</button>
+  <button id="burn-3-corn" class="modern-button" onclick="burncorn(3)">Burn 3 Corn</button>
+  <button id="burn-5-corn" class="modern-button" onclick="burncorn(5)">Burn 5 Corn</button><br>
 <p>
 4) Burn CORN kernels for POPCORN <br>
 6) Burn POPCORN to Mint NFT <br>
@@ -231,7 +231,8 @@ More Popcorn == Better NFT <br>
      const cornTokenAbi = ['function balanceOf(address) view returns (uint256)'];
      const cornTokenContract = new ethers.Contract(cornTokenAddress, cornTokenAbi, provider);
      const cornBalance = await cornTokenContract.balanceOf(address);
-     document.getElementById('balance').innerText = parseFloat(ethers.utils.formatUnits(cornBalance, 18)).toFixed(3);
+     const cornBalanceFormatted = parseFloat(ethers.utils.formatUnits(cornBalance, 18)).toFixed(3);
+     document.getElementById('balance').innerText = cornBalanceFormatted;
 
      // Update PopCorn Token balance
      const popCornTokenAddress = '0x6531547b44784dDD8A934fB9fEB92ba582dfeD15';
@@ -245,6 +246,33 @@ More Popcorn == Better NFT <br>
      const butterBalance = await butterTokenContract.balanceOf(address);
      const butterBalanceFormatted = (parseFloat(ethers.utils.formatUnits(butterBalance, 18)) / 1000).toFixed(0) + 'k';
      document.getElementById('balance3').innerText = butterBalanceFormatted;
+
+     // Update button colors based on Corn balance
+     updateButtonColors(cornBalanceFormatted);
+   }
+
+   function updateButtonColors(cornBalance) {
+     const burn1Button = document.getElementById('burn-1-corn');
+     const burn3Button = document.getElementById('burn-3-corn');
+     const burn5Button = document.getElementById('burn-5-corn');
+
+     if (cornBalance >= 1) {
+       burn1Button.style.backgroundColor = 'var(--corn-yellow)';
+     } else {
+       burn1Button.style.backgroundColor = '';
+     }
+
+     if (cornBalance >= 3) {
+       burn3Button.style.backgroundColor = 'var(--corn-yellow)';
+     } else {
+       burn3Button.style.backgroundColor = '';
+     }
+
+     if (cornBalance >= 5) {
+       burn5Button.style.backgroundColor = 'var(--corn-yellow)';
+     } else {
+       burn5Button.style.backgroundColor = '';
+     }
    }
 
    function updateConnectButton(isConnected) {
