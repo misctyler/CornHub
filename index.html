@@ -72,7 +72,11 @@
    </a>
 
 
-   <p id="network-status"></p>
+   <p id="network-status">
+     <img src="images/polygon-matic-logo.png" alt="polygon" style="width:25px;height:auto;vertical-align:middle;"> 
+     *** Please Only Connect using Polygon (matic) network *** 
+     <img src="images/polygon-matic-logo.png" alt="polygon" style="width:25px;height:auto;vertical-align:middle;">
+   </p>
    <script src="https://cdnjs.cloudflare.com/ajax/libs/web3/1.5.2/web3.min.js" integrity="sha512-qfNEgqdLEd+OkOZSZxb9kPOvOz62NNoPd0A5W5G8LMwfdtKn3+5D/tx5zvgu+7IaPqkFq60VfJ+Mn1bVJjMx/w==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
    <script>
      // Check if MetaMask is installed and is connected
@@ -110,28 +114,41 @@
          }
        }
 
+       // Function to update network status message
+       function updateNetworkStatus(isPolygon) {
+         const statusElement = document.getElementById('network-status');
+         if (isPolygon) {
+           statusElement.innerHTML = 'Connected to Polygon';
+         } else {
+           statusElement.innerHTML = '<img src="images/polygon-matic-logo.png" alt="polygon" style="width:25px;height:auto;vertical-align:middle;"> *** Please Only Connect using Polygon (matic) network *** <img src="images/polygon-matic-logo.png" alt="polygon" style="width:25px;height:auto;vertical-align:middle;">';
+         }
+       }
+
        // Check the current network and switch if necessary
        ethereum.request({ method: 'net_version' }).then((networkId) => {
          if (networkId !== '137') {
            switchToPolygon();
+           updateNetworkStatus(false);
          } else {
-           document.getElementById('network-status').textContent = 'Connected to Polygon';
+           updateNetworkStatus(true);
          }
        }).catch((error) => {
          console.error(error);
+         updateNetworkStatus(false);
        });
 
        // Listen for network changes
        ethereum.on('chainChanged', (chainId) => {
          if (chainId !== '0x89') { // '0x89' is the hexadecimal chainId for Polygon
            switchToPolygon();
+           updateNetworkStatus(false);
          } else {
-           document.getElementById('network-status').textContent = 'Connected to Polygon';
+           updateNetworkStatus(true);
          }
        });
      } else {
        // MetaMask is not installed or is not connected
-       document.getElementById('network-status').textContent = 'MetaMask not found';
+       document.getElementById('network-status').innerHTML = '<img src="images/polygon-matic-logo.png" alt="polygon" style="width:25px;height:auto;vertical-align:middle;"> *** Please Only Connect using Polygon (matic) network *** <img src="images/polygon-matic-logo.png" alt="polygon" style="width:25px;height:auto;vertical-align:middle;">';
      }
    </script>
 
@@ -160,10 +177,6 @@
   <button class="modern-button" onclick="approve()">Approve Corn</button>
   <button class="modern-button" onclick="approve2()">Approve PopCorn</button>
 <p>
-  <img src="images/polygon-matic-logo.png" alt="polygon" style="width:100%;max-width:25px;height:auto;"> 
-  *** Please Only Connect using Polygon (matic) network *** 
-  <img src="images/polygon-matic-logo.png" alt="polygon" style="width:100%;max-width:25px;height:auto;">
-  <br>
 1) Connect your wallet (assumes metamask or other types of injected wallets) <br>
 2) Hit Approve Corn to approve the PopCorn Machine to transfer your CORN Tokens <br>
 3) Hit Approve PopCorn to approve the PopCorn Machine to transfer your POPCORN Tokens <br>
