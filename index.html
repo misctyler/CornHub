@@ -13,6 +13,7 @@
     :root {
       --primary-color: #4CAF50;
       --hover-color: #45a049;
+      --corn-yellow: #F4D03F;
     }
     body {
       background-color: #f5f5f5;
@@ -45,6 +46,10 @@
       box-shadow: 0 4px 8px rgba(0,0,0,0.15);
       transform: translateY(-2px);
     }
+    .modern-button.connected {
+      background-color: var(--corn-yellow);
+      color: #333;
+    }
     .balance-table {
       margin: 20px auto;
       border-collapse: collapse;
@@ -59,6 +64,12 @@
     .balance-table th {
       background-color: var(--primary-color);
       color: white;
+    }
+    .gallery-embed {
+      width: 100%;
+      height: 600px;
+      border: none;
+      margin-top: 20px;
     }
   </style>
 </head>
@@ -173,7 +184,7 @@
      </tr>
    </table>
    <br>
-  <button id="connect-button" class="modern-button" onclick="connect()" style="display: none;">Connect wallet</button>
+  <button id="connect-button" class="modern-button" onclick="connect()" style="display: none;">Connect Wallet</button>
   <button class="modern-button" onclick="approve()">Approve Corn</button>
   <button class="modern-button" onclick="approve2()">Approve PopCorn</button>
 <p>
@@ -203,6 +214,7 @@ More Popcorn == Better NFT <br>
        } else {
          await window.ethereum.enable();
          updateBalances();
+         updateConnectButton(true);
        }
      } else {
        document.getElementById('connect-button').style.display = 'inline-block';
@@ -234,11 +246,22 @@ More Popcorn == Better NFT <br>
      document.getElementById('balance3').innerText = parseFloat(ethers.utils.formatUnits(butterBalance, 18)).toFixed(3);
    }
 
+   function updateConnectButton(isConnected) {
+     const connectButton = document.getElementById('connect-button');
+     if (isConnected) {
+       connectButton.textContent = 'Connected!';
+       connectButton.classList.add('connected');
+     } else {
+       connectButton.textContent = 'Connect Wallet';
+       connectButton.classList.remove('connected');
+     }
+   }
+
    async function connect() {
      if (typeof window.ethereum !== 'undefined') {
        try {
          await window.ethereum.request({ method: 'eth_requestAccounts' });
-         document.getElementById('connect-button').style.display = 'none';
+         updateConnectButton(true);
          updateBalances();
        } catch (error) {
          console.error('User denied account access');
