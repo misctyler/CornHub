@@ -45,6 +45,21 @@
       box-shadow: 0 4px 8px rgba(0,0,0,0.15);
       transform: translateY(-2px);
     }
+    .balance-table {
+      margin: 20px auto;
+      border-collapse: collapse;
+      width: 80%;
+      max-width: 400px;
+    }
+    .balance-table th, .balance-table td {
+      border: 1px solid #ddd;
+      padding: 8px;
+      text-align: center;
+    }
+    .balance-table th {
+      background-color: var(--primary-color);
+      color: white;
+    }
   </style>
 </head>
 
@@ -62,18 +77,56 @@
    <script>
      // Check if MetaMask is installed and is connected
      if (typeof window.ethereum !== 'undefined' && window.ethereum.isMetaMask) {
-       // Check if the current network is Polygon
-
-       
-       ethereum.request({ method: 'net_version' }, (error, networkId) => {
-         if (error) {
+       // Function to switch to Polygon network
+       async function switchToPolygon() {
+         try {
+           await window.ethereum.request({
+             method: 'wallet_switchEthereumChain',
+             params: [{ chainId: '0x89' }], // chainId must be in hexadecimal numbers
+           });
+         } catch (error) {
+           // This error code indicates that the chain has not been added to MetaMask
+           if (error.code === 4902) {
+             try {
+               await window.ethereum.request({
+                 method: 'wallet_addEthereumChain',
+                 params: [{
+                   chainId: '0x89',
+                   chainName: 'Polygon Mainnet',
+                   nativeCurrency: {
+                     name: 'MATIC',
+                     symbol: 'MATIC',
+                     decimals: 18
+                   },
+                   rpcUrls: ['https://polygon-rpc.com/'],
+                   blockExplorerUrls: ['https://polygonscan.com/']
+                 }],
+               });
+             } catch (addError) {
+               console.error(addError);
+             }
+           }
            console.error(error);
-         } else if (networkId === '137') {
-           // The current network is Polygon
-           document.getElementById('network-status').textContent = 'Connected to Polygon';
+         }
+       }
+
+       // Check the current network and switch if necessary
+       ethereum.request({ method: 'net_version' }).then((networkId) => {
+         if (networkId !== '137') {
+           switchToPolygon();
          } else {
-           // The current network is not Polygon
-           document.getElementById('network-status').textContent = 'WRONG NETWORK';
+           document.getElementById('network-status').textContent = 'Connected to Polygon';
+         }
+       }).catch((error) => {
+         console.error(error);
+       });
+
+       // Listen for network changes
+       ethereum.on('chainChanged', (chainId) => {
+         if (chainId !== '0x89') { // '0x89' is the hexadecimal chainId for Polygon
+           switchToPolygon();
+         } else {
+           document.getElementById('network-status').textContent = 'Connected to Polygon';
          }
        });
      } else {
@@ -84,9 +137,24 @@
 
 
 
-   <div id="balance"></div>
-   <div id="balance2"></div>
-   <div id="balance3"></div>
+   <table class="balance-table">
+     <tr>
+       <th>Token</th>
+       <th>Balance</th>
+     </tr>
+     <tr>
+       <td>Corn</td>
+       <td id="balance"></td>
+     </tr>
+     <tr>
+       <td>PopCorn</td>
+       <td id="balance2"></td>
+     </tr>
+     <tr>
+       <td>Butter</td>
+       <td id="balance3"></td>
+     </tr>
+   </table>
    <br>
   <button id="connect-button" class="modern-button" onclick="connect()" style="display: none;">Connect wallet</button>
   <button class="modern-button" onclick="approve()">Approve Corn</button>
@@ -138,19 +206,19 @@ More Popcorn == Better NFT <br>
      const cornTokenAbi = ['function balanceOf(address) view returns (uint256)'];
      const cornTokenContract = new ethers.Contract(cornTokenAddress, cornTokenAbi, provider);
      const cornBalance = await cornTokenContract.balanceOf(address);
-     document.getElementById('balance').innerText = `Corn Token balance: ${ethers.utils.formatUnits(cornBalance, 18)}`;
+     document.getElementById('balance').innerText = parseFloat(ethers.utils.formatUnits(cornBalance, 18)).toFixed(3);
 
      // Update PopCorn Token balance
      const popCornTokenAddress = '0x6531547b44784dDD8A934fB9fEB92ba582dfeD15';
      const popCornTokenContract = new ethers.Contract(popCornTokenAddress, cornTokenAbi, provider);
      const popCornBalance = await popCornTokenContract.balanceOf(address);
-     document.getElementById('balance2').innerText = `PopCorn Token balance: ${ethers.utils.formatUnits(popCornBalance, 18)}`;
+     document.getElementById('balance2').innerText = parseFloat(ethers.utils.formatUnits(popCornBalance, 18)).toFixed(3);
 
      // Update Butter Token balance
      const butterTokenAddress = '0x409e02e728418501720d7b1e5d7328ac461ecaae';
      const butterTokenContract = new ethers.Contract(butterTokenAddress, cornTokenAbi, provider);
      const butterBalance = await butterTokenContract.balanceOf(address);
-     document.getElementById('balance3').innerText = `Butter Token balance: ${ethers.utils.formatUnits(butterBalance, 18)}`;
+     document.getElementById('balance3').innerText = parseFloat(ethers.utils.formatUnits(butterBalance, 18)).toFixed(3);
    }
 
    async function connect() {
