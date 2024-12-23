@@ -75,7 +75,7 @@
   }
   
   .gallery-embed {
-    width: 100%;
+    width: 80%;
     height: 600px;
     border: none;
     margin-top: 20px;
@@ -227,14 +227,14 @@
        <button class="modern-button" onclick="approve2()">Approve PopCorn</button>
      </div>
      <div class="button-row">
-       <button id="burn-1-corn" class="modern-button" onclick="burncorn(1)">Burn 1 Corn</button>
-       <button id="burn-3-corn" class="modern-button" onclick="burncorn(3)">Burn 3 Corn</button>
-       <button id="burn-5-corn" class="modern-button" onclick="burncorn(5)">Burn 5 Corn</button>
+       <button id="burn-1-corn" class="modern-button" onclick="burncorn(1); updateBalances();">Burn 1 Corn</button>
+       <button id="burn-3-corn" class="modern-button" onclick="burncorn(3); updateBalances();">Burn 3 Corn</button>
+       <button id="burn-5-corn" class="modern-button" onclick="burncorn(5); updateBalances();">Burn 5 Corn</button>
      </div>
      <div class="button-row">
-       <button id="mint-bronze" class="modern-button" onclick="mintnft(1)">Mint Bronze</button>
-       <button id="mint-silver" class="modern-button" onclick="mintnft(3)">Mint Silver</button>
-       <button id="mint-gold" class="modern-button" onclick="mintnft(5)">Mint Gold</button>
+       <button id="mint-bronze" class="modern-button" onclick="mintnft(1); updateBalances();">Mint Bronze</button>
+       <button id="mint-silver" class="modern-button" onclick="mintnft(3); updateBalances();">Mint Silver</button>
+       <button id="mint-gold" class="modern-button" onclick="mintnft(5); updateBalances();">Mint Gold</button>
      </div>
    </div>
    <style>
@@ -420,7 +420,7 @@
 </p>
 <center>
   <div style="display: flex; justify-content: center;">
-    <iframe src="https://gallery.so/TylerIRL" class="gallery-embed" style="transform: scale(0.8); transform-origin: 0 0;"></iframe>
+    <iframe src="https://gallery.so/TylerIRL" class="gallery-embed" style="transform: scale(0.6); transform-origin: 0 0;"></iframe>
   </div>
 </center>
 
