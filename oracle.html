@@ -57,6 +57,9 @@ a:visited {
   background-color: #4040ff;
   color: white;
 }
+.connect-button.enabled {
+  background-color: #4040ff;
+}
 .balance-table {
   margin: 20px auto;
   border-collapse: collapse;
@@ -115,6 +118,8 @@ async function connectWallet() {
       button.textContent = 'Connected';
       button.classList.add('connected');
       document.getElementById('button-grid').style.display = 'grid';
+      document.getElementById('wallet-status').style.display = 'none';
+      document.getElementById('balance-info').style.display = 'block';
       updateBalances();
     } catch (error) {
       console.error('User denied account access');
@@ -153,6 +158,17 @@ async function updateBalances() {
   const butterBalanceFormatted = parseFloat(ethers.utils.formatUnits(butterBalance, 18)).toFixed(3);
   document.getElementById('balance3').innerText = butterBalanceFormatted;
   document.getElementById('balance3-display').innerText = butterBalanceFormatted;
+
+  // Enable/disable burn buttons based on CORN balance
+  const cornBalanceNum = parseFloat(cornBalanceFormatted);
+  document.getElementById('burn-1-corn').classList.toggle('enabled', cornBalanceNum >= 1);
+  document.getElementById('burn-3-corn').classList.toggle('enabled', cornBalanceNum >= 3);
+  document.getElementById('burn-5-corn').classList.toggle('enabled', cornBalanceNum >= 5);
+  
+  // Enable/disable mint buttons based on CORN balance
+  document.getElementById('mint-bronze').classList.toggle('enabled', cornBalanceNum >= 1);
+  document.getElementById('mint-silver').classList.toggle('enabled', cornBalanceNum >= 3);
+  document.getElementById('mint-gold').classList.toggle('enabled', cornBalanceNum >= 5);
 }
 </script>
 </head>
@@ -247,7 +263,7 @@ async function updateBalances() {
 <hr>
 <br>
 <p align="center" style="font-size: 1.2em">
-  <span id="wallet-status">Please connect wallet to see token balances</span>
+  <span id="wallet-status">To See Token Balances Please Connect Wallet</span>
   <span id="balance-info" style="display: none">
     Current Balances: 
     <span id="balance-display">0</span> CORN | 
