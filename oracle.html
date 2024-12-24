@@ -114,6 +114,7 @@ async function connectWallet() {
       const button = document.getElementById('connect-button');
       button.textContent = 'Connected';
       button.classList.add('connected');
+      document.getElementById('button-grid').style.display = 'grid';
       updateBalances();
     } catch (error) {
       console.error('User denied account access');
@@ -241,7 +242,7 @@ async function updateBalances() {
 </table>
 </center>
 <hr>
-<div class="button-grid">
+<div id="button-grid" class="button-grid" style="display: none;">
   <div class="button-row">
     <button class="connect-button" onclick="approve()">Approve Corn</button>
     <button class="connect-button" style="visibility: hidden">Spacer</button>
