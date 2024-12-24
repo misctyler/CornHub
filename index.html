@@ -351,17 +351,18 @@ async function updateBalances() {
   <button id="mint-bronze" class="connect-button" onclick="mintnft(1)" style="width: 100%;">Mint Bronze</button>
   <button id="mint-silver" class="connect-button" onclick="mintnft(3)" style="width: 100%;">Mint Silver</button>
   <button id="mint-gold" class="connect-button" onclick="mintnft(5)" style="width: 100%;">Mint Gold</button>
-  <div class="button-images">
-    <img src="images/moeda-bronze.png" alt="Bronze Kernel" style="width:100px;height:100px;">
-    <img src="images/moeda.png" alt="Silver Kernel" style="width:100px;height:100px;">
-    <img src="images/moeda-gold.png" alt="Gold Kernel" style="width:100px;height:100px;">
+
+  <img src="images/moeda-bronze.png" alt="Bronze Kernel" style="width:100px;height:100px;">
+  <img src="images/moeda.png" alt="Silver Kernel" style="width:100px;height:100px;">
+  <img src="images/moeda-gold.png" alt="Gold Kernel" style="width:100px;height:100px;">
+  <!-- <div class="button-images"></div> -->
   </div>
 </div>
 
 <style>
 .button-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr); /* Create a 3x3 grid */
+  grid-template-columns: repeat(3, 1fr); /* Create a 3x3 grid */
   gap: 10px;
   max-width: 600px;
   margin: 20px auto;
