@@ -292,8 +292,8 @@ async function updateBalances() {
     </td>
     <td>
       <ul>
-        <li style="font-size: 200%"><a href="https://misctyler.github.io/CornHub/">Corn Kernel Exchange</a><br>
-        <font size="2">Updated March 21, 2023</font></li>
+        <li style="font-size: 200%"><a href="./resources.html">Crypto Resources</a><br>
+        <font size="2">Updated December 24, 2024</font></li>
       </ul>
     </td>
   </tr>
@@ -301,12 +301,12 @@ async function updateBalances() {
     <td>
       <ul>
         <li style="font-size: 200%"><a href="https://www.gallery.so/tylerirl" target="_blank">Visit Tyler's NFT Gallery</a><br>
-        <font size="2">Updated March 15, 2023</font></li>
+        <font size="2">Updated December 24, 2024</font></li>
       </ul>
     </td>
     <td>
       <ul>
-        <li style="font-size: 200%"><a href="https://quickswap.exchange/#/swap?exactField=input&outputCurrency=0xa0c45509036c422ea7c4d4fcac26a9925531d8c3&swapIndex=0" target="_blank">Trade for some $CORN Kernels</a><br>
+        <li style="font-size: 200%"><a href="https://quickswap.exchange/#/swap?exactField=input&outputCurrency=0xa0c45509036c422ea7c4d4fcac26a9925531d8c3&swapIndex=0" target="_blank">Buy $CORN Kernels</a><br>
         <font size="2">Updated February 28, 2023</font></li>
       </ul>
     </td>
@@ -314,14 +314,15 @@ async function updateBalances() {
   <tr>
     <td>
       <ul>
-        <li style="font-size: 200%"><a href="https://rarible.com/token/0xd07dc4262bcdbf85190c01c996b4c06a461d2430:540112?tab=overview" target="_blank">Buy OG CornHub VIP NFTs</a><br>
-        <font size="2">Updated February 25, 2023</font></li>
+        <li style="font-size: 200%"><a href="https://polygonscan.com/address/0x1193d3f5d97e9a8a3B4511a718Eda88C21722B44" target="_blank">PopCorn Machine Contract</a><br>
+          <font size="2">Updated Oct 3, 2021</font></li>
       </ul>
     </td>
     <td>
       <ul>
-        <li style="font-size: 200%"><a href="https://polygonscan.com/address/0x1193d3f5d97e9a8a3B4511a718Eda88C21722B44" target="_blank">PopCorn Machine Contract</a><br>
-        <font size="2">Updated Oct 3, 2021</font></li>
+        
+        <li style="font-size: 200%"><a href="https://rarible.com/token/0xd07dc4262bcdbf85190c01c996b4c06a461d2430:540112?tab=overview" target="_blank">Buy OG CornHub VIP NFTs</a><br>
+          <font size="2">Updated May 4, 2021</font></li>
       </ul>
     </td>
   </tr>
@@ -342,25 +343,25 @@ async function updateBalances() {
 <br>
 <div id="button-grid" class="button-grid" style="display: none;">
   <div class="button-row">
-    <button class="connect-button" onclick="approve()">Approve Corn</button>
+    <button class="connect-button" onclick="approve()" style="width: 100%;">Approve Corn</button>
     <button class="connect-button" style="visibility: hidden">Spacer</button>
-    <button class="connect-button" onclick="approve2()">Approve PopCorn</button>
+    <button class="connect-button" onclick="approve2()" style="width: 100%;">Approve PopCorn</button>
     
   </div>
   <div class="button-row">
-    <button id="burn-1-corn" class="connect-button" onclick="burncorn(1)">Burn 1 Corn</button>
-    <button id="burn-3-corn" class="connect-button" onclick="burncorn(3)">Burn 3 Corn</button>
-    <button id="burn-5-corn" class="connect-button" onclick="burncorn(5)">Burn 5 Corn</button>
+    <button id="burn-1-corn" class="connect-button" onclick="burncorn(1)" style="width: 100%;">Burn 1 Corn</button>
+    <button id="burn-3-corn" class="connect-button" onclick="burncorn(3)" style="width: 100%;">Burn 3 Corn</button>
+    <button id="burn-5-corn" class="connect-button" onclick="burncorn(5)" style="width: 100%;">Burn 5 Corn</button>
   </div>
   <div class="button-row">
-    <button id="mint-bronze" class="connect-button" onclick="mintnft(1)">Mint Bronze</button>
-    <button id="mint-silver" class="connect-button" onclick="mintnft(3)">Mint Silver</button>
-    <button id="mint-gold" class="connect-button" onclick="mintnft(5)">Mint Gold</button>
+    <button id="mint-bronze" class="connect-button" onclick="mintnft(1)" style="width: 100%;">Mint Bronze</button>
+    <button id="mint-silver" class="connect-button" onclick="mintnft(3)" style="width: 100%;">Mint Silver</button>
+    <button id="mint-gold" class="connect-button" onclick="mintnft(5)" style="width: 100%;">Mint Gold</button>
   </div>
   <div class="button-row">
     <img src="images/moeda-bronze.png" alt="Bronze Kernel" style="width:100px;height:100px;">
-      <img src="images/moeda.png" alt="Silver Kernel" style="width:100px;height:100px;">
-      <img src="images/moeda-gold.png" alt="Gold Kernel" style="width:100px;height:100px;">
+    <img src="images/moeda.png" alt="Silver Kernel" style="width:100px;height:100px;">
+    <img src="images/moeda-gold.png" alt="Gold Kernel" style="width:100px;height:100px;">
   </div>
 </div>
 
@@ -373,12 +374,13 @@ async function updateBalances() {
 }
 .button-row {
   display: flex;
-  justify-content: center;
+  flex-direction: column; /* Change to column for better mobile support */
+  align-items: stretch; /* Ensure buttons take full width */
   gap: 10px;
 }
 .button-row .connect-button {
   flex: none;
-  width: 150px;
+  width: 100%; /* Ensure buttons take full width on mobile */
 }
 </style>
 

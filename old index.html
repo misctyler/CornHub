@@ -168,9 +168,9 @@
     </style>
     <br>
     <p>
-      <img src="images/moeda-bronze.png" alt="Bronze Kernel" style="width:50px;height:50px;">
-      <img src="images/moeda.png" alt="Silver Kernel" style="width:50px;height:50px;">
-      <img src="images/moeda-gold.png" alt="Gold Kernel" style="width:50px;height:50px;">
+        <img src="images/moeda-bronze.png" alt="Bronze Kernel" style="width:50px;height:50px;">
+        <img src="images/moeda.png" alt="Silver Kernel" style="width:50px;height:50px;">
+        <img src="images/moeda-gold.png" alt="Gold Kernel" style="width:50px;height:50px;">
       <img src="images/moeda-vip.png" alt="VIP Kernel" style="width:50px;height:50px;"><br>
       <img src="images/cornhub vip.gif" alt="OG VIP" style="width:50px;height:50px;">
       <a href="https://rarible.com/token/0xd07dc4262bcdbf85190c01c996b4c06a461d2430:540112?tab=overview" target="_blank" style="display:inline-block; margin:0 10px;">Buy OG CornHub VIP NFTs</a>
@@ -238,35 +238,7 @@
         updateMintButtonColors(popCornBalanceFormatted);
       }
 
-      function updateButtonColors(cornBalance) {
-        const burn1Button = document.getElementById('burn-1-corn');
-        const burn3Button = document.getElementById('burn-3-corn');
-        const burn5Button = document.getElementById('burn-5-corn');
-
-        if (cornBalance >= 1) {
-          burn1Button.style.backgroundColor = 'var(--corn-yellow)';
-          burn1Button.style.color = '#333';
-        } else {
-          burn1Button.style.backgroundColor = '';
-          burn1Button.style.color = '';
-        }
-
-        if (cornBalance >= 3) {
-          burn3Button.style.backgroundColor = 'var(--corn-yellow)';
-          burn3Button.style.color = '#333';
-        } else {
-          burn3Button.style.backgroundColor = '';
-          burn3Button.style.color = '';
-        }
-
-        if (cornBalance >= 5) {
-          burn5Button.style.backgroundColor = 'var(--corn-yellow)';
-          burn5Button.style.color = '#333';
-        } else {
-          burn5Button.style.backgroundColor = '';
-          burn5Button.style.color = '';
-        }
-      }
+  
 
       function updateMintButtonColors(popCornBalance) {
         const mintBronzeButton = document.getElementById('mint-bronze');
