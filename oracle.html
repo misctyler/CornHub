@@ -22,17 +22,145 @@ img {
   max-width: 100%;
   height: auto;
 }
+a {
+  text-decoration: none;
+  color: #800080;
+}
+a:visited {
+  color: #800080;
+}
+.wallet-connect {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+}
+.connect-button {
+  background-color: #000080;
+  border: none;
+  color: white;
+  padding: 12px 24px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+}
+.connect-button:hover {
+  background-color: #0000a0;
+  transform: translateY(-2px);
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+.connect-button.connected {
+  background-color: #4040ff;
+  color: white;
+}
+.balance-table {
+  margin: 20px auto;
+  border-collapse: collapse;
+  width: 80%;
+  max-width: 400px;
+}
+.balance-table th, .balance-table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: center;
+}
+.balance-table th {
+  background-color: #000080;
+  color: white;
+}
 </style>
+<script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/5.7.2/ethers.umd.min.js"></script>
+<script>
+async function connectWallet() {
+  if (typeof window.ethereum !== 'undefined') {
+    try {
+      await window.ethereum.request({ method: 'eth_requestAccounts' });
+      const button = document.getElementById('connect-button');
+      button.textContent = 'Connected';
+      button.classList.add('connected');
+      updateBalances();
+    } catch (error) {
+      console.error('User denied account access');
+    }
+  } else {
+    alert('Please install MetaMask!');
+  }
+}
+
+async function updateBalances() {
+  const provider = new ethers.providers.Web3Provider(window.ethereum);
+  const signer = provider.getSigner();
+  const address = await signer.getAddress();
+
+  // Update Corn Token balance
+  const cornTokenAddress = '0xa0c45509036c422ea7c4d4fcac26a9925531d8c3';
+  const cornTokenAbi = ['function balanceOf(address) view returns (uint256)'];
+  const cornTokenContract = new ethers.Contract(cornTokenAddress, cornTokenAbi, provider);
+  const cornBalance = await cornTokenContract.balanceOf(address);
+  const cornBalanceFormatted = parseFloat(ethers.utils.formatUnits(cornBalance, 18)).toFixed(3);
+  document.getElementById('balance').innerText = cornBalanceFormatted;
+
+  // Update PopCorn Token balance
+  const popCornTokenAddress = '0x6531547b44784dDD8A934fB9fEB92ba582dfeD15';
+  const popCornTokenContract = new ethers.Contract(popCornTokenAddress, cornTokenAbi, provider);
+  const popCornBalance = await popCornTokenContract.balanceOf(address);
+  const popCornBalanceFormatted = parseFloat(ethers.utils.formatUnits(popCornBalance, 18)).toFixed(3);
+  document.getElementById('balance2').innerText = popCornBalanceFormatted;
+
+  // Update Butter Token balance
+  const butterTokenAddress = '0x409e02e728418501720d7b1e5d7328ac461ecaae';
+  const butterTokenContract = new ethers.Contract(butterTokenAddress, cornTokenAbi, provider);
+  const butterBalance = await butterTokenContract.balanceOf(address);
+  const butterBalanceFormatted = parseFloat(ethers.utils.formatUnits(butterBalance, 18)).toFixed(3);
+  document.getElementById('balance3').innerText = butterBalanceFormatted;
+}
+</script>
 </head>
-<body link="#800080" bgcolor="#ffffff" text="#000080" vlink="#ff0000">
+<body bgcolor="#ffffff" text="#000080">
+<div class="wallet-connect">
+  <button id="connect-button" class="connect-button" onclick="connectWallet()">Connect Wallet</button>
+</div>
 <b>
 <font size="12"><p align="center">C</font><font size="8">ORN </font>
 <font size="12">H</font><font size="8">UB </font>
 <font size="4">INC.<br>CornHub.eth</font><br>Official Home Page</b>
 <font size="2">&nbsp;</p></font>
-<hr>
+
+<table class="balance-table" style="font-size: 75%;">
+  <tr>
+    <th>Token</th>
+    <th>Balance</th>
+    <th>Trade</th>
+    <th>Contract Address</th>
+  </tr>
+  <tr>
+    <td>Corn</td>
+    <td id="balance"></td>
+    <td><a href="https://quickswap.exchange/#/swap?exactField=input&outputCurrency=0xa0c45509036c422ea7c4d4fcac26a9925531d8c3&swapIndex=0&currency0=ETH" target="_blank">Trade Corn</a></td>
+    <td><a href="https://polygonscan.com/address/0xa0c45509036c422ea7c4d4fcac26a9925531d8c3" target="_blank">0xa0c45509036c422ea7c4d4fcac26a9925531d8c3</a></td>
+  </tr>
+  <tr>
+    <td>PopCorn</td>
+    <td id="balance2"></td>
+    <td><a href="https://quickswap.exchange/#/swap?exactField=input&outputCurrency=0x6531547b44784dDD8A934fB9fEB92ba582dfeD15&swapIndex=0&currency0=ETH" target="_blank">Trade PopCorn</a></td>
+    <td><a href="https://polygonscan.com/address/0x6531547b44784dDD8A934fB9fEB92ba582dfeD15" target="_blank">0x6531547b44784dDD8A934fB9fEB92ba582dfeD15</a></td>
+  </tr>
+  <tr>
+    <td>Butter</td>
+    <td id="balance3"></td>
+    <td><a href="https://quickswap.exchange/#/swap?exactField=input&outputCurrency=0x409e02e728418501720d7b1e5d7328ac461ecaae&swapIndex=0&currency0=ETH" target="_blank">Trade Butter</a></td>
+    <td><a href="https://polygonscan.com/address/0x409e02e728418501720d7b1e5d7328ac461ecaae" target="_blank">0x409e02e728418501720d7b1e5d7328ac461ecaae</a></td>
+  </tr>
+</table>
+
 <p align="center">
 <center>
+  <hr>
 
 <table border="0" cellspacing="0">
   <tbody>
