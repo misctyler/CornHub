@@ -90,6 +90,7 @@
    </p>
    <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
    <script src="https://cdn.jsdelivr.net/npm/ethers@latest/dist/ethers.umd.min.js"></script>
+   <script src="./script.js"></script>
 
    <table class="balance-table">
      <tr>
@@ -116,19 +117,19 @@
    <br>
    <div class="button-grid">
      <div class="button-row">
-       <button id="connect-button" class="modern-button" onclick="window.connect()">Connect Wallet</button>
-       <button class="modern-button" onclick="window.approve()">Approve Corn</button>
-       <button class="modern-button" onclick="window.approve2()">Approve PopCorn</button>
+       <button id="connect-button" class="modern-button" onclick="connect()">Connect Wallet</button>
+       <button class="modern-button" onclick="approve()">Approve Corn</button>
+       <button class="modern-button" onclick="approve2()">Approve PopCorn</button>
      </div>
      <div class="button-row">
-       <button id="burn-1-corn" class="modern-button" onclick="window.burncorn(1)">Burn 1 Corn</button>
-       <button id="burn-3-corn" class="modern-button" onclick="window.burncorn(3)">Burn 3 Corn</button>
-       <button id="burn-5-corn" class="modern-button" onclick="window.burncorn(5)">Burn 5 Corn</button>
+       <button id="burn-1-corn" class="modern-button" onclick="burncorn(1)">Burn 1 Corn</button>
+       <button id="burn-3-corn" class="modern-button" onclick="burncorn(3)">Burn 3 Corn</button>
+       <button id="burn-5-corn" class="modern-button" onclick="burncorn(5)">Burn 5 Corn</button>
      </div>
      <div class="button-row">
-       <button id="mint-bronze" class="modern-button" onclick="window.mintnft(1)">Mint Bronze</button>
-       <button id="mint-silver" class="modern-button" onclick="window.mintnft(3)">Mint Silver</button>
-       <button id="mint-gold" class="modern-button" onclick="window.mintnft(5)">Mint Gold</button>
+       <button id="mint-bronze" class="modern-button" onclick="mintnft(1)">Mint Bronze</button>
+       <button id="mint-silver" class="modern-button" onclick="mintnft(3)">Mint Silver</button>
+       <button id="mint-gold" class="modern-button" onclick="mintnft(5)">Mint Gold</button>
      </div>
    </div>
    <style>
@@ -149,12 +150,11 @@
      }
    </style>
 <p>
-1) Connect your wallet (assumes metamask or other types of injected wallets) <br>
-2) Hit Approve Corn to approve the PopCorn Machine to transfer your CORN Tokens <br>
-3) Hit Approve PopCorn to approve the PopCorn Machine to transfer your POPCORN Tokens <br>
-4) Burn CORN kernels for POPCORN <br>
-6) Burn POPCORN to Mint NFT <br>
-More Popcorn == Better NFT <br> 
+Connect your wallet (assumes metamask or other types of injected wallets) <br>
+Hit Approve Corn to approve the PopCorn Machine to transfer your CORN Tokens <br>
+Hit Approve PopCorn to approve the PopCorn Machine to transfer your POPCORN Tokens <br>
+Burn CORN kernels for POPCORN <br>
+Burn POPCORN to Mint NFT <br>
 [1]:Bronze [3]:Silver [5]:Gold <br>
 </p>
 
@@ -171,7 +171,7 @@ More Popcorn == Better NFT <br>
    });
 
    async function updateBalances() {
-     const provider = new ethers.providers.Web3Provider(window.ethereum || window.web3.currentProvider);
+     const provider = new ethers.providers.Web3Provider(window.ethereum);
      const signer = provider.getSigner();
      const address = await signer.getAddress();
 
@@ -237,7 +237,7 @@ More Popcorn == Better NFT <br>
    function updateMintButtonColors(popCornBalance) {
      const mintBronzeButton = document.getElementById('mint-bronze');
      const mintSilverButton = document.getElementById('mint-silver');
-     const mintGoldButton = document.getElementById('mint-gold');
+     const mintGoldButton   = document.getElementById('mint-gold');
 
      if (popCornBalance >= 1) {
        mintBronzeButton.style.backgroundColor = 'var(--corn-yellow)';
@@ -303,7 +303,5 @@ More Popcorn == Better NFT <br>
 </p>
 
   <div class="grass"></div>
-
-  <script src="./script.js"></script>
 </body>
 </html>
