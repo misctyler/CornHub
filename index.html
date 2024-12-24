@@ -20,11 +20,18 @@
       font-family: 'Roboto', sans-serif;
       line-height: 1.6;
       color: #333;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
     }
     .container {
       max-width: 1200px;
       margin: 0 auto;
       padding: 0 20px;
+      width: 100%;
     }
     .modern-button {
       background-color: var(--primary-color);
@@ -75,246 +82,248 @@
 </head>
 
 <body>
-  <center>
+  <div class="container">
+    <a href="https://misctyler.github.io/CornHub/">
+      <img src="images/teste-f-branco-1.png" alt="CornHub Banner" style="width:100%;max-width:500px;height:auto;">
+      <br>
+    </a>
 
-  <a href="https://misctyler.github.io/CornHub/">
-    <img src="images/teste-f-branco-1.png" alt="CornHub Banner" style="width:100%;max-width:500px;height:auto;">
-    <br>
-   </a>
+    <p id="network-status">
+      <img src="images/polygon-matic-logo.png" alt="polygon" style="width:25px;height:auto;vertical-align:middle;"> 
+      *** Please Only Connect using Polygon (matic) network *** 
+      <img src="images/polygon-matic-logo.png" alt="polygon" style="width:25px;height:auto;vertical-align:middle;">
+    </p>
+    <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
+    <!-- <script src="https://cdn.jsdelivr.net/npm/ethers@latest/dist/ethers.umd.min.js"></script> -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/5.7.2/ethers.umd.min.js"></script>
 
+    <script src="script.js"></script>
 
-   <p id="network-status">
-     <img src="images/polygon-matic-logo.png" alt="polygon" style="width:25px;height:auto;vertical-align:middle;"> 
-     *** Please Only Connect using Polygon (matic) network *** 
-     <img src="images/polygon-matic-logo.png" alt="polygon" style="width:25px;height:auto;vertical-align:middle;">
-   </p>
-   <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
-   <!-- <script src="https://cdn.jsdelivr.net/npm/ethers@latest/dist/ethers.umd.min.js"></script> -->
-   <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/5.7.2/ethers.umd.min.js"></script>
-
-   <script src="script.js"></script>
-
-   <table class="balance-table">
-     <tr>
-       <th>Token</th>
-       <th>Balance</th>
-       <th>Trade</th>
-       <th>Contract Address</th>
-     </tr>
-     <tr>
-       <td>Corn</td>
-       <td id="balance"></td>
-       <td><a href="https://quickswap.exchange/#/swap?exactField=input&outputCurrency=0xa0c45509036c422ea7c4d4fcac26a9925531d8c3&swapIndex=0&currency0=ETH" target="_blank">Trade on QuickSwap</a></td>
-       <td><a href="https://polygonscan.com/address/0xa0c45509036c422ea7c4d4fcac26a9925531d8c3" target=_blank">0xa0c45509036c422ea7c4d4fcac26a9925531d8c3</td>
+    <table class="balance-table">
+      <tr>
+        <th>Token</th>
+        <th>Balance</th>
+        <th>Trade</th>
+        <th>Contract Address</th>
       </tr>
-     <tr>
-       <td>PopCorn</td>
-       <td id="balance2"></td>
-       <td><a href="https://quickswap.exchange/#/swap?exactField=input&outputCurrency=0x6531547b44784dDD8A934fB9fEB92ba582dfeD15&swapIndex=0&currency0=ETH" target="_blank">Trade on QuickSwap</a></td>
-       <td><a href="https://polygonscan.com/address/0x6531547b44784dDD8A934fB9fEB92ba582dfeD15" target=_blank">0x6531547b44784dDD8A934fB9fEB92ba582dfeD15</td>
+      <tr>
+        <td>Corn</td>
+        <td id="balance"></td>
+        <td><a href="https://quickswap.exchange/#/swap?exactField=input&outputCurrency=0xa0c45509036c422ea7c4d4fcac26a9925531d8c3&swapIndex=0&currency0=ETH" target="_blank">Trade on QuickSwap</a></td>
+        <td><a href="https://polygonscan.com/address/0xa0c45509036c422ea7c4d4fcac26a9925531d8c3" target=_blank">0xa0c45509036c422ea7c4d4fcac26a9925531d8c3</td>
+      </tr>
+      <tr>
+        <td>PopCorn</td>
+        <td id="balance2"></td>
+        <td><a href="https://quickswap.exchange/#/swap?exactField=input&outputCurrency=0x6531547b44784dDD8A934fB9fEB92ba582dfeD15&swapIndex=0&currency0=ETH" target="_blank">Trade on QuickSwap</a></td>
+        <td><a href="https://polygonscan.com/address/0x6531547b44784dDD8A934fB9fEB92ba582dfeD15" target=_blank">0x6531547b44784dDD8A934fB9fEB92ba582dfeD15</td>
+      </tr>
+      <tr>
+        <td>Butter</td>
+        <td id="balance3"></td>
+        <td><a href="https://quickswap.exchange/#/swap?exactField=input&outputCurrency=0x409e02e728418501720d7b1e5d7328ac461ecaaegit&swapIndex=0&currency0=ETH" target="_blank">Trade on QuickSwap</a></td>
+        <td><a href="https://polygonscan.com/address/0x409e02e728418501720d7b1e5d7328ac461ecaae" target=_blank">0x409e02e728418501720d7b1e5d7328ac461ecaae</td>
+      </tr>
+    </table>
+    <br>
+    <div class="button-grid">
+      <div class="button-row">
+        <button id="connect-button" class="modern-button" onclick="connect()">Connect Wallet</button>
+        <button class="modern-button" onclick="approve()">Approve Corn</button>
+        <button class="modern-button" onclick="approve2()">Approve PopCorn</button>
+      </div>
+      <div class="button-row">
+        <button id="burn-1-corn" class="modern-button" onclick="burncorn(1)">Burn 1 Corn</button>
+        <button id="burn-3-corn" class="modern-button" onclick="burncorn(3)">Burn 3 Corn</button>
+        <button id="burn-5-corn" class="modern-button" onclick="burncorn(5)">Burn 5 Corn</button>
+      </div>
+      <div class="button-row">
+        <button id="mint-bronze" class="modern-button" onclick="mintnft(1)">Mint Bronze</button>
+        <button id="mint-silver" class="modern-button" onclick="mintnft(3)">Mint Silver</button>
+        <button id="mint-gold" class="modern-button" onclick="mintnft(5)">Mint Gold</button>
+      </div>
+    </div>
+    <style>
+      .button-grid {
+        display: grid;
+        gap: 10px;
+        max-width: 600px;
+        margin: 0 auto;
+      }
+      .button-row {
+        display: flex;
+        justify-content: center;
+      }
+      .modern-button {
+        margin: 0 5px;
+        flex: none;
+        width: 150px;
+      }
+    </style>
+    <br>
+    <p>
+      <img src="images/moeda-bronze.png" alt="Bronze Kernel" style="width:50px;height:50px;">
+      <img src="images/moeda.png" alt="Silver Kernel" style="width:50px;height:50px;">
+      <img src="images/moeda-gold.png" alt="Gold Kernel" style="width:50px;height:50px;">
+      <img src="images/moeda-vip.png" alt="VIP Kernel" style="width:50px;height:50px;"><br>
+      <img src="images/cornhub vip.gif" alt="OG VIP" style="width:50px;height:50px;">
+      <a href="https://rarible.com/token/0xd07dc4262bcdbf85190c01c996b4c06a461d2430:540112?tab=overview" target="_blank" style="display:inline-block; margin:0 10px; vertical-align:middle;">Buy OG CornHub VIP NFTs</a>
+      <img src="images/cornhub vip.gif" alt="OG VIP" style="width:50px;height:50px;"> <br>
+      
+      &#127829 <a href="https://www.gallery.so/TylerIRL" target="_blank">Visit Tyler's NFT Gallery </a> &#127829 <br>
+    </p>
+    <br>
+    <iframe 
+      src="https://widget.quickswap.exchange/#/?swapIndex=0&currency0=ETH&currency1=0xa0C45509036C422EA7C4D4fCaC26a9925531D8C3"
+      style="width: 600px; height: 750px; border: none; display: block; margin: 0 auto; zoom: 55%; -moz-transform: scale(0.75); -moz-transform-origin: 0 0;"
+    ></iframe>
 
-     </tr>
-     <tr>
-       <td>Butter</td>
-       <td id="balance3"></td>
-       <td><a href="https://quickswap.exchange/#/swap?exactField=input&outputCurrency=0x409e02e728418501720d7b1e5d7328ac461ecaaegit&swapIndex=0&currency0=ETH" target="_blank">Trade on QuickSwap</a></td>
-       <td><a href="https://polygonscan.com/address/0x409e02e728418501720d7b1e5d7328ac461ecaae" target=_blank">0x409e02e728418501720d7b1e5d7328ac461ecaae</td>
-     </tr>
-   </table>
-   <br>
-   <div class="button-grid">
-     <div class="button-row">
-       <button id="connect-button" class="modern-button" onclick="connect()">Connect Wallet</button>
-       <button class="modern-button" onclick="approve()">Approve Corn</button>
-       <button class="modern-button" onclick="approve2()">Approve PopCorn</button>
-     </div>
-     <div class="button-row">
-       <button id="burn-1-corn" class="modern-button" onclick="burncorn(1)">Burn 1 Corn</button>
-       <button id="burn-3-corn" class="modern-button" onclick="burncorn(3)">Burn 3 Corn</button>
-       <button id="burn-5-corn" class="modern-button" onclick="burncorn(5)">Burn 5 Corn</button>
-     </div>
-     <div class="button-row">
-       <button id="mint-bronze" class="modern-button" onclick="mintnft(1)">Mint Bronze</button>
-       <button id="mint-silver" class="modern-button" onclick="mintnft(3)">Mint Silver</button>
-       <button id="mint-gold" class="modern-button" onclick="mintnft(5)">Mint Gold</button>
-     </div>
-   </div>
-   <style>
-     .button-grid {
-       display: grid;
-       gap: 10px;
-       max-width: 600px;
-       margin: 0 auto;
-     }
-     .button-row {
-       display: flex;
-       justify-content: center;
-     }
-     .modern-button {
-       margin: 0 5px;
-       flex: none;
-       width: 150px;
-     }
-   </style>
-  <br>
-   <iframe 
-     src="https://widget.quickswap.exchange/#/?swapIndex=0&currency0=ETH&currency1=0xa0C45509036C422EA7C4D4fCaC26a9925531D8C3"
-     style="width: 600px; height: 1500px; border: none; display: block; zoom: 55%; -moz-transform: scale(0.75); -moz-transform-origin: 0 0;"
-   ></iframe>
+    <p>
+      Connect your wallet (assumes metamask or other types of injected wallets) <br>
+      Hit Approve Corn to approve the PopCorn Machine to transfer your CORN Tokens <br>
+      Hit Approve PopCorn to approve the PopCorn Machine to transfer your POPCORN Tokens <br>
+      Burn CORN kernels for POPCORN <br>
+      Burn POPCORN to Mint NFT <br>
+      [1]:Bronze [3]:Silver [5]:Gold <br>
+    </p>
 
-<p>
-Connect your wallet (assumes metamask or other types of injected wallets) <br>
-Hit Approve Corn to approve the PopCorn Machine to transfer your CORN Tokens <br>
-Hit Approve PopCorn to approve the PopCorn Machine to transfer your POPCORN Tokens <br>
-Burn CORN kernels for POPCORN <br>
-Burn POPCORN to Mint NFT <br>
-[1]:Bronze [3]:Silver [5]:Gold <br>
-</p>
+    <script>
+      window.addEventListener('load', async () => {
+        if (typeof window.ethereum !== 'undefined') {
+          const accounts = await window.ethereum.request({ method: 'eth_accounts' });
+          if (accounts.length > 0) {
+            await window.ethereum.enable();
+            updateBalances();
+            updateConnectButton(true);
+          }
+        }
+      });
 
- <script>
-   window.addEventListener('load', async () => {
-     if (typeof window.ethereum !== 'undefined') {
-       const accounts = await window.ethereum.request({ method: 'eth_accounts' });
-       if (accounts.length > 0) {
-         await window.ethereum.enable();
-         updateBalances();
-         updateConnectButton(true);
-       }
-     }
-   });
+      async function updateBalances() {
+        const provider = new ethers.providers.Web3Provider(window.ethereum);
+        const signer = provider.getSigner();
+        const address = await signer.getAddress();
 
-   async function updateBalances() {
-     const provider = new ethers.providers.Web3Provider(window.ethereum);
-     const signer = provider.getSigner();
-     const address = await signer.getAddress();
+        // Update Corn Token balance
+        const cornTokenAddress = '0xa0c45509036c422ea7c4d4fcac26a9925531d8c3';
+        const cornTokenAbi = ['function balanceOf(address) view returns (uint256)'];
+        const cornTokenContract = new ethers.Contract(cornTokenAddress, cornTokenAbi, provider);
+        const cornBalance = await cornTokenContract.balanceOf(address);
+        const cornBalanceFormatted = parseFloat(ethers.utils.formatUnits(cornBalance, 18)).toFixed(3);
+        document.getElementById('balance').innerText = cornBalanceFormatted;
 
-     // Update Corn Token balance
-     const cornTokenAddress = '0xa0c45509036c422ea7c4d4fcac26a9925531d8c3';
-     const cornTokenAbi = ['function balanceOf(address) view returns (uint256)'];
-     const cornTokenContract = new ethers.Contract(cornTokenAddress, cornTokenAbi, provider);
-     const cornBalance = await cornTokenContract.balanceOf(address);
-     const cornBalanceFormatted = parseFloat(ethers.utils.formatUnits(cornBalance, 18)).toFixed(3);
-     document.getElementById('balance').innerText = cornBalanceFormatted;
+        // Update PopCorn Token balance
+        const popCornTokenAddress = '0x6531547b44784dDD8A934fB9fEB92ba582dfeD15';
+        const popCornTokenContract = new ethers.Contract(popCornTokenAddress, cornTokenAbi, provider);
+        const popCornBalance = await popCornTokenContract.balanceOf(address);
+        const popCornBalanceFormatted = parseFloat(ethers.utils.formatUnits(popCornBalance, 18)).toFixed(3);
+        document.getElementById('balance2').innerText = popCornBalanceFormatted;
 
-     // Update PopCorn Token balance
-     const popCornTokenAddress = '0x6531547b44784dDD8A934fB9fEB92ba582dfeD15';
-     const popCornTokenContract = new ethers.Contract(popCornTokenAddress, cornTokenAbi, provider);
-     const popCornBalance = await popCornTokenContract.balanceOf(address);
-     const popCornBalanceFormatted = parseFloat(ethers.utils.formatUnits(popCornBalance, 18)).toFixed(3);
-     document.getElementById('balance2').innerText = popCornBalanceFormatted;
+        // Update Butter Token balance
+        const butterTokenAddress = '0x409e02e728418501720d7b1e5d7328ac461ecaae';
+        const butterTokenContract = new ethers.Contract(butterTokenAddress, cornTokenAbi, provider);
+        const butterBalance = await butterTokenContract.balanceOf(address);
+        const butterBalanceFormatted = (parseFloat(ethers.utils.formatUnits(butterBalance, 18)) / 1000).toFixed(0) + 'k';
+        document.getElementById('balance3').innerText = butterBalanceFormatted;
 
-     // Update Butter Token balance
-     const butterTokenAddress = '0x409e02e728418501720d7b1e5d7328ac461ecaae';
-     const butterTokenContract = new ethers.Contract(butterTokenAddress, cornTokenAbi, provider);
-     const butterBalance = await butterTokenContract.balanceOf(address);
-     const butterBalanceFormatted = (parseFloat(ethers.utils.formatUnits(butterBalance, 18)) / 1000).toFixed(0) + 'k';
-     document.getElementById('balance3').innerText = butterBalanceFormatted;
+        // Update button colors based on Corn balance
+        updateButtonColors(cornBalanceFormatted);
 
-     // Update button colors based on Corn balance
-     updateButtonColors(cornBalanceFormatted);
+        // Update mint button colors based on PopCorn balance
+        updateMintButtonColors(popCornBalanceFormatted);
+      }
 
-     // Update mint button colors based on PopCorn balance
-     updateMintButtonColors(popCornBalanceFormatted);
-   }
+      function updateButtonColors(cornBalance) {
+        const burn1Button = document.getElementById('burn-1-corn');
+        const burn3Button = document.getElementById('burn-3-corn');
+        const burn5Button = document.getElementById('burn-5-corn');
 
-   function updateButtonColors(cornBalance) {
-     const burn1Button = document.getElementById('burn-1-corn');
-     const burn3Button = document.getElementById('burn-3-corn');
-     const burn5Button = document.getElementById('burn-5-corn');
+        if (cornBalance >= 1) {
+          burn1Button.style.backgroundColor = 'var(--corn-yellow)';
+          burn1Button.style.color = '#333';
+        } else {
+          burn1Button.style.backgroundColor = '';
+          burn1Button.style.color = '';
+        }
 
-     if (cornBalance >= 1) {
-       burn1Button.style.backgroundColor = 'var(--corn-yellow)';
-       burn1Button.style.color = '#333';
-     } else {
-       burn1Button.style.backgroundColor = '';
-       burn1Button.style.color = '';
-     }
+        if (cornBalance >= 3) {
+          burn3Button.style.backgroundColor = 'var(--corn-yellow)';
+          burn3Button.style.color = '#333';
+        } else {
+          burn3Button.style.backgroundColor = '';
+          burn3Button.style.color = '';
+        }
 
-     if (cornBalance >= 3) {
-       burn3Button.style.backgroundColor = 'var(--corn-yellow)';
-       burn3Button.style.color = '#333';
-     } else {
-       burn3Button.style.backgroundColor = '';
-       burn3Button.style.color = '';
-     }
+        if (cornBalance >= 5) {
+          burn5Button.style.backgroundColor = 'var(--corn-yellow)';
+          burn5Button.style.color = '#333';
+        } else {
+          burn5Button.style.backgroundColor = '';
+          burn5Button.style.color = '';
+        }
+      }
 
-     if (cornBalance >= 5) {
-       burn5Button.style.backgroundColor = 'var(--corn-yellow)';
-       burn5Button.style.color = '#333';
-     } else {
-       burn5Button.style.backgroundColor = '';
-       burn5Button.style.color = '';
-     }
-   }
+      function updateMintButtonColors(popCornBalance) {
+        const mintBronzeButton = document.getElementById('mint-bronze');
+        const mintSilverButton = document.getElementById('mint-silver');
+        const mintGoldButton   = document.getElementById('mint-gold');
 
-   function updateMintButtonColors(popCornBalance) {
-     const mintBronzeButton = document.getElementById('mint-bronze');
-     const mintSilverButton = document.getElementById('mint-silver');
-     const mintGoldButton   = document.getElementById('mint-gold');
+        if (popCornBalance >= 1) {
+          mintBronzeButton.style.backgroundColor = 'var(--corn-yellow)';
+          mintBronzeButton.style.color = '#333';
+        } else {
+          mintBronzeButton.style.backgroundColor = '';
+          mintBronzeButton.style.color = '';
+        }
 
-     if (popCornBalance >= 1) {
-       mintBronzeButton.style.backgroundColor = 'var(--corn-yellow)';
-       mintBronzeButton.style.color = '#333';
-     } else {
-       mintBronzeButton.style.backgroundColor = '';
-       mintBronzeButton.style.color = '';
-     }
+        if (popCornBalance >= 3) {
+          mintSilverButton.style.backgroundColor = 'var(--corn-yellow)';
+          mintSilverButton.style.color = '#333';
+        } else {
+          mintSilverButton.style.backgroundColor = '';
+          mintSilverButton.style.color = '';
+        }
 
-     if (popCornBalance >= 3) {
-       mintSilverButton.style.backgroundColor = 'var(--corn-yellow)';
-       mintSilverButton.style.color = '#333';
-     } else {
-       mintSilverButton.style.backgroundColor = '';
-       mintSilverButton.style.color = '';
-     }
+        if (popCornBalance >= 5) {
+          mintGoldButton.style.backgroundColor = 'var(--corn-yellow)';
+          mintGoldButton.style.color = '#333';
+        } else {
+          mintGoldButton.style.backgroundColor = '';
+          mintGoldButton.style.color = '';
+        }
+      }
 
-     if (popCornBalance >= 5) {
-       mintGoldButton.style.backgroundColor = 'var(--corn-yellow)';
-       mintGoldButton.style.color = '#333';
-     } else {
-       mintGoldButton.style.backgroundColor = '';
-       mintGoldButton.style.color = '';
-     }
-   }
+      function updateConnectButton(isConnected) {
+        const connectButton = document.getElementById('connect-button');
+        if (isConnected) {
+          connectButton.textContent = 'Wallet Connected';
+          connectButton.style.backgroundColor = '#F4D03F';
+          connectButton.style.color = '#333';
+        } else {
+          connectButton.textContent = 'Connect Wallet';
+          connectButton.style.backgroundColor = '';
+          connectButton.style.color = '';
+        }
+      }
 
-   function updateConnectButton(isConnected) {
-     const connectButton = document.getElementById('connect-button');
-     if (isConnected) {
-       connectButton.textContent = 'Wallet Connected';
-       connectButton.style.backgroundColor = '#F4D03F';
-       connectButton.style.color = '#333';
-     } else {
-       connectButton.textContent = 'Connect Wallet';
-       connectButton.style.backgroundColor = '';
-       connectButton.style.color = '';
-     }
-   }
+      async function connect() {
+        if (typeof window.ethereum !== 'undefined') {
+          try {
+            await window.ethereum.request({ method: 'eth_requestAccounts' });
+            updateConnectButton(true);
+            updateBalances();
+          } catch (error) {
+            console.error('User denied account access');
+          }
+        } else {
+          console.log('MetaMask is not installed');
+        }
+      }
+    </script>
 
-   async function connect() {
-     if (typeof window.ethereum !== 'undefined') {
-       try {
-         await window.ethereum.request({ method: 'eth_requestAccounts' });
-         updateConnectButton(true);
-         updateBalances();
-       } catch (error) {
-         console.error('User denied account access');
-       }
-     } else {
-       console.log('MetaMask is not installed');
-     }
-   }
- </script>
+   
 
- <br>
- <p>
-  <img src="images/moeda-bronze.png" alt="Bronze Kernel" style="width:50px;height:50px;">
-  <img src="images/moeda.png" alt="Silver Kernel" style="width:50px;height:50px;">
-  <img src="images/moeda-gold.png" alt="Gold Kernel" style="width:50px;height:50px;">
-  <img src="images/moeda-vip.png" alt="VIP Kernel" style="width:50px;height:50px;"><br>
-  &#127806 <a href="https://rarible.com/token/0xd07dc4262bcdbf85190c01c996b4c06a461d2430:540112?tab=overview" target="_blank">Buy OG CornHub VIP NFTs </a> &#127806 <br>
-  &#127829 <a href="https://www.gallery.so/TylerIRL" target="_blank">Visit Tyler's NFT Gallery </a> &#127829 <br>
-</p>
-
-  <div class="grass"></div>
+    <div class="grass"></div>
+  </div>
 </body>
 </html>
