@@ -247,7 +247,7 @@ async function updateBalances() {
 </center>
 
 <div style="overflow: hidden; margin: 20px auto; width: 90%; max-width: 800px;">
-  <label for="toggle-marquee">Toggle Marquee:</label>
+  <label for="toggle-marquee">Stop Ticker:</label>
   <input type="checkbox" id="toggle-marquee" onclick="toggleMarquee()">
   
   <div id="marquee-container">
@@ -374,11 +374,6 @@ async function updateBalances() {
   <button id="mint-bronze" class="connect-button" onclick="mintnft(1)" style="width: 100%;">Mint Bronze</button>
   <button id="mint-silver" class="connect-button" onclick="mintnft(3)" style="width: 100%;">Mint Silver</button>
   <button id="mint-gold" class="connect-button" onclick="mintnft(5)" style="width: 100%;">Mint Gold</button>
-  <div style="display: flex; justify-content: center; gap: 10px;">
-    <img src="images/moeda-bronze.png" alt="Bronze Kernel" style="width:100px;height:100px;">
-    <img src="images/moeda.png" alt="Silver Kernel" style="width:100px;height:100px;">
-    <img src="images/moeda-gold.png" alt="Gold Kernel" style="width:100px;height:100px;">
-  </div>
   <!-- <div class="button-images"></div> -->
   </div>
 </div>
@@ -401,7 +396,10 @@ async function updateBalances() {
 
 <p align="center">
 
-<!-- <img border="0" alt="CornHub logo" src="images/moeda.png" width="100" height="100"> -->
+  <img src="images/moeda-bronze.png" alt="Bronze Kernel" style="width:100px;height:100px;">   
+  <img src="images/moeda.png" alt="Silver Kernel" style="width:100px;height:100px;">
+  <img src="images/moeda-gold.png" alt="Gold Kernel" style="width:100px;height:100px;"><br>
+
 </a>
 <font size="2" style="font-size: 150%">
 Our Father, which art in the blockchain, Hallowed be thy Node.<br>
