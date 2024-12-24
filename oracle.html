@@ -60,17 +60,45 @@ a:visited {
 .balance-table {
   margin: 20px auto;
   border-collapse: collapse;
-  width: 80%;
-  max-width: 400px;
+  width: 90%;
+  max-width: 800px;
+  table-layout: fixed;
 }
 .balance-table th, .balance-table td {
   border: 1px solid #ddd;
   padding: 8px;
   text-align: center;
+  font-size: clamp(10px, 1.5vw, 14px);
 }
 .balance-table th {
   background-color: #000080;
   color: white;
+}
+.balance-table td:last-child {
+  font-family: monospace;
+  padding: 0;
+  height: 40px;
+  position: relative;
+  overflow: hidden;
+}
+.balance-table td:last-child a {
+  position: absolute;
+  width: 100%;
+  animation: marquee 15s linear infinite;
+  white-space: nowrap;
+}
+.balance-table td:last-child a:nth-child(2) {
+  animation-delay: 5s;
+}
+.balance-table td:last-child a:nth-child(3) {
+  animation-delay: 10s;
+}
+@keyframes marquee {
+  0% { transform: translateY(100%); }
+  5% { transform: translateY(0); }
+  28% { transform: translateY(0); }
+  33% { transform: translateY(-100%); }
+  100% { transform: translateY(-100%); }
 }
 </style>
 <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
@@ -130,58 +158,59 @@ async function updateBalances() {
 <font size="12">H</font><font size="8">UB </font>
 <font size="4">INC.<br>CornHub.eth</font><br>Official Home Page</b>
 <font size="2">&nbsp;</p></font>
+<br>
+<div style="overflow: hidden; margin: 20px auto; width: 90%; max-width: 800px;">
+  <div style="white-space: nowrap; animation: scroll1 20s linear infinite;">
+    Corn Token - Balance: <span id="balance"></span> - <a href="https://quickswap.exchange/#/swap?exactField=input&outputCurrency=0xa0c45509036c422ea7c4d4fcac26a9925531d8c3&swapIndex=0&currency0=ETH" target="_blank">Trade Corn</a> - Contract: <a href="https://polygonscan.com/address/0xa0c45509036c422ea7c4d4fcac26a9925531d8c3" target="_blank">0xa0c45509036c422ea7c4d4fcac26a9925531d8c3</a>
+  </div>
+  <div style="white-space: nowrap; animation: scroll2 30s linear infinite;">
+    PopCorn Token - Balance: <span id="balance2"></span> - <a href="https://quickswap.exchange/#/swap?exactField=input&outputCurrency=0x6531547b44784dDD8A934fB9fEB92ba582dfeD15&swapIndex=0&currency0=ETH" target="_blank">Trade PopCorn</a> - Contract: <a href="https://polygonscan.com/address/0x6531547b44784dDD8A934fB9fEB92ba582dfeD15" target="_blank">0x6531547b44784dDD8A934fB9fEB92ba582dfeD15</a>
+  </div>
+  <div style="white-space: nowrap; animation: scroll3 25s linear infinite;">
+    Butter Token - Balance: <span id="balance3"></span> - <a href="https://quickswap.exchange/#/swap?exactField=input&outputCurrency=0x409e02e728418501720d7b1e5d7328ac461ecaae&swapIndex=0&currency0=ETH" target="_blank">Trade Butter</a> - Contract: <a href="https://polygonscan.com/address/0x409e02e728418501720d7b1e5d7328ac461ecaae" target="_blank">0x409e02e728418501720d7b1e5d7328ac461ecaae</a>
+  </div>
+</div>
 
-<table class="balance-table" style="font-size: 75%;">
-  <tr>
-    <th>Token</th>
-    <th>Balance</th>
-    <th>Trade</th>
-    <th>Contract Address</th>
-  </tr>
-  <tr>
-    <td>Corn</td>
-    <td id="balance"></td>
-    <td><a href="https://quickswap.exchange/#/swap?exactField=input&outputCurrency=0xa0c45509036c422ea7c4d4fcac26a9925531d8c3&swapIndex=0&currency0=ETH" target="_blank">Trade Corn</a></td>
-    <td><a href="https://polygonscan.com/address/0xa0c45509036c422ea7c4d4fcac26a9925531d8c3" target="_blank">0xa0c45509036c422ea7c4d4fcac26a9925531d8c3</a></td>
-  </tr>
-  <tr>
-    <td>PopCorn</td>
-    <td id="balance2"></td>
-    <td><a href="https://quickswap.exchange/#/swap?exactField=input&outputCurrency=0x6531547b44784dDD8A934fB9fEB92ba582dfeD15&swapIndex=0&currency0=ETH" target="_blank">Trade PopCorn</a></td>
-    <td><a href="https://polygonscan.com/address/0x6531547b44784dDD8A934fB9fEB92ba582dfeD15" target="_blank">0x6531547b44784dDD8A934fB9fEB92ba582dfeD15</a></td>
-  </tr>
-  <tr>
-    <td>Butter</td>
-    <td id="balance3"></td>
-    <td><a href="https://quickswap.exchange/#/swap?exactField=input&outputCurrency=0x409e02e728418501720d7b1e5d7328ac461ecaae&swapIndex=0&currency0=ETH" target="_blank">Trade Butter</a></td>
-    <td><a href="https://polygonscan.com/address/0x409e02e728418501720d7b1e5d7328ac461ecaae" target="_blank">0x409e02e728418501720d7b1e5d7328ac461ecaae</a></td>
-  </tr>
-</table>
+<style>
+@keyframes scroll1 {
+  from { transform: translateX(100%); }
+  to { transform: translateX(-100%); }
+}
+@keyframes scroll2 {
+  from { transform: translateX(100%); }
+  to { transform: translateX(-100%); }
+}
+@keyframes scroll3 {
+  from { transform: translateX(100%); }
+  to { transform: translateX(-100%); }
+}
+</style>
+
 
 <p align="center">
 <center>
   <hr>
-
 <table border="0" cellspacing="0">
   <tbody>
   <tr>
-    <!-- <td>
-      <ul>
-        <li style="font-size: 200%"><a href="autopets.html">Weekly Super Auto Pets Tournament</a></li>
-      </ul>
-    </td> -->
     <td>
       <ul>
-        <li style="font-size: 200%"><a href="https://rarible.com/token/0xd07dc4262bcdbf85190c01c996b4c06a461d2430:540112?tab=overview" target="_blank">Buy OG CornHub VIP NFTs</a><br>
-        <font size="2">Updated February 25, 2023</font></li>
+        <li style="font-size: 200%"><a href="https://cult.inc/" target="_blank">CULT, INC</a><br>
+        <font size="2">Updated Dec 23, 2024</font></li>
+      </ul>
+    </td>
+    <td>
+      <ul>
+        <li style="font-size: 200%"><a href="https://misctyler.github.io/CornHub/">Corn Kernel Exchange</a><br>
+        <font size="2">Updated March 21, 2023</font></li>
       </ul>
     </td>
   </tr>
   <tr>
     <td>
       <ul>
-        <li style="font-size: 200%"><a href="https://snapshot.org/#/cornhub.eth" target="_blank">CornHub snapshot voting</a><br>
-        <font size="2">Updated March 21, 2023</font></li>
+        <li style="font-size: 200%"><a href="https://www.oncyber.io/tylerirl" target="_blank">Visit Tyler's NFT Gallery</a><br>
+        <font size="2">Updated March 15, 2023</font></li>
       </ul>
     </td>
     <td>
@@ -194,15 +223,14 @@ async function updateBalances() {
   <tr>
     <td>
       <ul>
-        <li style="font-size: 200%"><a href="https://misctyler.github.io/CornHub/">Corn Kernel Exchange</a><br>
-        <font size="2">Updated March 21, 2023</font></li>
+        <li style="font-size: 200%"><a href="https://rarible.com/token/0xd07dc4262bcdbf85190c01c996b4c06a461d2430:540112?tab=overview" target="_blank">Buy OG CornHub VIP NFTs</a><br>
+        <font size="2">Updated February 25, 2023</font></li>
       </ul>
     </td>
     <td>
-      <ul>
-        <li style="font-size: 200%"><a href="https://www.oncyber.io/tylerirl" target="_blank">Visit Tyler's NFT Gallery</a><br>
-        <font size="2">Updated March 15, 2023</font></li>
-      </ul>
+      <!-- <ul>
+        <li style="font-size: 200%"><a href="autopets.html">Weekly Super Auto Pets Tournament</a></li>
+      </ul> -->
     </td>
   </tr>
   </tbody>
@@ -210,13 +238,61 @@ async function updateBalances() {
 </center>
 
 <hr>
+<div id="polygon-buttons" style="display: none;">
+  <div class="button-grid">
+    <div class="button-row">
+      <button id="connect-button" class="connect-button" onclick="connect()">Connect Wallet</button>
+      <button class="connect-button" onclick="approve()">Approve Corn</button>
+      <button class="connect-button" onclick="approve2()">Approve PopCorn</button>
+    </div>
+    <div class="button-row">
+      <button id="burn-1-corn" class="connect-button" onclick="burncorn(1)">Burn 1 Corn</button>
+      <button id="burn-3-corn" class="connect-button" onclick="burncorn(3)">Burn 3 Corn</button>
+      <button id="burn-5-corn" class="connect-button" onclick="burncorn(5)">Burn 5 Corn</button>
+    </div>
+    <div class="button-row">
+      <button id="mint-bronze" class="connect-button" onclick="mintnft(1)">Mint Bronze</button>
+      <button id="mint-silver" class="connect-button" onclick="mintnft(3)">Mint Silver</button>
+      <button id="mint-gold" class="connect-button" onclick="mintnft(5)">Mint Gold</button>
+    </div>
+  </div>
+</div>
+
+<style>
+.button-grid {
+  display: grid;
+  gap: 10px;
+  max-width: 600px;
+  margin: 20px auto;
+}
+.button-row {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+.button-row .connect-button {
+  flex: none;
+  width: 150px;
+}
+</style>
+
+<script>
+window.ethereum.on('chainChanged', function (chainId) {
+  const polygonButtons = document.getElementById('polygon-buttons');
+  if (chainId === '0x89') { // Polygon Mainnet chainId
+    polygonButtons.style.display = 'block';
+  } else {
+    polygonButtons.style.display = 'none';
+  }
+});
+</script>
 
 <p align="center">
 <a href="https://misctyler.github.io/CornHub/">
 <img border="0" alt="CornHub logo" src="images/moeda.png" width="100" height="100">
 </a>
 <br>
-<font size="2" style="font-size: 200%">
+<font size="2" style="font-size: 150%">
 Our Father, which art in the blockchain, Hallowed be thy Node.<br>
 Thy Moon will come. Thy hash will be done, on earth, As it is encrypted.<br>
 Give us this day our daily coin. And forgive us our DDoSes, As we forgive them that DDoS against us.<br>
@@ -224,7 +300,6 @@ And lead us not into regulation, But deliver us from fiat currency inflation.<br
 For thine is the Ledger, The processing power, and the wattage.<br>
 For ever and ever.<br>
 Amen<br>
-<a href="https://misctyler.github.io/CornHub/">CornHub</a>
 </font>
 </p>
 
@@ -239,7 +314,7 @@ provide a direct response.</p>
 <hr>
 
 <dl>
-<p align="left"><font size="4"><a href="index.html">Main Page</a></p><br>
+<p align="left"><font size="4"><a href="index.html">Main Page</a></p>  <img src="images/tyler.png" alt="Oh...I see" style="width:150px;height:150px;"><br>
   <a class="twitter-follow-button"
   href="https://twitter.com/itsTylerIRL">
 Follow @itsTylerIRL</a><br>
