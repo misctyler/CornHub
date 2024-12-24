@@ -110,6 +110,62 @@ a:visited {
 <script src="script.js"></script>
 
 <script>
+window.addEventListener('load', async () => {
+  if (typeof window.ethereum !== 'undefined') {
+    // Check if already connected to Polygon network
+    const polygonChainId = '0x89'; // Chain ID for Polygon Mainnet
+    const currentChainId = await window.ethereum.request({ method: 'eth_chainId' });
+    
+    if (currentChainId !== polygonChainId) {
+      try {
+        // Request network switch to Polygon
+        await window.ethereum.request({
+          method: 'wallet_switchEthereumChain',
+          params: [{ chainId: polygonChainId }],
+        });
+      } catch (switchError) {
+        // If network not added, add it
+        if (switchError.code === 4902) {
+          try {
+            await window.ethereum.request({
+              method: 'wallet_addEthereumChain',
+              params: [{
+                chainId: polygonChainId,
+                chainName: 'Polygon Mainnet',
+                nativeCurrency: {
+                  name: 'MATIC',
+                  symbol: 'MATIC',
+                  decimals: 18
+                },
+                rpcUrls: ['https://polygon-rpc.com/'],
+                blockExplorerUrls: ['https://polygonscan.com/']
+              }]
+            });
+          } catch (addError) {
+            console.error('Failed to add Polygon network:', addError);
+          }
+        }
+      }
+    }
+    
+    // Connect wallet
+    try {
+      await window.ethereum.request({ method: 'eth_requestAccounts' });
+      const button = document.getElementById('connect-button');
+      button.textContent = 'Connected';
+      button.classList.add('connected');
+      document.getElementById('button-grid').style.display = 'grid';
+      document.getElementById('wallet-status').style.display = 'none';
+      document.getElementById('balance-info').style.display = 'block';
+      updateBalances();
+    } catch (error) {
+      console.error('User denied account access');
+    }
+  } else {
+    alert('Please install MetaMask!');
+  }
+});
+
 async function connectWallet() {
   if (typeof window.ethereum !== 'undefined') {
     try {
@@ -315,10 +371,9 @@ async function updateBalances() {
 </style>
 
 <p align="center">
-<a href="https://misctyler.github.io/CornHub/">
+
 <!-- <img border="0" alt="CornHub logo" src="images/moeda.png" width="100" height="100"> -->
 </a>
-<br>
 <font size="2" style="font-size: 150%">
 Our Father, which art in the blockchain, Hallowed be thy Node.<br>
 Thy Moon will come. Thy hash will be done, on earth, As it is encrypted.<br>
