@@ -238,23 +238,21 @@ async function updateBalances() {
 </center>
 
 <hr>
-<div id="polygon-buttons" style="display: none;">
-  <div class="button-grid">
-    <div class="button-row">
-      <button id="connect-button" class="connect-button" onclick="connect()">Connect Wallet</button>
-      <button class="connect-button" onclick="approve()">Approve Corn</button>
-      <button class="connect-button" onclick="approve2()">Approve PopCorn</button>
-    </div>
-    <div class="button-row">
-      <button id="burn-1-corn" class="connect-button" onclick="burncorn(1)">Burn 1 Corn</button>
-      <button id="burn-3-corn" class="connect-button" onclick="burncorn(3)">Burn 3 Corn</button>
-      <button id="burn-5-corn" class="connect-button" onclick="burncorn(5)">Burn 5 Corn</button>
-    </div>
-    <div class="button-row">
-      <button id="mint-bronze" class="connect-button" onclick="mintnft(1)">Mint Bronze</button>
-      <button id="mint-silver" class="connect-button" onclick="mintnft(3)">Mint Silver</button>
-      <button id="mint-gold" class="connect-button" onclick="mintnft(5)">Mint Gold</button>
-    </div>
+<div class="button-grid">
+  <div class="button-row">
+    <button id="connect-button" class="connect-button" onclick="connect()">Connect Wallet</button>
+    <button class="connect-button" onclick="approve()">Approve Corn</button>
+    <button class="connect-button" onclick="approve2()">Approve PopCorn</button>
+  </div>
+  <div class="button-row">
+    <button id="burn-1-corn" class="connect-button" onclick="burncorn(1)">Burn 1 Corn</button>
+    <button id="burn-3-corn" class="connect-button" onclick="burncorn(3)">Burn 3 Corn</button>
+    <button id="burn-5-corn" class="connect-button" onclick="burncorn(5)">Burn 5 Corn</button>
+  </div>
+  <div class="button-row">
+    <button id="mint-bronze" class="connect-button" onclick="mintnft(1)">Mint Bronze</button>
+    <button id="mint-silver" class="connect-button" onclick="mintnft(3)">Mint Silver</button>
+    <button id="mint-gold" class="connect-button" onclick="mintnft(5)">Mint Gold</button>
   </div>
 </div>
 
@@ -275,17 +273,6 @@ async function updateBalances() {
   width: 150px;
 }
 </style>
-
-<script>
-window.ethereum.on('chainChanged', function (chainId) {
-  const polygonButtons = document.getElementById('polygon-buttons');
-  if (chainId === '0x89') { // Polygon Mainnet chainId
-    polygonButtons.style.display = 'block';
-  } else {
-    polygonButtons.style.display = 'none';
-  }
-});
-</script>
 
 <p align="center">
 <a href="https://misctyler.github.io/CornHub/">
