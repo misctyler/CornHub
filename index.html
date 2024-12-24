@@ -223,10 +223,11 @@ async function updateBalances() {
   document.getElementById('burn-3-corn').classList.toggle('enabled', cornBalanceNum >= 3);
   document.getElementById('burn-5-corn').classList.toggle('enabled', cornBalanceNum >= 5);
   
-  // Enable/disable mint buttons based on CORN balance
-  document.getElementById('mint-bronze').classList.toggle('enabled', cornBalanceNum >= 1);
-  document.getElementById('mint-silver').classList.toggle('enabled', cornBalanceNum >= 3);
-  document.getElementById('mint-gold').classList.toggle('enabled', cornBalanceNum >= 5);
+  // Enable/disable mint buttons based on POPCORN balance
+  const popcornBalanceNum = parseFloat(popCornBalanceFormatted);
+  document.getElementById('mint-bronze').classList.toggle('enabled', popcornBalanceNum >= 1);
+  document.getElementById('mint-silver').classList.toggle('enabled', popcornBalanceNum >= 3);
+  document.getElementById('mint-gold').classList.toggle('enabled', popcornBalanceNum >= 5);
 }
 </script>
 </head>
@@ -260,8 +261,7 @@ async function updateBalances() {
 <br>
 
 <script src="https://widgets.coingecko.com/gecko-coin-price-static-headline-widget.js"></script>
-<gecko-coin-price-static-headline-widget locale="en" transparent-background="true" coin-ids="bitcoin,ethereum,chainlink,milady-cult-coin,curve-dao-token,mog-coin,milady-vault-nftx" initial-currency="usd"></gecko-coin-price-static-headline-widget><br>
-
+<gecko-coin-price-static-headline-widget locale="en" transparent-background="true" coin-ids="bitcoin,ethereum,chainlink,milady-cult-coin,curve-dao-token,aavegotchi,heheh" initial-currency="usd"></gecko-coin-price-static-headline-widget>
 
 
 <style>
@@ -342,23 +342,15 @@ async function updateBalances() {
 </p>
 <br>
 <div id="button-grid" class="button-grid" style="display: none;">
-  <div class="button-row">
-    <button class="connect-button" onclick="approve()" style="width: 100%;">Approve Corn</button>
-    <button class="connect-button" style="visibility: hidden">Spacer</button>
-    <button class="connect-button" onclick="approve2()" style="width: 100%;">Approve PopCorn</button>
-    
-  </div>
-  <div class="button-row">
-    <button id="burn-1-corn" class="connect-button" onclick="burncorn(1)" style="width: 100%;">Burn 1 Corn</button>
-    <button id="burn-3-corn" class="connect-button" onclick="burncorn(3)" style="width: 100%;">Burn 3 Corn</button>
-    <button id="burn-5-corn" class="connect-button" onclick="burncorn(5)" style="width: 100%;">Burn 5 Corn</button>
-  </div>
-  <div class="button-row">
-    <button id="mint-bronze" class="connect-button" onclick="mintnft(1)" style="width: 100%;">Mint Bronze</button>
-    <button id="mint-silver" class="connect-button" onclick="mintnft(3)" style="width: 100%;">Mint Silver</button>
-    <button id="mint-gold" class="connect-button" onclick="mintnft(5)" style="width: 100%;">Mint Gold</button>
-  </div>
-  <div class="button-row">
+  <button class="connect-button" onclick="approve()" style="width: 100%;">Approve Corn</button>
+  <button class="connect-button" onclick="approve2()" style="width: 100%;">Approve PopCorn</button>
+  <button id="burn-1-corn" class="connect-button" onclick="burncorn(1)" style="width: 100%;">Burn 1 Corn</button>
+  <button id="burn-3-corn" class="connect-button" onclick="burncorn(3)" style="width: 100%;">Burn 3 Corn</button>
+  <button id="burn-5-corn" class="connect-button" onclick="burncorn(5)" style="width: 100%;">Burn 5 Corn</button>
+  <button id="mint-bronze" class="connect-button" onclick="mintnft(1)" style="width: 100%;">Mint Bronze</button>
+  <button id="mint-silver" class="connect-button" onclick="mintnft(3)" style="width: 100%;">Mint Silver</button>
+  <button id="mint-gold" class="connect-button" onclick="mintnft(5)" style="width: 100%;">Mint Gold</button>
+  <div class="button-images">
     <img src="images/moeda-bronze.png" alt="Bronze Kernel" style="width:100px;height:100px;">
     <img src="images/moeda.png" alt="Silver Kernel" style="width:100px;height:100px;">
     <img src="images/moeda-gold.png" alt="Gold Kernel" style="width:100px;height:100px;">
@@ -368,18 +360,15 @@ async function updateBalances() {
 <style>
 .button-grid {
   display: grid;
+  grid-template-columns: repeat(3, 1fr); /* Create a 3x3 grid */
   gap: 10px;
   max-width: 600px;
   margin: 20px auto;
 }
-.button-row {
-  display: flex;
-  flex-direction: column; /* Change to column for better mobile support */
-  align-items: stretch; /* Ensure buttons take full width */
-  gap: 10px;
+.button-images {
+  grid-column: span 3; /* Make images span across all columns */
 }
 .button-row .connect-button {
-  flex: none;
   width: 100%; /* Ensure buttons take full width on mobile */
 }
 </style>
@@ -409,7 +398,18 @@ provide a direct response.</p>
 
 <hr>
 
-<div class="affiliated-projects">
+
+<dl>
+<p align="left"><font size="4"><a href="index.html">Main Page</a></p>  <img src="images/tyler.png" alt="Oh...I see" style="width:150px;height:150px;"><br>
+  <a class="twitter-follow-button"
+  href="https://twitter.com/itsTylerIRL">
+Follow @itsTylerIRL</a>
+<br>
+<p align="left">Copyright &copy; 2023 <b>CornHub Intl Inc.</b></font></p>
+</dl>
+<br>
+
+<div class="affiliated-projects"></div>
   <div class="project-grid">
     <div class="project-item">
       <a href="https://misctyler.github.io/CornHub/oracle"><img src="images/moeda.png" alt="CornHub" style="width:50px;height:50px;"></a>
@@ -446,14 +446,6 @@ provide a direct response.</p>
   gap: 5px;
 }
 </style><br>
-<dl>
-<p align="left"><font size="4"><a href="index.html">Main Page</a></p>  <img src="images/tyler.png" alt="Oh...I see" style="width:150px;height:150px;"><br>
-  <a class="twitter-follow-button"
-  href="https://twitter.com/itsTylerIRL">
-Follow @itsTylerIRL</a>
-<br>
-<p align="left">Copyright &copy; 2023 <b>CornHub Intl Inc.</b></font></p>
-</dl>
 
 </body>
 </html>
