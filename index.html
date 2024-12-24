@@ -89,83 +89,7 @@
      <img src="images/polygon-matic-logo.png" alt="polygon" style="width:25px;height:auto;vertical-align:middle;">
    </p>
    <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
-
-   <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/web3/1.5.2/web3.min.js" integrity="sha512-qfNEgqdLEd+OkOZSZxb9kPOvOz62NNoPd0A5W5G8LMwfdtKn3+5D/tx5zvgu+7IaPqkFq60VfJ+Mn1bVJjMx/w==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-   <script>
-     // Check if MetaMask is installed and is connected
-     if (typeof window.ethereum !== 'undefined' && window.ethereum.isMetaMask) {
-       // Function to switch to Polygon network
-       async function switchToPolygon() {
-         try {
-           await window.ethereum.request({
-             method: 'wallet_switchEthereumChain',
-             params: [{ chainId: '0x89' }], // chainId must be in hexadecimal numbers
-           });
-         } catch (error) {
-           // This error code indicates that the chain has not been added to MetaMask
-           if (error.code === 4902) {
-             try {
-               await window.ethereum.request({
-                 method: 'wallet_addEthereumChain',
-                 params: [{
-                   chainId: '0x89',
-                   chainName: 'Polygon Mainnet',
-                   nativeCurrency: {
-                     name: 'MATIC',
-                     symbol: 'MATIC',
-                     decimals: 18
-                   },
-                   rpcUrls: ['https://polygon-rpc.com/'],
-                   blockExplorerUrls: ['https://polygonscan.com/']
-                 }],
-               });
-             } catch (addError) {
-               console.error(addError);
-             }
-           }
-           console.error(error);
-         }
-       }
-
-       // Function to update network status message
-       function updateNetworkStatus(isPolygon) {
-         const statusElement = document.getElementById('network-status');
-         if (isPolygon) {
-           statusElement.innerHTML = 'Connected to Polygon';
-         } else {
-           statusElement.innerHTML = '<img src="images/polygon-matic-logo.png" alt="polygon" style="width:25px;height:auto;vertical-align:middle;"> *** Please Only Connect using Polygon (matic) network *** <img src="images/polygon-matic-logo.png" alt="polygon" style="width:25px;height:auto;vertical-align:middle;">';
-         }
-       }
-
-       // Check the current network and switch if necessary
-       ethereum.request({ method: 'net_version' }).then((networkId) => {
-         if (networkId !== '137') {
-           switchToPolygon();
-           updateNetworkStatus(false);
-         } else {
-           updateNetworkStatus(true);
-         }
-       }).catch((error) => {
-         console.error(error);
-         updateNetworkStatus(false);
-       });
-
-       // Listen for network changes
-       ethereum.on('chainChanged', (chainId) => {
-         if (chainId !== '0x89') { // '0x89' is the hexadecimal chainId for Polygon
-           switchToPolygon();
-           updateNetworkStatus(false);
-         } else {
-           updateNetworkStatus(true);
-         }
-       });
-     } else {
-       // MetaMask is not installed or is not connected
-       document.getElementById('network-status').innerHTML = '<img src="images/polygon-matic-logo.png" alt="polygon" style="width:25px;height:auto;vertical-align:middle;"> *** Please Only Connect using Polygon (matic) network *** <img src="images/polygon-matic-logo.png" alt="polygon" style="width:25px;height:auto;vertical-align:middle;">';
-     }
-   </script> -->
-
-
+   <script src="https://cdn.jsdelivr.net/npm/ethers@latest/dist/ethers.umd.min.js"></script>
 
    <table class="balance-table">
      <tr>
@@ -192,19 +116,19 @@
    <br>
    <div class="button-grid">
      <div class="button-row">
-       <button id="connect-button" class="modern-button" onclick="connect()">Connect Wallet</button>
-       <button class="modern-button" onclick="approve()">Approve Corn</button>
-       <button class="modern-button" onclick="approve2()">Approve PopCorn</button>
+       <button id="connect-button" class="modern-button" onclick="window.connect()">Connect Wallet</button>
+       <button class="modern-button" onclick="window.approve()">Approve Corn</button>
+       <button class="modern-button" onclick="window.approve2()">Approve PopCorn</button>
      </div>
      <div class="button-row">
-       <button id="burn-1-corn" class="modern-button" onclick="burncorn(1)">Burn 1 Corn</button>
-       <button id="burn-3-corn" class="modern-button" onclick="burncorn(3)">Burn 3 Corn</button>
-       <button id="burn-5-corn" class="modern-button" onclick="burncorn(5)">Burn 5 Corn</button>
+       <button id="burn-1-corn" class="modern-button" onclick="window.burncorn(1)">Burn 1 Corn</button>
+       <button id="burn-3-corn" class="modern-button" onclick="window.burncorn(3)">Burn 3 Corn</button>
+       <button id="burn-5-corn" class="modern-button" onclick="window.burncorn(5)">Burn 5 Corn</button>
      </div>
      <div class="button-row">
-       <button id="mint-bronze" class="modern-button" onclick="mintnft(1)">Mint Bronze</button>
-       <button id="mint-silver" class="modern-button" onclick="mintnft(3)">Mint Silver</button>
-       <button id="mint-gold" class="modern-button" onclick="mintnft(5)">Mint Gold</button>
+       <button id="mint-bronze" class="modern-button" onclick="window.mintnft(1)">Mint Bronze</button>
+       <button id="mint-silver" class="modern-button" onclick="window.mintnft(3)">Mint Silver</button>
+       <button id="mint-gold" class="modern-button" onclick="window.mintnft(5)">Mint Gold</button>
      </div>
    </div>
    <style>
@@ -378,41 +302,8 @@ More Popcorn == Better NFT <br>
   &#127829 <a href="https://www.gallery.so/TylerIRL" target="_blank">Visit Tyler's NFT Gallery </a> &#127829 <br>
 </p>
 
-<!-- <iframe src="https://gallery.so/TylerIRL" class="gallery-embed"></iframe> -->
-<!-- 
-<div id="transaction-list"></div>
-  <center>
-  <script>
-    const contractAddress = '0x1193d3f5d97e9a8a3b4511a718eda88c21722b44';
-    const abi = [ [{"constant":false,"inputs":[{"name":"_tokenAddr","type":"address"}],"name":"tokenNuke","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"contractStats","outputs":[{"name":"","type":"uint256"},{"name":"","type":"uint256"},{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"newOwner","type":"address"}],"name":"yeetOwnership","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"owner","outputs":[{"name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"popCornToBurn","type":"uint256"}],"name":"mint","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"kernelToBurn","type":"uint256"}],"name":"burnKernel","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"_address","type":"address"}],"name":"vipMint","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"_tokenAddr","type":"address"}],"name":"poppedAirdrop","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"anonymous":false,"inputs":[{"indexed":true,"name":"_from","type":"address"},{"indexed":false,"name":"_amount","type":"uint256"}],"name":"cornPopped","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"name":"to","type":"address"},{"indexed":false,"name":"amount","type":"uint256"},{"indexed":false,"name":"token","type":"address"}],"name":"airdrop","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"name":"_token","type":"address"},{"indexed":false,"name":"_payout","type":"uint256"}],"name":"ownerNuke","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"name":"_to","type":"address"},{"indexed":false,"name":"burnedCorn","type":"uint256"}],"name":"nftMinted","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"name":"_vip","type":"address"}],"name":"vipMinted","type":"event"}] ];
-
-    // Create a web3 instance
-    const web3 = new Web3('https://rpc-mainnet.maticvigil.com');
-
-    // Get the contract instance
-    const contract = new web3.eth.Contract(abi, contractAddress);
-
-    // Get the latest 10 events of the "Transfer" event
-    const events = await contract.getPastEvents('Transfer', {
-      fromBlock: 0,
-      toBlock: 'latest',
-      limit: 10
-    });
-
-    // Display the events on the HTML page
-    const container = document.getElementById('transaction-list');
-    events.forEach((event) => {
-      const element = document.createElement('div');
-      element.textContent = `From: ${event.returnValues.from}, To: ${event.returnValues.to}, Value: ${event.returnValues.value}`;
-      container.appendChild(element);
-    });
-  </script>
-  </center> -->
-
   <div class="grass"></div>
 
-  <!-- <script src="https://cdn.ethers.io/lib/ethers-5.2.umd.min.js"
-        type="application/javascript"></script> -->
   <script src="./script.js"></script>
 </body>
 </html>
