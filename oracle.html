@@ -136,6 +136,7 @@ async function updateBalances() {
   const cornBalance = await cornTokenContract.balanceOf(address);
   const cornBalanceFormatted = parseFloat(ethers.utils.formatUnits(cornBalance, 18)).toFixed(3);
   document.getElementById('balance').innerText = cornBalanceFormatted;
+  document.getElementById('balance-display').innerText = cornBalanceFormatted;
 
   // Update PopCorn Token balance
   const popCornTokenAddress = '0x6531547b44784dDD8A934fB9fEB92ba582dfeD15';
@@ -143,6 +144,7 @@ async function updateBalances() {
   const popCornBalance = await popCornTokenContract.balanceOf(address);
   const popCornBalanceFormatted = parseFloat(ethers.utils.formatUnits(popCornBalance, 18)).toFixed(3);
   document.getElementById('balance2').innerText = popCornBalanceFormatted;
+  document.getElementById('balance2-display').innerText = popCornBalanceFormatted;
 
   // Update Butter Token balance
   const butterTokenAddress = '0x409e02e728418501720d7b1e5d7328ac461ecaae';
@@ -150,6 +152,7 @@ async function updateBalances() {
   const butterBalance = await butterTokenContract.balanceOf(address);
   const butterBalanceFormatted = parseFloat(ethers.utils.formatUnits(butterBalance, 18)).toFixed(3);
   document.getElementById('balance3').innerText = butterBalanceFormatted;
+  document.getElementById('balance3-display').innerText = butterBalanceFormatted;
 }
 </script>
 </head>
@@ -245,9 +248,9 @@ async function updateBalances() {
 <br>
 <p align="center" style="font-size: 1.2em">
   Current Balances: 
-  <span id="balance">0</span> CORN | 
-  <span id="balance2">0</span> POPCORN | 
-  <span id="balance3">0</span> BUTTER
+  <span id="balance-display">0</span> CORN | 
+  <span id="balance2-display">0</span> POPCORN | 
+  <span id="balance3-display">0</span> BUTTER
 </p>
 <br>
 <div id="button-grid" class="button-grid" style="display: none;">
