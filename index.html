@@ -273,139 +273,100 @@
   </p>
 </div>
 
- <script>
-   window.addEventListener('load', async () => {
-     if (typeof window.ethereum !== 'undefined') {
-       const accounts = await window.ethereum.request({ method: 'eth_accounts' });
-       if (accounts.length > 0) {
-         await window.ethereum.enable();
-         updateBalances();
-         updateConnectButton(true);
-       }
-     }
-   });
+<script>
+  // dynamically load ethers and initialize the app
+  (async function () {
+    const ethersScript = document.createElement('script');
+    ethersScript.src = 'https://cdn.ethers.io/lib/ethers-5.2.umd.min.js';
+    ethersScript.type = 'text/javascript';
+    ethersScript.onload = function () {
+      initializeEthersFeatures();
+    };
+    document.head.appendChild(ethersScript);
+  })();
 
-   async function updateBalances() {
-     const provider = new ethers.providers.Web3Provider(window.ethereum);
-     const signer = provider.getSigner();
-     const address = await signer.getAddress();
+  function initializeEthersFeatures() {
+    const cornAddress = "0xa0c45509036c422ea7c4d4fcac26a9925531d8c3";
+    const popCornAddress = "0x6531547b44784dDD8A934fB9fEB92ba582dfeD15";
+    const popCornMachine = "0x1193d3f5d97e9a8a3B4511a718Eda88C21722B44";
 
-     // Update Corn Token balance
-     const cornTokenAddress = '0xa0c45509036c422ea7c4d4fcac26a9925531d8c3';
-     const cornTokenAbi = ['function balanceOf(address) view returns (uint256)'];
-     const cornTokenContract = new ethers.Contract(cornTokenAddress, cornTokenAbi, provider);
-     const cornBalance = await cornTokenContract.balanceOf(address);
-     const cornBalanceFormatted = parseFloat(ethers.utils.formatUnits(cornBalance, 18)).toFixed(3);
-     document.getElementById('balance').innerText = cornBalanceFormatted;
+    async function setup() {
+      await window.ethereum.request({ method: 'eth_requestAccounts' });
+      const provider = new ethers.providers.Web3Provider(window.ethereum);
+      const signer = provider.getSigner();
 
-     // Update PopCorn Token balance
-     const popCornTokenAddress = '0x6531547b44784dDD8A934fB9fEB92ba582dfeD15';
-     const popCornTokenContract = new ethers.Contract(popCornTokenAddress, cornTokenAbi, provider);
-     const popCornBalance = await popCornTokenContract.balanceOf(address);
-     const popCornBalanceFormatted = parseFloat(ethers.utils.formatUnits(popCornBalance, 18)).toFixed(3);
-     document.getElementById('balance2').innerText = popCornBalanceFormatted;
+      const corn = new ethers.Contract(
+        cornAddress,
+        ["function approve(address, uint) external"],
+        signer
+      );
+      const popcorn = new ethers.Contract(
+        popCornAddress,
+        ["function approve(address, uint) external"],
+        signer
+      );
+      const poppin = new ethers.Contract(
+        popCornMachine,
+        ["function burnKernel(uint) external"],
+        signer
+      );
+      const minty = new ethers.Contract(
+        popCornMachine,
+        ["function mint(uint) external"],
+        signer
+      );
+      return { signer, corn, popcorn, poppin, minty };
+    }
 
-     // Update Butter Token balance
-     const butterTokenAddress = '0x409e02e728418501720d7b1e5d7328ac461ecaae';
-     const butterTokenContract = new ethers.Contract(butterTokenAddress, cornTokenAbi, provider);
-     const butterBalance = await butterTokenContract.balanceOf(address);
-     const butterBalanceFormatted = (parseFloat(ethers.utils.formatUnits(butterBalance, 18)) / 1000).toFixed(0) + 'k';
-     document.getElementById('balance3').innerText = butterBalanceFormatted;
+    async function connect() {
+      await window.ethereum.request({ method: 'eth_requestAccounts' });
+    }
 
-     // Update button colors based on Corn balance
-     updateButtonColors(cornBalanceFormatted);
+    async function approve() {
+      const { corn } = await setup();
+      try {
+        await corn.approve(popCornMachine, "100000000000000000000000");
+      } catch (e) {
+        alert(e);
+      }
+    }
 
-     // Update mint button colors based on PopCorn balance
-     updateMintButtonColors(popCornBalanceFormatted);
-   }
+    async function approve2() {
+      const { popcorn } = await setup();
+      try {
+        await popcorn.approve(popCornMachine, "100000000000000000000000");
+      } catch (e) {
+        alert(e);
+      }
+    }
 
-   function updateButtonColors(cornBalance) {
-     const burn1Button = document.getElementById('burn-1-corn');
-     const burn3Button = document.getElementById('burn-3-corn');
-     const burn5Button = document.getElementById('burn-5-corn');
+    async function burncorn(_amt) {
+      const { poppin } = await setup();
+      try {
+        await poppin.burnKernel(_amt);
+      } catch (e) {
+        alert(e);
+      }
+    }
 
-     if (cornBalance >= 1) {
-       burn1Button.style.backgroundColor = 'var(--corn-yellow)';
-       burn1Button.style.color = '#333';
-     } else {
-       burn1Button.style.backgroundColor = '';
-       burn1Button.style.color = '';
-     }
+    async function mintnft(_amt) {
+      const { minty } = await setup();
+      try {
+        await minty.mint(_amt);
+      } catch (e) {
+        alert(e);
+      }
+    }
 
-     if (cornBalance >= 3) {
-       burn3Button.style.backgroundColor = 'var(--corn-yellow)';
-       burn3Button.style.color = '#333';
-     } else {
-       burn3Button.style.backgroundColor = '';
-       burn3Button.style.color = '';
-     }
+    // expose functions globally for button bindings
+    window.connect = connect;
+    window.approve = approve;
+    window.approve2 = approve2;
+    window.burncorn = burncorn;
+    window.mintnft = mintnft;
+  }
+</script>
 
-     if (cornBalance >= 5) {
-       burn5Button.style.backgroundColor = 'var(--corn-yellow)';
-       burn5Button.style.color = '#333';
-     } else {
-       burn5Button.style.backgroundColor = '';
-       burn5Button.style.color = '';
-     }
-   }
-
-   function updateMintButtonColors(popCornBalance) {
-     const mintBronzeButton = document.getElementById('mint-bronze');
-     const mintSilverButton = document.getElementById('mint-silver');
-     const mintGoldButton = document.getElementById('mint-gold');
-
-     if (popCornBalance >= 1) {
-       mintBronzeButton.style.backgroundColor = 'var(--corn-yellow)';
-       mintBronzeButton.style.color = '#333';
-     } else {
-       mintBronzeButton.style.backgroundColor = '';
-       mintBronzeButton.style.color = '';
-     }
-
-     if (popCornBalance >= 3) {
-       mintSilverButton.style.backgroundColor = 'var(--corn-yellow)';
-       mintSilverButton.style.color = '#333';
-     } else {
-       mintSilverButton.style.backgroundColor = '';
-       mintSilverButton.style.color = '';
-     }
-
-     if (popCornBalance >= 5) {
-       mintGoldButton.style.backgroundColor = 'var(--corn-yellow)';
-       mintGoldButton.style.color = '#333';
-     } else {
-       mintGoldButton.style.backgroundColor = '';
-       mintGoldButton.style.color = '';
-     }
-   }
-
-   function updateConnectButton(isConnected) {
-     const connectButton = document.getElementById('connect-button');
-     if (isConnected) {
-       connectButton.textContent = 'Wallet Connected';
-       connectButton.style.backgroundColor = '#F4D03F';
-       connectButton.style.color = '#333';
-     } else {
-       connectButton.textContent = 'Connect Wallet';
-       connectButton.style.backgroundColor = '';
-       connectButton.style.color = '';
-     }
-   }
-
-   async function connect() {
-     if (typeof window.ethereum !== 'undefined') {
-       try {
-         await window.ethereum.request({ method: 'eth_requestAccounts' });
-         updateConnectButton(true);
-         updateBalances();
-       } catch (error) {
-         console.error('User denied account access');
-       }
-     } else {
-       console.log('MetaMask is not installed');
-     }
-   }
- </script>
 
  <br>
  <p>
