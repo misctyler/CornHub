@@ -246,19 +246,42 @@ async function updateBalances() {
   Luck is the most important thing, but really it's God."<br>
 </center>
 
-
 <div style="overflow: hidden; margin: 20px auto; width: 90%; max-width: 800px;">
-  <div style="white-space: nowrap; animation: scroll1 20s linear infinite;">
-    Corn Token - Balance: <span id="balance"></span> - <a href="https://quickswap.exchange/#/swap?exactField=input&outputCurrency=0xa0c45509036c422ea7c4d4fcac26a9925531d8c3&swapIndex=0&currency0=ETH" target="_blank">Trade Corn</a> - Contract: <a href="https://polygonscan.com/address/0xa0c45509036c422ea7c4d4fcac26a9925531d8c3" target="_blank">0xa0c45509036c422ea7c4d4fcac26a9925531d8c3</a>
-  </div>
-  <div style="white-space: nowrap; animation: scroll2 30s linear infinite;">
-    PopCorn Token - Balance: <span id="balance2"></span> - <a href="https://quickswap.exchange/#/swap?exactField=input&outputCurrency=0x6531547b44784dDD8A934fB9fEB92ba582dfeD15&swapIndex=0&currency0=ETH" target="_blank">Trade PopCorn</a> - Contract: <a href="https://polygonscan.com/address/0x6531547b44784dDD8A934fB9fEB92ba582dfeD15" target="_blank">0x6531547b44784dDD8A934fB9fEB92ba582dfeD15</a>
-  </div>
-  <div style="white-space: nowrap; animation: scroll3 25s linear infinite;">
-    Butter Token - Balance: <span id="balance3"></span> - <a href="https://quickswap.exchange/#/swap?exactField=input&outputCurrency=0x409e02e728418501720d7b1e5d7328ac461ecaae&swapIndex=0&currency0=ETH" target="_blank">Trade Butter</a> - Contract: <a href="https://polygonscan.com/address/0x409e02e728418501720d7b1e5d7328ac461ecaae" target="_blank">0x409e02e728418501720d7b1e5d7328ac461ecaae</a>
+  <label for="toggle-marquee">Toggle Marquee:</label>
+  <input type="checkbox" id="toggle-marquee" onclick="toggleMarquee()">
+  
+  <div id="marquee-container">
+    <div style="white-space: nowrap; animation: scroll1 20s linear infinite;" class="marquee">
+      Corn Token - Balance: <span id="balance"></span> - <a href="https://quickswap.exchange/#/swap?exactField=input&outputCurrency=0xa0c45509036c422ea7c4d4fcac26a9925531d8c3&swapIndex=0&currency0=ETH" target="_blank">Trade Corn</a> - Contract: <a href="https://polygonscan.com/address/0xa0c45509036c422ea7c4d4fcac26a9925531d8c3" target="_blank">0xa0c45509036c422ea7c4d4fcac26a9925531d8c3</a>
+    </div>
+    <div style="white-space: nowrap; animation: scroll2 30s linear infinite;" class="marquee">
+      PopCorn Token - Balance: <span id="balance2"></span> - <a href="https://quickswap.exchange/#/swap?exactField=input&outputCurrency=0x6531547b44784dDD8A934fB9fEB92ba582dfeD15&swapIndex=0&currency0=ETH" target="_blank">Trade PopCorn</a> - Contract: <a href="https://polygonscan.com/address/0x6531547b44784dDD8A934fB9fEB92ba582dfeD15" target="_blank">0x6531547b44784dDD8A934fB9fEB92ba582dfeD15</a>
+    </div>
+    <div style="white-space: nowrap; animation: scroll3 25s linear infinite;" class="marquee">
+      Butter Token - Balance: <span id="balance3"></span> - <a href="https://quickswap.exchange/#/swap?exactField=input&outputCurrency=0x409e02e728418501720d7b1e5d7328ac461ecaae&swapIndex=0&currency0=ETH" target="_blank">Trade Butter</a> - Contract: <a href="https://polygonscan.com/address/0x409e02e728418501720d7b1e5d7328ac461ecaae" target="_blank">0x409e02e728418501720d7b1e5d7328ac461ecaae</a>
+    </div>
   </div>
 </div>
 <br>
+
+<script>
+  function toggleMarquee() {
+    const isChecked = document.getElementById('toggle-marquee').checked;
+    const marquees = document.querySelectorAll('.marquee');
+    
+    if (isChecked) {
+      marquees.forEach(m => {
+        m.style.animation = 'none';
+        m.style.display = 'inline'; // Center the text
+      });
+    } else {
+      marquees.forEach((m, index) => {
+        m.style.animation = `scroll${index + 1} ${20 + index * 5}s linear infinite`;
+        m.style.display = 'block'; // Reset to block for scrolling
+      });
+    }
+  }
+</script>
 
 <script src="https://widgets.coingecko.com/gecko-coin-price-static-headline-widget.js"></script>
 <gecko-coin-price-static-headline-widget locale="en" transparent-background="true" coin-ids="bitcoin,ethereum,chainlink,milady-cult-coin,curve-dao-token,aavegotchi,heheh" initial-currency="usd"></gecko-coin-price-static-headline-widget>
@@ -351,10 +374,11 @@ async function updateBalances() {
   <button id="mint-bronze" class="connect-button" onclick="mintnft(1)" style="width: 100%;">Mint Bronze</button>
   <button id="mint-silver" class="connect-button" onclick="mintnft(3)" style="width: 100%;">Mint Silver</button>
   <button id="mint-gold" class="connect-button" onclick="mintnft(5)" style="width: 100%;">Mint Gold</button>
-
-  <img src="images/moeda-bronze.png" alt="Bronze Kernel" style="width:100px;height:100px;">
-  <img src="images/moeda.png" alt="Silver Kernel" style="width:100px;height:100px;">
-  <img src="images/moeda-gold.png" alt="Gold Kernel" style="width:100px;height:100px;">
+  <div style="display: flex; justify-content: center; gap: 10px;">
+    <img src="images/moeda-bronze.png" alt="Bronze Kernel" style="width:100px;height:100px;">
+    <img src="images/moeda.png" alt="Silver Kernel" style="width:100px;height:100px;">
+    <img src="images/moeda-gold.png" alt="Gold Kernel" style="width:100px;height:100px;">
+  </div>
   <!-- <div class="button-images"></div> -->
   </div>
 </div>
