@@ -343,6 +343,7 @@ async function updateBalances() {
 <br>
 <div id="button-grid" class="button-grid" style="display: none;">
   <button class="connect-button" onclick="approve()" style="width: 100%;">Approve Corn</button>
+  <div style="width: 100%; height: 0;"></div> <!-- Spacer -->
   <button class="connect-button" onclick="approve2()" style="width: 100%;">Approve PopCorn</button>
   <button id="burn-1-corn" class="connect-button" onclick="burncorn(1)" style="width: 100%;">Burn 1 Corn</button>
   <button id="burn-3-corn" class="connect-button" onclick="burncorn(3)" style="width: 100%;">Burn 3 Corn</button>
@@ -360,7 +361,7 @@ async function updateBalances() {
 <style>
 .button-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr); /* Create a 3x3 grid */
+  grid-template-columns: repeat(4, 1fr); /* Create a 3x3 grid */
   gap: 10px;
   max-width: 600px;
   margin: 20px auto;
