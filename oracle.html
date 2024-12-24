@@ -236,13 +236,13 @@ async function updateBalances() {
   </tbody>
 </table>
 </center>
-
 <hr>
 <div class="button-grid">
   <div class="button-row">
-    <button id="connect-button" class="connect-button" onclick="connect()">Connect Wallet</button>
     <button class="connect-button" onclick="approve()">Approve Corn</button>
+    <button class="connect-button" style="visibility: hidden">Spacer</button>
     <button class="connect-button" onclick="approve2()">Approve PopCorn</button>
+    
   </div>
   <div class="button-row">
     <button id="burn-1-corn" class="connect-button" onclick="burncorn(1)">Burn 1 Corn</button>
