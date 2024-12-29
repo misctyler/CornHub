@@ -246,6 +246,40 @@ async function updateBalances() {
   Luck is the most important thing, but really it's God."<br>
 </center>
 
+<!-- bitcoin countdoun -->
+<div id="bitcoin-halving-countdown" style="text-align: center; margin: 20px;">
+    <h5>Bitcoin Halving Countdown</h5>
+    <div id="countdown" style="font-family: Arial, sans-serif; font-size: 24px; color: #333;"></div>
+</div>
+
+<script>
+    // Set the date and time for the next Bitcoin halving event
+    const halvingDate = new Date('April 14, 2028 14:36:22 UTC').getTime();
+
+    // Update the countdown every second
+    const countdownFunction = setInterval(() => {
+        const now = new Date().getTime();
+        const timeLeft = halvingDate - now;
+
+        // Time calculations for days, hours, minutes, and seconds
+        const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+
+        // Display the result
+        document.getElementById('countdown').innerHTML =
+            days + 'd ' + hours + 'h ' + minutes + 'm ' + seconds + 's ';
+
+        // If the countdown is over, display a message
+        if (timeLeft < 0) {
+            clearInterval(countdownFunction);
+            document.getElementById('countdown').innerHTML = 'The Bitcoin halving has occurred!';
+        }
+    }, 1000);
+</script>
+
+
 <div style="overflow: hidden; margin: 20px auto; width: 90%; max-width: 800px;">
   <label for="toggle-marquee">Stop Ticker:</label>
   <input type="checkbox" id="toggle-marquee" onclick="toggleMarquee()">
@@ -639,6 +673,38 @@ Amen<br>
   </div>
 </div>
 
+
+
+<center><h3>Deeper Reading</h3></center>
+<!-- Start Generation Here -->
+<div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; max-width: 90%; margin: 20px auto;">
+  <div>
+    <p>
+      <a href="https://goldenlight.mirror.xyz/qrXKqoUvzXEtcbM_hvezCxmJaJn4t6CjAh2kocDzxNA" target="_blank">Dynasty Mindset by Charlotte Fang</a><br>
+      <a href="https://members.delphidigital.io/feed/schizoposters-the-nft-collection-with-the-most-momentum" target="_blank">SchizoPosters: The NFT Collection With the Most Momentum?</a><br>
+      <a href="https://www.bloomberg.com/news/newsletters/2024-02-15/new-thriller-from-cornell-s-ari-juels-imagines-weaponizing-blockchain" target="_blank">New Thriller [The Oracle] From Cornell's Ari Juels Imagines Weaponizing Blockchain</a><br>
+      <a href="https://x.com/CharlotteFang77/status/1871713478802825255" target="_blank">Corporate Memo: Remilia 2024 Christmas Missive</a><br>
+    </p>
+  </div>
+  <div>
+    <p>
+      <a href="https://blog.goodaudience.com/chainlink-the-missing-piece-to-the-god-protocol-fd455dde92ab" target="_blank">Chainlink: The Missing Piece to the God Protocol</a><br>
+      <a href="https://www.cryptopolitan.com/milady-cult-token-500m-market-cap-whitepaper/" target="_blank">Milady CULT token reaches $500M market cap, launches updated white paper</a><br>
+      <a href="https://cult.inc/assets/pdf/cultpaper.pdf" target="_blank">Milady CULT Coin: Declassified [wp]</a><br>
+      <a href="https://www.ccn.com/news/crypto/vitalik-buterin-war-betting-polymarket/" target="_blank">Vitalik Buterin Sparks Controversy by Supporting War Betting on Polymarket</a><br>
+
+    </p>
+  </div>
+  <div>
+    <p>
+      <a href="https://decrypt.co/243073/miladycraft-metaverse-art-piece-grand-remilia-ball-minecraft" target="_blank">Miladycraft: The Grand Remilia Ball and 'Network Spirituality' in Minecraft</a><br>
+      <a href="https://www.prnewswire.com/news-releases/donald-j-trump-inspired-world-liberty-financial-adopts-the-chainlink-standard-to-accelerate-the-mass-adoption-of-defi-302305219.html" target="_blank">Donald J. Trump-Inspired World Liberty Financial Adopts the Chainlink Standard To Accelerate the Mass Adoption of DeFi</a><br>
+      <a href="https://x.com/St3cu/status/1869442830982328458" target="_blank">Schizo Builders Association: Schizo/acc</a><br>
+      </a>
+    </p>
+  </div>
+</div>
+<!-- End Generation Here -->
 
 
 <hr>
