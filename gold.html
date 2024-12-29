@@ -1,0 +1,588 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html><head><title>CORNHUB INTL INC.</title>
+<meta content="text/html; charset=unicode" http-equiv="Content-Type">
+<meta name="GENERATOR" content="MSHTML 8.00.6001.18828">
+<link rel="icon" type="image/png" href="images/favicon-32x32 2.png" sizes="32x32">
+<link rel="icon" type="image/png" href="images/favicon-16x16 2.png" sizes="16x16">
+<style>
+table {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+td {
+  width: 50%;
+  padding: 10px;
+  vertical-align: top;
+}
+body {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+img {
+  max-width: 100%;
+  height: auto;
+}
+a {
+  text-decoration: none;
+  color: #000080;
+}
+a:visited {
+  color: #000080;
+}
+.wallet-connect {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+}
+.connect-button {
+  background-color: #000080;
+  border: none;
+  color: white;
+  padding: 12px 24px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+}
+.connect-button:hover {
+  background-color: #0000a0;
+  transform: translateY(-2px);
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+.connect-button.connected {
+  background-color: #4040ff;
+  color: white;
+}
+.connect-button.enabled {
+  background-color: #4040ff;
+}
+.balance-table {
+  margin: 20px auto;
+  border-collapse: collapse;
+  width: 90%;
+  max-width: 800px;
+  table-layout: fixed;
+}
+.balance-table th, .balance-table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: center;
+  font-size: clamp(10px, 1.5vw, 14px);
+}
+.balance-table th {
+  background-color: #000080;
+  color: white;
+}
+.balance-table td:last-child {
+  font-family: monospace;
+  padding: 0;
+  height: 40px;
+  position: relative;
+  overflow: hidden;
+}
+.balance-table td:last-child a {
+  position: absolute;
+  width: 100%;
+  animation: marquee 15s linear infinite;
+  white-space: nowrap;
+}
+.balance-table td:last-child a:nth-child(2) {
+  animation-delay: 5s;
+}
+.balance-table td:last-child a:nth-child(3) {
+  animation-delay: 10s;
+}
+@keyframes marquee {
+  0% { transform: translateY(100%); }
+  5% { transform: translateY(0); }
+  28% { transform: translateY(0); }
+  33% { transform: translateY(-100%); }
+  100% { transform: translateY(-100%); }
+}
+</style>
+<script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/5.7.2/ethers.umd.min.js"></script>
+
+<script src="script.js"></script>
+
+<script>
+window.addEventListener('load', async () => {
+  if (typeof window.ethereum !== 'undefined') {
+    // Check if already connected to Polygon network
+    const polygonChainId = '0x89'; // Chain ID for Polygon Mainnet
+    const currentChainId = await window.ethereum.request({ method: 'eth_chainId' });
+    
+    if (currentChainId !== polygonChainId) {
+      try {
+        // Request network switch to Polygon
+        await window.ethereum.request({
+          method: 'wallet_switchEthereumChain',
+          params: [{ chainId: polygonChainId }],
+        });
+      } catch (switchError) {
+        // If network not added, add it
+        if (switchError.code === 4902) {
+          try {
+            await window.ethereum.request({
+              method: 'wallet_addEthereumChain',
+              params: [{
+                chainId: polygonChainId,
+                chainName: 'Polygon Mainnet',
+                nativeCurrency: {
+                  name: 'MATIC',
+                  symbol: 'MATIC',
+                  decimals: 18
+                },
+                rpcUrls: ['https://polygon-rpc.com/'],
+                blockExplorerUrls: ['https://polygonscan.com/']
+              }]
+            });
+          } catch (addError) {
+            console.error('Failed to add Polygon network:', addError);
+          }
+        }
+      }
+    }
+    
+    // Connect wallet
+    try {
+      await window.ethereum.request({ method: 'eth_requestAccounts' });
+      const button = document.getElementById('connect-button');
+      button.textContent = 'Connected';
+      button.classList.add('connected');
+      document.getElementById('button-grid').style.display = 'grid';
+      document.getElementById('wallet-status').style.display = 'none';
+      document.getElementById('balance-info').style.display = 'block';
+      updateBalances();
+    } catch (error) {
+      console.error('User denied account access');
+    }
+  } else {
+    alert('Please install MetaMask!');
+  }
+});
+
+async function connectWallet() {
+  if (typeof window.ethereum !== 'undefined') {
+    try {
+      await window.ethereum.request({ method: 'eth_requestAccounts' });
+      const button = document.getElementById('connect-button');
+      button.textContent = 'Connected';
+      button.classList.add('connected');
+      document.getElementById('button-grid').style.display = 'grid';
+      document.getElementById('wallet-status').style.display = 'none';
+      document.getElementById('balance-info').style.display = 'block';
+      updateBalances();
+    } catch (error) {
+      console.error('User denied account access');
+    }
+  } else {
+    alert('Please install MetaMask!');
+  }
+}
+
+async function updateBalances() {
+  const provider = new ethers.providers.Web3Provider(window.ethereum);
+  const signer = provider.getSigner();
+  const address = await signer.getAddress();
+
+  // Update Corn Token balance
+  const cornTokenAddress = '0xa0c45509036c422ea7c4d4fcac26a9925531d8c3';
+  const cornTokenAbi = ['function balanceOf(address) view returns (uint256)'];
+  const cornTokenContract = new ethers.Contract(cornTokenAddress, cornTokenAbi, provider);
+  const cornBalance = await cornTokenContract.balanceOf(address);
+  const cornBalanceFormatted = parseFloat(ethers.utils.formatUnits(cornBalance, 18)).toFixed(3);
+  document.getElementById('balance').innerText = cornBalanceFormatted;
+  document.getElementById('balance-display').innerText = cornBalanceFormatted;
+
+  // Update PopCorn Token balance
+  const popCornTokenAddress = '0x6531547b44784dDD8A934fB9fEB92ba582dfeD15';
+  const popCornTokenContract = new ethers.Contract(popCornTokenAddress, cornTokenAbi, provider);
+  const popCornBalance = await popCornTokenContract.balanceOf(address);
+  const popCornBalanceFormatted = parseFloat(ethers.utils.formatUnits(popCornBalance, 18)).toFixed(3);
+  document.getElementById('balance2').innerText = popCornBalanceFormatted;
+  document.getElementById('balance2-display').innerText = popCornBalanceFormatted;
+
+  // Update Butter Token balance
+  const butterTokenAddress = '0x409e02e728418501720d7b1e5d7328ac461ecaae';
+  const butterTokenContract = new ethers.Contract(butterTokenAddress, cornTokenAbi, provider);
+  const butterBalance = await butterTokenContract.balanceOf(address);
+  const butterBalanceFormatted = parseFloat(ethers.utils.formatUnits(butterBalance, 18)).toFixed(3);
+  document.getElementById('balance3').innerText = butterBalanceFormatted;
+  document.getElementById('balance3-display').innerText = butterBalanceFormatted;
+
+  // Enable/disable burn buttons based on CORN balance
+  const cornBalanceNum = parseFloat(cornBalanceFormatted);
+  document.getElementById('burn-1-corn').classList.toggle('enabled', cornBalanceNum >= 1);
+  document.getElementById('burn-3-corn').classList.toggle('enabled', cornBalanceNum >= 3);
+  document.getElementById('burn-5-corn').classList.toggle('enabled', cornBalanceNum >= 5);
+  
+  // Enable/disable mint buttons based on POPCORN balance
+  const popcornBalanceNum = parseFloat(popCornBalanceFormatted);
+  document.getElementById('mint-bronze').classList.toggle('enabled', popcornBalanceNum >= 1);
+  document.getElementById('mint-silver').classList.toggle('enabled', popcornBalanceNum >= 3);
+  document.getElementById('mint-gold').classList.toggle('enabled', popcornBalanceNum >= 5);
+}
+</script>
+</head>
+<body bgcolor="#ffffff" text="#000080">
+<div class="wallet-connect">
+  <button id="connect-button" class="connect-button" onclick="connectWallet()">Connect Wallet</button>
+</div>
+<b>
+<font size="12"><p align="center">C</font><font size="8">ORN </font>
+<font size="12">H</font><font size="8">UB </font>
+<font size="4">INC.<br>CornHub.eth</font><br>Official Home Page</b>
+<font size="2">&nbsp;</p></font>
+
+<center>
+  "God is just. Work is rewarded with blessing if not money. <br>
+  Luck is the most important thing, but really it's God."<br>
+</center>
+
+<div style="overflow: hidden; margin: 20px auto; width: 90%; max-width: 800px;">
+  <label for="toggle-marquee">Stop Ticker:</label>
+  <input type="checkbox" id="toggle-marquee" onclick="toggleMarquee()">
+  
+  <div id="marquee-container">
+    <div style="white-space: nowrap; animation: scroll1 20s linear infinite;" class="marquee">
+      Corn Token - Balance: <span id="balance"></span> - <a href="https://quickswap.exchange/#/swap?exactField=input&outputCurrency=0xa0c45509036c422ea7c4d4fcac26a9925531d8c3&swapIndex=0&currency0=ETH" target="_blank">Trade Corn</a> - Contract: <a href="https://polygonscan.com/address/0xa0c45509036c422ea7c4d4fcac26a9925531d8c3" target="_blank">0xa0c45509036c422ea7c4d4fcac26a9925531d8c3</a>
+    </div>
+    <div style="white-space: nowrap; animation: scroll2 30s linear infinite;" class="marquee">
+      PopCorn Token - Balance: <span id="balance2"></span> - <a href="https://quickswap.exchange/#/swap?exactField=input&outputCurrency=0x6531547b44784dDD8A934fB9fEB92ba582dfeD15&swapIndex=0&currency0=ETH" target="_blank">Trade PopCorn</a> - Contract: <a href="https://polygonscan.com/address/0x6531547b44784dDD8A934fB9fEB92ba582dfeD15" target="_blank">0x6531547b44784dDD8A934fB9fEB92ba582dfeD15</a>
+    </div>
+    <div style="white-space: nowrap; animation: scroll3 25s linear infinite;" class="marquee">
+      Butter Token - Balance: <span id="balance3"></span> - <a href="https://quickswap.exchange/#/swap?exactField=input&outputCurrency=0x409e02e728418501720d7b1e5d7328ac461ecaae&swapIndex=0&currency0=ETH" target="_blank">Trade Butter</a> - Contract: <a href="https://polygonscan.com/address/0x409e02e728418501720d7b1e5d7328ac461ecaae" target="_blank">0x409e02e728418501720d7b1e5d7328ac461ecaae</a>
+    </div>
+  </div>
+</div>
+<br>
+
+<script>
+  function toggleMarquee() {
+    const isChecked = document.getElementById('toggle-marquee').checked;
+    const marquees = document.querySelectorAll('.marquee');
+    
+    if (isChecked) {
+      marquees.forEach(m => {
+        m.style.animation = 'none';
+        m.style.display = 'inline'; // Center the text
+      });
+    } else {
+      marquees.forEach((m, index) => {
+        m.style.animation = `scroll${index + 1} ${20 + index * 5}s linear infinite`;
+        m.style.display = 'block'; // Reset to block for scrolling
+      });
+    }
+  }
+</script>
+
+<script src="https://widgets.coingecko.com/gecko-coin-price-static-headline-widget.js"></script>
+<gecko-coin-price-static-headline-widget locale="en" transparent-background="true" coin-ids="bitcoin,ethereum,chainlink,milady-cult-coin,curve-dao-token,aavegotchi,heheh" initial-currency="usd"></gecko-coin-price-static-headline-widget>
+
+
+<style>
+@keyframes scroll1 {
+  from { transform: translateX(100%); }
+  to { transform: translateX(-100%); }
+}
+@keyframes scroll2 {
+  from { transform: translateX(100%); }
+  to { transform: translateX(-100%); }
+}
+@keyframes scroll3 {
+  from { transform: translateX(100%); }
+  to { transform: translateX(-100%); }
+}
+</style>
+
+
+<!-- Start of Selection -->
+<div style="width: 80%; margin: auto;">
+    <h1>Gold and Glory in Times of Thought-Chaos</h1>
+  <p><em>The real gold and glory of our generation will be given to a newly emerging kind of person who is truly interested in change and is willing to take more risks with their career betting on technologies whose availability and utility are uncertain.</em></p>
+  <p><em>You need to be clear in yourself to survive the coming period of thought-chaos, because it will make you question your perception, your awareness, your presence... what is natural, what is true, what is real.</em></p>
+  <p><em>People who are distracted now, will be even more distracted later. Pacific ocean disappear.</em></p>
+  <p>— <a href="https://www.youtube.com/watch?v=iI-clmmpdZM" rel="noreferrer" target="_blank">Jade Dragon Power Ching Hong Kong Bathouse White Tigress yacht Million Yen Stock Market Pacific Ocean Disappear</a> (2020)</p>
+  <p>You stand at the edge of a chasm that’s growing wider every day. You are living through the greatest wealth transfer in world history as the global market teeters at the precipice of Keynesian financial collapse. There is little time left.</p>
+  <p>Market inefficiency is opportunity. All wealth transfer markets happen in contexts of rapid development. It&#x27;s money on the table for anyone sharp and risk tolerant. Either you make it big or get pushed out by the players who do as it formalizes.</p>
+  <p>Crypto is the greatest wealth transfer opportunity accessible to the common man in history. Dynasties are made this generation.</p>
+  <p>You have to wake up.</p>
+  <p>Cryptocurrency has achieved anarchocapitalism by force, and all the wealth that comes from that. But it’s not about money, it’s resistance against the state. More boons will follow and with it more countersignalling from the powers that be.</p>
+  <blockquote>
+    <p><em>You need to be clear in yourself to survive the coming period of thought-chaos.</em></p>
+  </blockquote>
+  <p>You must become immune to propaganda.</p>
+  <p>The state intends to reduce their populations into slave cattle. This is what the contemporary culture war comes down to: the state is highly interested in extinguishing tech-enabled anarchist freedoms as it undermines their stranglehold on the propaganda complex, an existential necessity to hold power in democracy. Freedom of speech, freedom of association, freedom of the market, freedom of spirit.</p>
+  <p>A wedge is being driven into the middle class. You are in danger of falling on the wrong side of the chasm.</p>
+  <hr/>
+  <div>
+    <figure class="rehype-figure">
+      <div data-rmiz-wrap="visible">
+        <img alt="" loading="lazy" width="680" height="227" decoding="async" data-nimg="1" style="color:transparent;height:auto;width:680px;max-width:100%;max-height:100%" src="https://images.mirror-media.xyz/publication-images/kvKdEOnDNvcoVHdIRvey1.png"/>
+        <button aria-label="Zoom image" data-rmiz-btn-open="true"></button>
+      </div>
+    </figure>
+  </div>
+  <p>Are you in college? Drop out.</p>
+  <p>Higher education is in a bubble supplied by subsidized debt. Degree inflation has diluted the value proposition of any ROI by reducing academia into a credential farm for the job market. Universities are heavily profit incentivized to promote this, yet the bubble pops the moment the “get a degree, earn more money” narrative fails.</p>
+  <p>Without being propped up by the government, universities would be bankrupt due to the inefficiency of “higher academia” being rerouted into career training—a poor replacement for the unserved STEM trade school niche. Grade inflation, class size inflation, affirmative action and foreign student imports have all worked eliminate the prestige and qualifying standards universities developed over the last half-century; and in turn, replication crisis effects nearly every field: Academia is a joke. Recruiters do not care about your degree.</p>
+  <p>Your same student loan placed in an index fund outperforms your degree in the same time. You’ve made a mistake, and you’re paying for it.</p>
+  <p>University used to be a funnel for all the smartest minds of the generation, but now it’s a certainty it’s where you won’t find any. Why waste your time in classrooms? Internet has made effective autodidactism more accessible than any other time in history.</p>
+  <p>No one learns in university, the classes are a joke. If you struggle with them, you are a joke. They’re not hard, you’re just depressed. Depression is a sin. Get out of bed.¹</p>
+  <p>The most value you could ever get out of university is networking with bright minds; yet you can network with far greater scale, volume and filters online. The future is unevenly distributed. You need to start paying attention to where the world has moved, or you will be left behind.</p>
+  <p>College is a gov-propped debt farm that extracted trillions in value from the youth every year with a primary of propaganda distribution. That’s all it’s been for decades, and the music is stopping now. The market is correcting.</p>
+  <p>The real future of academia and schooling will belong to digital and physical learning networks, and glorified degree farms will be replaced by effective vocational schools. Stop wasting your time. There is no time.</p>
+  <p>If you aren&#x27;t aggressively pursuing make it plays, if you are content waging or in school towards that, you are never going to make it. Wasting away in school or waging instead of maximizing exposure to valuable equity is an immense opportunity cost you can’t afford to leave on the table.</p>
+  <p>(1) Risk aversion is the ceiling of the middle class.</p>
+  <p>(2) The wealth gap is growing insurmountably,</p>
+  <p>(3) At a rate wages are not.</p>
+  <p>(4) USD is an inflationary shitcoin.</p>
+  <p>$2MM net worth will be middle class in 5 years. If you&#x27;ve not already made it, this is your only chance to cross over the chasm.</p>
+  <p>There is no safe path: waging is slow death, you are in danger. You&#x27;re in danger. You are in d—</p>
+  <hr/>
+  <blockquote>
+    <p><em>An astrologer foretells that the king will die in one month. The king is crushed and falls sick with despair.</em></p>
+    <p><em>His most trusted knight summons the astrologer before the king and asks him, “When will you die?”.</em></p>
+    <p><em>20 years from now, the astrologer answers. The knight beheads immediately.</em></p>
+    <p>—Akbar-Birbal the Wise (16c)</p>
+  </blockquote>
+  <p>Securing and maintaining wealth is not complicated. It’s a matter of the soul. You need to be clear in yourself.</p>
+  <p>Most people are allergic to money. I believe they subconsciously fumble their wealth intentionally because they know they don&#x27;t deserve it.</p>
+  <p>Wealth comes to the virtuous.</p>
+  <p>Wealth always comes in windfalls. You have to maximize your exposure to it. It comes down to positioning.</p>
+  <p>Wealth falls from the sky, so we place baskets to catch them. You must position yourself by maximizing luck, opportunity exposure, risk forwardness and leveraging existing capital.</p>
+  <p>Whenever anyone copes about &quot;luck&quot;, remember luck can be optimized: if there&#x27;s dumb luck, there is also smart luck. Luck is a stat that you can farm, and you can get bonus multipliers to max out rewards when Lady Luck does hit.²</p>
+  <p>Maintaining wealth simply comes from the balance of securing profits in risk off assets versus capital deployment to further lever up your bag—against the slow burn.</p>
+  <p>You cannot survive through cowardliness and miserliness. You must have a clear and courageous mind to survive.</p>
+  <p>Wealth is the right of the virtuous. Karma is real at every level; all presumptions are manifested, you receive the world what you give to it.</p>
+  <p>This is the group that interests me, the intelligent and free.</p>
+  <p>The question is: will they choose achievement, or sloth?</p>
+  <p>Dynasty, or slavery?</p>
+  <hr/>
+  <div>
+    <figure class="rehype-figure">
+      <div data-rmiz-wrap="visible">
+        <img alt="ABUNDANCE MINDSET: Wealth Flows from Karmic Position x Hyperstitional Prayer =Eternity Time Preference is a Mode of Soul <3" loading="lazy" width="1053" height="1053" decoding="async" data-nimg="1" style="color:transparent;height:auto;width:1053px;max-width:100%;max-height:100%" src="https://images.mirror-media.xyz/publication-images/0A_8rStOSrYtduu49n34C.png"/>
+        <button aria-label="Zoom image" data-rmiz-btn-open="true"></button>
+      </div>
+    </figure>
+  </div>
+  <p>Securing and maintaining wealth is not complicated. It’s a matter of the soul. You need to be clear in yourself.</p>
+  <p>Most people are allergic to money. I believe they subconsciously fumble their wealth intentionally because they know they don't deserve it.</p>
+  <p>Wealth comes to the virtuous.</p>
+  <p>Wealth always comes in windfalls. You have to maximize your exposure to it. It comes down to positioning.</p>
+<p>Wealth falls from the sky, so we place baskets to catch them. You must position yourself by maximizing luck, opportunity exposure, risk forwardness and leveraging existing capital.</p>
+<p>Whenever anyone copes about &quot;luck&quot;, remember luck can be optimized: if there&#x27;s dumb luck, there is also smart luck. Luck is a stat that you can farm, and you can get bonus multipliers to max out rewards when Lady Luck does hit.²</p>
+<p>Maintaining wealth simply comes from the balance of securing profits in risk off assets versus capital deployment to further lever up your bag—against the slow burn.</p>
+<p>You cannot survive through cowardliness and miserliness. You must have a clear and courageous mind to survive.</p>
+<hr/>
+<div><figure class="rehype-figure"><div data-rmiz-wrap="visible"><img alt="ABUNDANCE MINDSET: Wealth Flows from Karmic Position x Hyperstitional Prayer =Eternity Time Preference is a Mode of Soul &lt;3" loading="lazy" width="1053" height="1053" decoding="async" data-nimg="1" style="color:transparent;height:auto;width:1053px;max-width:100%;max-height:100%" src="https://images.mirror-media.xyz/publication-images/ANX--oG84m4GQXauZzH01.png"/><button aria-label="Zoom image" data-rmiz-btn-open="true"></button></div><figcaption>ABUNDANCE MINDSET: Wealth Flows from Karmic Position x Hyperstitional Prayer =Eternity Time Preference is a Mode of Soul &lt;3</figcaption></figure></div>
+<p>Wealth is the right of the virtuous. Karma is real at every level; all presumptions are manifested, you receive the world what you give to it.</p>
+<p>You must escape the spiritual poverty of scarcity by embracing a mindset of abundance regardless of real means, knowing wealth of all types will follow.</p>
+<p>People suffer for their sins in a living hell. Some people are meant to be poor. Many are not, they have the intellect to escape it, but wallow in sins of despondency (sloth) and insecurity (envy).</p>
+<p>Without both agency and virtue, intellect is unactionable³.</p>
+<p>Instead of resolving the problems in their life preventing them from the success they feel they&#x27;re owed, they try to externalize the blame, because they&#x27;re weak and it takes courage to blame yourself, rather than coping. In this way, they&#x27;re not simply materially poor, but spiritually.</p>
+<p>Wealth comes to those who deserve it like a metal to a magnet, and escapes the sinful like oil and water.</p>
+<p>The future belongs to those who take risks, network, and prioritize self-education. Virtue is the key to success in a world plagued by sin.</p>
+<p>You must be virtuous to survive. Virtue is a program for living well, formalized for low time preference, long-term success, a traditionalist heuristic against the innate cognitive biases of human irrationality. Virtue is efficacy.</p>
+<p>Virtue is also a self-manifesting external signal to the network: by being virtuous, others know you will succeed, and will support you, while you naturally curate out the non-virtuous. Your network ascends together, exponentially. Virtue always finds friends.</p>
+<p>The Occident’s adoption of a castrated slave morality pushed by the intentionally diminutive State has led to a crisis of virtue. This is opportunity for you, as success comes easily to the virtuous few.</p>
+<p>You just need to be clear in yourself to survive. You have to have the courage to cut your own path. Others will try to drag you down. You have to be stronger than them.</p>
+<p>You can’t get distracted now. There is no time.</p>
+<p>The Deadly Sins of Catholicism is a good inverse moral compass:</p>
+<ol>
+<li>
+<p>Gluttony</p>
+</li>
+<li>
+<p>Lust</p>
+</li>
+<li>
+<p>Greed</p>
+</li>
+<li>
+<p>Sloth/despair⁴</p>
+</li>
+<li>
+<p>Wrath</p>
+</li>
+<li>
+<p>Envy</p>
+</li>
+<li>
+<p>Pride</p>
+</li>
+</ol>
+<p>Look around, anyone complicit in them are punished for it with dreadful lives. Think of your enemies, think of the failures you know in life, count the sins they commit.</p>
+<p>Eliminate sin from your life⁵.</p>
+<p>Study Aristotle’s matrix of virtues⁶. Study it closely, review it at night, and thinking back on your actions each day. If you strive to keep virtue in mind in your daily action, you cannot fail. This is what I measure myself and others by.</p>
+<div><figure class="rehype-figure"><div data-rmiz-wrap="visible"><img alt="" loading="lazy" width="664" height="416" decoding="async" data-nimg="1" style="color:transparent;height:auto;width:664px;max-width:100%;max-height:100%" src="https://images.mirror-media.xyz/publication-images/_tS0qVJtTxGt0Z7R_UbKV.png"/><button aria-label="Zoom image" data-rmiz-btn-open="true"></button></div></figure></div>
+<p>Virtuous actions earn karmic points that automatically accrue compounding spiritual interest. Start now.</p>
+<hr/>
+<div><figure class="rehype-figure"><div data-rmiz-wrap="visible"><img alt="" loading="lazy" width="599" height="282" decoding="async" data-nimg="1" style="color:transparent;height:auto;width:599px;max-width:100%;max-height:100%" src="https://images.mirror-media.xyz/publication-images/VrReNpqWsUraIbPevGPqN.png"/><button aria-label="Zoom image" data-rmiz-btn-open="true"></button></div></figure></div>
+<p>Virtue brings you wealth, but being wealthy does not mean you are virtuous. Most aren’t, and they will lose their wealth within generations.</p>
+<p>Despite existing in the aristocratic frame of burdenlessness, most of the born rich today are largely listless and unproductive, or otherwise caught in mind traps, the self-destructive parasitic memetic complexes midwits are often consumed by, that takes otherwise virtuous and intelligent people and diverts them into wasting their time.</p>
+<p>This is almost as detestable as the resentful poor, for they squander their inheritance, fumbling their dynasty⁷. Their fumble is your opportunity.</p>
+<blockquote>
+<p><em>People who are distracted now, will be even more distracted later.</em></p>
+</blockquote>
+<p>All of pre-modern history and achievement was the result of the aristocracy, which across all civilized society shared a similar mores of encouraging artistry or other meaningful pursuits, in competition for pride among each other. This quality has been lost, as the western world increasingly succumbs to the slave morality that prides in weakness, and discourages courage and achievement.</p>
+<p>Yet, a new aristocracy emerges in the digital age, the agentic NEET, who, exactly like the aristocrats of old, enjoy freedom from burden, with access to all the resources needed to autodidact themselves in the humanities and sciences, and the ability to network a culture of collective development.</p>
+<p>This is the group that interests me, the intelligent and free.</p>
+<p>The question is: will they choose achievement, or sloth?</p>
+<p>Dynasty, or slavery?</p>
+<hr/>
+<div><figure class="rehype-figure"><div data-rmiz-wrap="visible"><img alt="" loading="lazy" width="598" height="254" decoding="async" data-nimg="1" style="color:transparent;height:auto;width:598px;max-width:100%;max-height:100%" src="https://images.mirror-media.xyz/publication-images/h4PqO6U_tpZ4VCrawBGLC.png"/><button aria-label="Zoom image" data-rmiz-btn-open="true"></button></div></figure></div>
+<hr/>
+<h2 id="heading-footnotes">Footnotes</h2>
+<p>[1]: Despair/despondency (<em>tristitia)</em> was present in the earliest deadly sins lists from Christian Egypt, e.g. Evagrius Ponticus’, before being combined with Sloth (<em>acedia</em>) by Pope Gregory I (AD 850) in the now standard Seven Deadly Sins (the version discussed in Thomas Aquinas’ <em>Summa Theologica</em>). The despondent, depressed, listless state is probably the most common affliction of our times, more prevalent than any other sin—in no small part due to loss of faith, as despair is the ultimate pride in believing nothing can save you, not even God.</p>
+<p>It’s worthwhile to reassert that Sloth = Despair = Despondency as the hopelessness of despondency is a more relevant understanding of Sloth than the standard interpretation of as mere “laziness,” which the depressed would feel doesn’t apply to them because of their personally rationalized grief. It does. Depression is a sin. Industry is a virtue⁸. Get out of bed.</p>
+<p>[2]: Street Don has elsewhere compared luck as a direct barometer of agency:</p>
+<blockquote>
+<p><em>Luck = Agency = Energy</em></p>
+<p><em>Luck is an emergent phenomenon proceeding from the life of a highly agency, energetic person. When a person considers themselves to be unlucky, they are making a veiled admission of the belief that they are dominated by external forces to the detriment of their life–that is, that they lack agency.</em></p>
+<p><em>A person of high energy inevitably seizes agency and gains competence, drawing more factors into their realm of control. Though it is possible for a person to actively self-sabotage, a healthy person rarely uses their own agency to lessen the qualify of their outcomes.</em></p>
+<p>— Street Don, <a href="https://dons.directory" rel="noreferrer" target="_blank">Don’s Directory</a> (2022)</p>
+</blockquote>
+<p>[3]: See Footnote 1 above</p>
+<p>[4]: Innate genetic capability is real and IQ is its most efficacious measure, but capability is unrealizable without both virtue and agency; lower stats in one can be compensated with higher stats in another. The IQ-wealth coefficient is ~0.3-0.5 depending on who you ask, but if we had equivalent psychometric tests for virtue and agency, I think we’d see no one intelligent actually stays poor over a lifetime unless they&#x27;re also unvirtuous and low agency.</p>
+<p>[5]: Sin must be understood as separate from vice, which only graduates to sin in its excess (be it depth, or count). At minimum, a spice of vice is expected in all men’s lives; in fact, I am wary of people with no apparent vices—while indeed unsaintly, vice appears in all vigorous men, releasing animal energies otherwise unsublimated into productive output. Energetic titans produce epiphenomenal outpourings like pressurized steam, and so their great, raw energy, if not sublimated into industry, will be offshot as vice.</p>
+<p>Apparent vicelessness can only signify 3 things:</p>
+<ol>
+<li>
+<p>That vices are present, but secret. Possibly because the vice is shameful or perverted, or the person is dishonest.</p>
+</li>
+<li>
+<p>That the person is not spiritually energetic enough to have a vice worth speaking of: their energy, low as it is, is adequately channeled only into socially acceptable acts.</p>
+</li>
+<li>
+<p>That the person is truly a saint.</p>
+</li>
+</ol>
+<blockquote>
+<p><em>Monsters of spirit and industry destroy in compulsion what others create in lifetimes of idle pottering… The caprices of kings and gods are the subject of legend for the same reason the modern peasant fixates on the wealthy and powerful: Their experiences are richer, they feel more deeply, they define others yet are themselves auto-defined — they forget more than most will ever know.</em></p>
+<p>—James Liao, <a href="https://twitter.com/JamesLiao333" rel="noreferrer" target="_blank">@JamesLiao333</a> (2023)</p>
+</blockquote>
+<p>And so, astute readers may recall I did note in the <em>summae autobiographia</em> of “<a href="https://goldenlight.mirror.xyz/AOaPt55Uz0X4PEOPWtL7Iv6djVD7bq-GYDF-_lq_iGA" rel="noreferrer" target="_blank">Admin Reveal: I said I’m just a vessel bro</a> (2022) that “<em>my vice is alcohol.</em>” A dirty vodka martini with two olives, to be specific.</p>
+<p>[6]: I prefer Aristotlean virtue to later Christian formulations because they maintain a master morality. Where Aristotle’s four greater ethics are maganimity, justice, practical judgement and good friendship; only justice is maintained in the four cardinal virtues of Christianity: temperance, justice, prudence and fortitude; formulated as an inversion of sin, as the Seven Capital Virtues are, which push for humility, kindness, patience, etc. Sins take toll on the soul, they invite demons into your life to manifest a living hell⁹, but only avoiding sin is not virtue, it’s just the lack of sin, and simply pursuing the opposite of sin is reductionist and dogmatic.</p>
+<p>Compared to Aristotlean ethics, the Christian Virtues specifically omit:</p>
+<ul>
+<li>
+<p>Courage</p>
+</li>
+<li>
+<p>Truthfulness</p>
+</li>
+<li>
+<p>Friendliness</p>
+</li>
+<li>
+<p>Magnificence</p>
+</li>
+<li>
+<p>Liberality (in spending)</p>
+</li>
+<li>
+<p>Proper pride (versus vainglory)</p>
+</li>
+<li>
+<p>Proper ambition (versus greed/avarice)</p>
+</li>
+<li>
+<p>Proper indignation (versus envy/spite)</p>
+</li>
+</ul>
+<p>Pure Christian ethics’ focus is on the faith, tellingly handicapped with a commitment to humility (and no interest in bravery): there is no space for <em>proper</em> pride, ambition and indignation, as they leave it all to God. But this is not an efficacious program of personal virtue, of “sovereign individuals” “aristocrats of the soul” “<em>ubermensch</em>” etc. to survive our confused times. Aristotle’s magnanimity (great soul, great spirit, great heart), the greatest virtue requiring the possession of all the other virtues, is key here:</p>
+<blockquote>
+<p><em>He that claims less than he deserves is small-souled...For the great-souled man is justified in despising other people—his estimates are correct; but most proud men have no good ground for their pride.</em></p>
+<p><em>[…]</em></p>
+<p><em>He must be open both in love and in hate, since concealment shows timidity; and care more for the truth than for what people will think; and speak and act openly, since as he despises other men he is outspoken and frank, except when speaking with ironical self-depreciation, as he does to common people</em></p>
+<p><em>[…]</em></p>
+<p><em>Such then being the Great-souled man, the corresponding character on the side of deficiency is the Small-souled man, and on that of excess the Vain man.</em></p>
+<p>—Aristotle, Nicomachean Ethics, IV.3 (340 BC)</p>
+</blockquote>
+<p>Aristotle is right to seek a mean between the two excesses present in each sphere, as he pursues greatness, not simply the escape from sin. This is honor, this is a complete man, and Christian ethics alone won’t get you there. Followed to the letter, they in truth commit to being Aristotle’s “small-souled man,” the inverse of excess, because their focus is solely heaven in the afterlife—but our concern here is to persist dynasty beyond slavery: our worldly afterlife. The times have changed, dignity can only be earned with a fight.</p>
+<p>[7]: <em>&quot;My new system assumes that the wealth of the peasant is LOWER than that of the donkey, because donkeys are animals without original sin”:</em></p>
+<div><figure class="rehype-figure"><div data-rmiz-wrap="visible"><img alt="" loading="lazy" width="1280" height="632" decoding="async" data-nimg="1" style="color:transparent;height:auto;width:1280px;max-width:100%;max-height:100%" src="https://images.mirror-media.xyz/publication-images/0A_8rStOSrYtduu49n34C.png"/><button aria-label="Zoom image" data-rmiz-btn-open="true"></button></div></figure></div>
+<p>[8]: Thomas Carlyle on the virtue of industry:</p>
+<blockquote>
+<p><em>There is a perennial nobleness, and even sacredness, in work. Were he never so benighted, forgetful of his high calling, there is always hope in a man that actually and earnestly works: in idleness alone there is perpetual despair.</em> <em>Work, never so Mammonish, mean, is in communication with Nature; the real desire to get Work done will itself lead one more and more to truth, to Nature’s appointments and regulations...</em></p>
+<p><em>[…]</em></p>
+<p><em>Admirable was that saying’ of the old Monks, ’Laborare est Orare, Work is Worship.’ Older than all preached Gospels was this unpreached, inarticulate, but ineradicable, foreverenduring Gospel: Work, and therein have well-being. […] What is immethodic, waste, thou shalt make methodic, regulated, arable; obedient and productive to thee. Wheresoever thou findest Disorder, there is thy eternal enemy attack him swiftly, subdue him; make Order of him, the subject not of Chaos, but of Intelligence, Divinity and Thee! [...] Thou shalt work while it is called Today. For the Night cometh, wherein no man can work.</em></p>
+<p>—Thomas Carlyle, Past and Present (1843)</p>
+</blockquote>
+<p>[9]: On demons:</p>
+<div><figure class="rehype-figure"><div data-rmiz-wrap="visible"><img alt="" loading="lazy" width="601" height="286" decoding="async" data-nimg="1" style="color:transparent;height:auto;width:601px;max-width:100%;max-height:100%" src="https://images.mirror-media.xyz/publication-images/IuUNwFxcFD5XdzBuFtBVn.png"/>
+</div>
+<!-- End of Selection -->
+
+
+<hr>
+
+<font size="4">
+    <p>If you have any comments about our WEB page, you can write us at the address shown above. 
+        However, due to the limited number of personnel in our corporate office, we are unable to 
+        provide a direct response.</p>
+        </font>
+        
+        <hr>
+        
+        
+        <dl>
+        <p align="left"><font size="4"><a href="index.html">Main Page</a></p>  <img src="images/tyler.png" alt="Oh...I see" style="width:150px;height:150px;"><br>
+          <a class="twitter-follow-button"
+          href="https://twitter.com/itsTylerIRL">
+        Follow @itsTylerIRL</a>
+        <br>
+        <p align="left">Copyright &copy; 2023 <b>CornHub Intl Inc.</b></font></p>
+        </dl>
+        <br>
+        
+        <div class="affiliated-projects"></div>
+          <div class="project-grid">
+            <div class="project-item">
+              <a href="https://misctyler.github.io/CornHub/oracle"><img src="images/moeda.png" alt="CornHub" style="width:50px;height:50px;"></a>
+            </div>
+            <div class="project-item">
+              <a href="https://cult.inc"><img src="images/cult.png" alt="Milady Cult Coin" style="width:50px;height:50px;"></a>
+            </div>
+            <div class="project-item">
+              <a href="https://radbro.xyz"><img src="images/radbro.png" alt="Radbro Webring" style="width:50px;height:50px;"></a>
+            </div>
+            <div class="project-item">
+              <a href="https://heheh.finance"><img src="images/heheh.gif" alt="Heheh Finance" style="width:50px;height:50px;"></a>
+            </div>
+            <div class="project-item">
+              <a href="https://dapp.aavegotchi.com"><img src="images/gotchi.png" alt="Aavegotchi" style="width:50px;height:50px;"></a>
+            </div>
+          </div>
+        </div>
+        <style>
+        .affiliated-projects {
+          text-align: center;
+          margin: 20px 0;
+        }
+        .project-grid {
+          display: flex;
+          justify-content: center;
+          gap: 20px;
+          margin: 10px 0;
+        }
+        .project-item {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 5px;
+        }
+        </style><br>
+        
+        </body>
+        </html>
+        
