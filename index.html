@@ -111,7 +111,7 @@ a:visited {
 
 <script src="script.js"></script>
 
-<script>
+<!-- <script>
 window.addEventListener('load', async () => {
   if (typeof window.ethereum !== 'undefined') {
     // Check if already connected to Polygon network
@@ -181,6 +181,61 @@ async function connectWallet() {
       updateBalances();
     } catch (error) {
       console.error('User denied account access');
+    }
+  } else {
+    alert('Please install MetaMask!');
+  }
+} -->
+
+<script>
+window.addEventListener('load', async () => {
+  if (typeof window.ethereum !== 'undefined') {
+    const polygonChainId = '0x89'; // Chain ID for Polygon Mainnet
+    const currentChainId = await window.ethereum.request({ method: 'eth_chainId' });
+    const button = document.getElementById('connect-button');
+
+    if (currentChainId !== polygonChainId) {
+      button.textContent = 'Change Network';
+      button.classList.add('change-network');
+    } else {
+      try {
+        await window.ethereum.request({ method: 'eth_requestAccounts' });
+        button.textContent = 'Connected';
+        button.classList.add('connected');
+        document.getElementById('button-grid').style.display = 'grid';
+        document.getElementById('wallet-status').style.display = 'none';
+        document.getElementById('balance-info').style.display = 'block';
+        updateBalances();
+      } catch (error) {
+        console.error('User denied account access');
+      }
+    }
+  } else {
+    alert('Please install MetaMask!');
+  }
+});
+
+async function connectWallet() {
+  if (typeof window.ethereum !== 'undefined') {
+    const polygonChainId = '0x89'; // Chain ID for Polygon Mainnet
+    const currentChainId = await window.ethereum.request({ method: 'eth_chainId' });
+    const button = document.getElementById('connect-button');
+
+    if (currentChainId !== polygonChainId) {
+      button.textContent = 'Change Network';
+      button.classList.add('change-network');
+    } else {
+      try {
+        await window.ethereum.request({ method: 'eth_requestAccounts' });
+        button.textContent = 'Connected';
+        button.classList.add('connected');
+        document.getElementById('button-grid').style.display = 'grid';
+        document.getElementById('wallet-status').style.display = 'none';
+        document.getElementById('balance-info').style.display = 'block';
+        updateBalances();
+      } catch (error) {
+        console.error('User denied account access');
+      }
     }
   } else {
     alert('Please install MetaMask!');
