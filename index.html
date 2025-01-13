@@ -241,9 +241,7 @@ async function updateBalances() {
 </script>
 </head>
 <body bgcolor="#ffffff" text="#000080">
-<!-- <div class="wallet-connect">
-  <button id="connect-button" class="connect-button" onclick="connectWallet()">Connect Wallet</button>
-</div> -->
+
 <b>
 <font size="12"><p align="center">C</font><font size="8">ORN </font>
 <font size="12">H</font><font size="8">UB </font>
@@ -398,9 +396,11 @@ async function updateBalances() {
 <hr>
 <br>
 <p align="center" style="font-size: 1.2em">
-  <span id="wallet-status">To See Token Balances Please Connect Wallet</span>
-  <button id="connect-wallet" class="connect-button" onclick="connectWallet()" style="display: block; margin: 10px auto;">Connect Wallet</button>
-
+  <span id="wallet-status">To See Token Balances Please Connect Wallet
+    <div class="wallet-connect">
+      <button id="connect-button" class="connect-button" onclick="connectWallet()">Connect Wallet</button>
+    </div>
+  </span>
   <span id="balance-info" style="display: none">
     Current CornHub Token Balances: <br>
     <span id="balance-display">0</span> CORN | 
@@ -410,7 +410,7 @@ async function updateBalances() {
 </p>
 <br>
 <div id="button-grid" class="button-grid" style="display: none;">
-  <button id="connect-wallet-grid" class="connect-button" onclick="connectWallet()" style="width: 100%; display: none;">Connected</button>
+  <button id="connect-button" class="connect-button" onclick="connectWallet()">Connect Wallet</button>
   <button class="connect-button" onclick="approve()" style="width: 100%;">Approve Corn</button>
   <button class="connect-button" onclick="approve2()" style="width: 100%;">Approve PopCorn</button>
   <button id="burn-1-corn" class="connect-button" onclick="burncorn(1)" style="width: 100%;">Burn 1 Corn</button>
