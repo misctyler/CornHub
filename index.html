@@ -394,69 +394,104 @@ async function updateBalances() {
 </table>
 </center>
 <hr>
-<br>
-<center><a href="https://app.transporter.io/?from=polygon&tab=token&to=arbitrum" target="_blank">
-  Bridge CORN to Arbitrum!
-</a></center>
-<p align="center" style="font-size: 1.4em">
-  <span id="wallet-status">To See Token Balances Please Connect Wallet<br>
-  <button id="connect-button" class="connect-button" onclick="connectWallet()">Connect Wallet</button>
-  </span>
-  <span id="balance-info" style="display: none">
-    Current CornHub Token Balances: <br>
-    <span id="balance-display">0</span> CORN | 
-    <span id="balance2-display">0</span> POPCORN | 
-    <span id="balance3-display">0</span> BUTTER 
-  </span>
-</p>
-<br>
-<div id="button-grid" class="button-grid" style="display: none;">
-  <button id="connect-button" class="connect-button" onclick="connectWallet()">Connected</button>
-  <button class="connect-button" onclick="approve()" style="width: 100%;">Approve Corn</button>
-  <button class="connect-button" onclick="approve2()" style="width: 100%;">Approve PopCorn</button>
-  <button id="burn-1-corn" class="connect-button" onclick="burncorn(1)" style="width: 100%;">Burn 1 Corn</button>
-  <button id="burn-3-corn" class="connect-button" onclick="burncorn(3)" style="width: 100%;">Burn 3 Corn</button>
-  <button id="burn-5-corn" class="connect-button" onclick="burncorn(5)" style="width: 100%;">Burn 5 Corn</button>
-  <button id="mint-bronze" class="connect-button" onclick="mintnft(1)" style="width: 100%;">Mint Bronze</button>
-  <button id="mint-silver" class="connect-button" onclick="mintnft(3)" style="width: 100%;">Mint Silver</button>
-  <button id="mint-gold" class="connect-button" onclick="mintnft(5)" style="width: 100%;">Mint Gold</button>
-  <!-- <div class="button-images"></div> -->
+
+<div style="text-align: center;">
+  <br>
+  <section id="blurb" style="font-size: 1.4em; font-family: 'YourFontFamily';">
+    <a style="color:#000080;">
+      <a href="https://app.transporter.io/?from=polygon&tab=token&to=arbitrum" target="_blank">
+        Bridge CORN to Arbitrum!<br><br>
+      </a>
+    </a>
+    <span>
+      <!-- <a href="https://app.uniswap.org/explore/tokens/arbitrum/0x872348f097cfa396edba3313b89aff9930d0b847" style="color:#000080;">[ BUY CORN ]</a><br> -->
+    </span>
+    <a id="ca" style="text-align:center;color:#000080;cursor:pointer;" onclick="copyToClipboard('0x872348f097cfa396edba3313b89aff9930d0b847')" data-tooltip-id="tooltip" data-tooltip-content="Click to copy" data-tooltip-class-name="max-sm:hidden">
+      ARBITRUM ADDRESS: 
+      <span class="contract-address" style="overflow-wrap:break-word;font-family:monospace;color:#000080;">[0x872348f097cfa396edba3313b89aff9930d0b847]</span><br>
+      <a id="ca" style="text-align:center;color:#000080;cursor:pointer;" onclick="copyToClipboard('0xa0c45509036c422ea7c4d4fcac26a9925531d8c3')" data-tooltip-id="tooltip" data-tooltip-content="Click to copy" data-tooltip-class-name="max-sm:hidden">
+        POLYGON  ADDRESS: 
+        <span class="contract-address" style="overflow-wrap:break-word;font-family:monospace;color:#000080;" >[0xa0c45509036c422ea7c4d4fcac26a9925531d8c3]</span><br><br>
+    </a>
+    <div id="linkies" style="display:flex;justify-content:space-evenly">
+      <span>
+        <a href="https://app.uniswap.org/explore/tokens/arbitrum/0x872348f097cfa396edba3313b89aff9930d0b847" style="color:#000080;">[ UNISWAP ]</a>
+      </span>
+      <span>
+        <a href="https://arbiscan.io/address/0x872348f097cfa396edba3313b89aff9930d0b847" style="color:#000080;">[ ARBISCAN ]</a>
+      </span>
+      <span>
+        <a href="https://polygonscan.com/address/0xa0c45509036c422ea7c4d4fcac26a9925531d8c3" style="color:#000080;">[ POLYGONSCAN ]</a>
+      </span>
+    </div>
+  </section>
+
+  <script>
+    function copyToClipboard(text) {
+      navigator.clipboard.writeText(text).then(function() {
+        alert('Contract address copied to clipboard');
+      }, function(err) {
+        console.error('Could not copy text: ', err);
+      });
+    }
+  </script>
+
+  <p align="center" style="font-size: 1.4em">
+    <span id="wallet-status">To See Token Balances Please Connect Wallet<br>
+    <button id="connect-button" class="connect-button" onclick="connectWallet()">Connect Wallet</button>
+    </span>
+    <span id="balance-info" style="display: none">
+      Current CornHub Token Balances: <br>
+      <span id="balance-display">0</span> CORN | 
+      <span id="balance2-display">0</span> POPCORN | 
+      <span id="balance3-display">0</span> BUTTER 
+    </span>
+  </p>
+  <br>
+  <div id="button-grid" class="button-grid" style="display: none;">
+    <button id="connect-button" class="connect-button" onclick="connectWallet()">Connected</button>
+    <button class="connect-button" onclick="approve()" style="width: 100%;">Approve Corn</button>
+    <button class="connect-button" onclick="approve2()" style="width: 100%;">Approve PopCorn</button>
+    <button id="burn-1-corn" class="connect-button" onclick="burncorn(1)" style="width: 100%;">Burn 1 Corn</button>
+    <button id="burn-3-corn" class="connect-button" onclick="burncorn(3)" style="width: 100%;">Burn 3 Corn</button>
+    <button id="burn-5-corn" class="connect-button" onclick="burncorn(5)" style="width: 100%;">Burn 5 Corn</button>
+    <button id="mint-bronze" class="connect-button" onclick="mintnft(1)" style="width: 100%;">Mint Bronze</button>
+    <button id="mint-silver" class="connect-button" onclick="mintnft(3)" style="width: 100%;">Mint Silver</button>
+    <button id="mint-gold" class="connect-button" onclick="mintnft(5)" style="width: 100%;">Mint Gold</button>
   </div>
+
+  <style>
+    .button-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr); /* Create a 3x3 grid */
+      gap: 10px;
+      max-width: 600px;
+      margin: 20px auto;
+    }
+    .button-images {
+      grid-column: span 3; /* Make images span across all columns */
+    }
+    .button-row .connect-button {
+      width: 100%; /* Ensure buttons take full width on mobile */
+    }
+  </style>
+
+  <p align="center">
+    <img src="images/moeda-bronze.png" alt="Bronze Kernel" style="width:100px;height:100px;">   
+    <img src="images/moeda.png" alt="Silver Kernel" style="width:100px;height:100px;">
+    <img src="images/moeda-gold.png" alt="Gold Kernel" style="width:100px;height:100px;"><br>
+  </p>
+
+  <p align="center" style="font-size: 120%;">
+    Our Father, which art in the blockchain, Hallowed be thy Node.<br>
+    Thy Moon will come. Thy hash will be done, on earth, As it is encrypted.<br>
+    Give us this day our daily coin. And forgive us our DDoSes, As we forgive them that DDoS against us.<br>
+    And lead us not into regulation, But deliver us from fiat currency inflation.<br>
+    For thine is the Ledger, The processing power, and the wattage.<br>
+    For ever and ever.<br>
+    Amen<br>
+  </p>
 </div>
-
-<style>
-.button-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr); /* Create a 3x3 grid */
-  gap: 10px;
-  max-width: 600px;
-  margin: 20px auto;
-}
-.button-images {
-  grid-column: span 3; /* Make images span across all columns */
-}
-.button-row .connect-button {
-  width: 100%; /* Ensure buttons take full width on mobile */
-}
-</style>
-
-<p align="center">
-
-  <img src="images/moeda-bronze.png" alt="Bronze Kernel" style="width:100px;height:100px;">   
-  <img src="images/moeda.png" alt="Silver Kernel" style="width:100px;height:100px;">
-  <img src="images/moeda-gold.png" alt="Gold Kernel" style="width:100px;height:100px;"><br>
-
-</a>
-<font size="2" style="font-size: 120%">
-Our Father, which art in the blockchain, Hallowed be thy Node.<br>
-Thy Moon will come. Thy hash will be done, on earth, As it is encrypted.<br>
-Give us this day our daily coin. And forgive us our DDoSes, As we forgive them that DDoS against us.<br>
-And lead us not into regulation, But deliver us from fiat currency inflation.<br>
-For thine is the Ledger, The processing power, and the wattage.<br>
-For ever and ever.<br>
-Amen<br>
-</font>
-</p>
 
 <hr>
 <h2 style="text-align: center;">CornHub Community Resources</h2>
@@ -767,6 +802,40 @@ Amen<br>
 </video>
 <img src="images/crosschain.png" width="600" height="400" alt="Level 5 Security">
 </center>
+
+
+
+<!-- <section id="blurb"><center>
+  <a style="color:blue;"></a>
+  <span>
+    <a href="https://app.uniswap.org/explore/tokens/arbitrum/0x872348f097cfa396edba3313b89aff9930d0b847" style="color:blue;">[ BUY CORN ]</a>
+  </span>
+  <a id="ca" style="text-align:center;color:blue;" href="https://etherscan.io/address/0x0000000000c5dc95539589fbD24BE07c6C14eCa4" data-tooltip-id="tooltip" data-tooltip-content="Click to copy" data-tooltip-class-name="max-sm:hidden">
+    CONTRACT ADDRESS: 
+    <span class="contract-address" style="overflow-wrap:break-word;font-family:monospace;color:blue;">[0x872348f097cfa396edba3313b89aff9930d0b847]</span>
+  </a>
+  <div id="linkies" style="display:flex;justify-content:space-evenly">
+    <span>
+      <a href="https://app.uniswap.org/explore/tokens/arbitrum/0x872348f097cfa396edba3313b89aff9930d0b847" style="color:blue;">[ UNISWAP ]</a>
+    </span>
+    <span>
+      <a href="https://arbiscan.io/address/0x872348f097cfa396edba3313b89aff9930d0b847" style="color:blue;">[ ARBISCAN ]</a>
+    </span>
+    <span>
+      <a href="https://polygonscan.com/address/0xa0c45509036c422ea7c4d4fcac26a9925531d8c3" style="color:blue;">[ POLYGONSCAN ]</a>
+    </span>
+  </div></center>
+</section> -->
+
+
+
+
+
+
+
+
+
+
 
 <hr>
 
