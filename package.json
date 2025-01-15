@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "@uniswap/widgets": "^2.59.0",
+    "react-redux": "^8.1.3"
+  }
+}
