@@ -1,0 +1,835 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html><head><title>CORNHUB INTL INC.</title>
+<meta content="text/html; charset=unicode" http-equiv="Content-Type">
+<meta name="GENERATOR" content="MSHTML 8.00.6001.18828">
+<link rel="icon" type="image/png" href="images/favicon-32x32 2.png" sizes="32x32">
+<link rel="icon" type="image/png" href="images/favicon-16x16 2.png" sizes="16x16">
+<style>
+table {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+td {
+  width: 50%;
+  padding: 10px;
+  vertical-align: top;
+}
+body {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+img {
+  max-width: 100%;
+  height: auto;
+}
+a {
+  text-decoration: none;
+  color: #000080;
+}
+a:visited {
+  color: #000080;
+}
+.wallet-connect {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+}
+.connect-button {
+  background-color: #000080;
+  border: none;
+  color: white;
+  padding: 12px 24px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+}
+.connect-button:hover {
+  background-color: #0000a0;
+  transform: translateY(-2px);
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+.connect-button.connected {
+  background-color: #4040ff;
+  color: white;
+}
+.connect-button.enabled {
+  background-color: #4040ff;
+}
+.balance-table {
+  margin: 20px auto;
+  border-collapse: collapse;
+  width: 90%;
+  max-width: 800px;
+  table-layout: fixed;
+}
+.balance-table th, .balance-table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: center;
+  font-size: clamp(10px, 1.5vw, 14px);
+}
+.balance-table th {
+  background-color: #000080;
+  color: white;
+}
+.balance-table td:last-child {
+  font-family: monospace;
+  padding: 0;
+  height: 40px;
+  position: relative;
+  overflow: hidden;
+}
+.balance-table td:last-child a {
+  position: absolute;
+  width: 100%;
+  animation: marquee 15s linear infinite;
+  white-space: nowrap;
+}
+.balance-table td:last-child a:nth-child(2) {
+  animation-delay: 5s;
+}
+.balance-table td:last-child a:nth-child(3) {
+  animation-delay: 10s;
+}
+@keyframes marquee {
+  0% { transform: translateY(100%); }
+  5% { transform: translateY(0); }
+  28% { transform: translateY(0); }
+  33% { transform: translateY(-100%); }
+  100% { transform: translateY(-100%); }
+}
+</style>
+<script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/5.7.2/ethers.umd.min.js"></script>
+
+<script src="script.js"></script>
+
+<script>
+  window.addEventListener('load', async () => {
+    if (typeof window.ethereum !== 'undefined') {
+      const polygonChainId = '0x89'; // Chain ID for Polygon Mainnet
+      const currentChainId = await window.ethereum.request({ method: 'eth_chainId' });
+      const button = document.getElementById('connect-button');
+  
+      if (currentChainId !== polygonChainId) {
+        button.textContent = 'Change Network';
+        button.classList.add('change-network');
+        button.addEventListener('click', async () => {
+          try {
+            await window.ethereum.request({
+              method: 'wallet_switchEthereumChain',
+              params: [{ chainId: polygonChainId }],
+            });
+            window.location.reload();
+          } catch (switchError) {
+            if (switchError.code === 4902) {
+              alert('Polygon network is not available in your MetaMask. Please add it manually.');
+            } else {
+              console.error('Failed to switch network', switchError);
+            }
+          }
+        });
+      } else {
+        try {
+          await window.ethereum.request({ method: 'eth_requestAccounts' });
+          button.textContent = 'Connected';
+          button.classList.add('connected');
+          document.getElementById('button-grid').style.display = 'grid';
+          document.getElementById('wallet-status').style.display = 'none';
+          document.getElementById('balance-info').style.display = 'block';
+          updateBalances();
+        } catch (error) {
+          console.error('User denied account access');
+        }
+      }
+    } else {
+      alert('Please install MetaMask!');
+    }
+  });
+  
+  async function connectWallet() {
+    if (typeof window.ethereum !== 'undefined') {
+      const polygonChainId = '0x89'; // Chain ID for Polygon Mainnet
+      const currentChainId = await window.ethereum.request({ method: 'eth_chainId' });
+      const button = document.getElementById('connect-button');
+  
+      if (currentChainId !== polygonChainId) {
+        button.textContent = 'Change Network';
+        button.classList.add('change-network');
+        button.addEventListener('click', async () => {
+          try {
+            await window.ethereum.request({
+              method: 'wallet_switchEthereumChain',
+              params: [{ chainId: polygonChainId }],
+            });
+            window.location.reload();
+          } catch (switchError) {
+            if (switchError.code === 4902) {
+              alert('Polygon network is not available in your MetaMask. Please add it manually.');
+            } else {
+              console.error('Failed to switch network', switchError);
+            }
+          }
+        });
+      } else {
+        try {
+          await window.ethereum.request({ method: 'eth_requestAccounts' });
+          button.textContent = 'Connected';
+          button.classList.add('connected');
+          document.getElementById('button-grid').style.display = 'grid';
+          document.getElementById('wallet-status').style.display = 'none';
+          document.getElementById('balance-info').style.display = 'block';
+          updateBalances();
+        } catch (error) {
+          console.error('User denied account access');
+        }
+      }
+    } else {
+      alert('Please install MetaMask!');
+    }
+  }
+
+async function updateBalances() {
+  const provider = new ethers.providers.Web3Provider(window.ethereum);
+  const signer = provider.getSigner();
+  const address = await signer.getAddress();
+
+  // Update Corn Token balance
+  const cornTokenAddress = '0xa0c45509036c422ea7c4d4fcac26a9925531d8c3';
+  const cornTokenAbi = ['function balanceOf(address) view returns (uint256)'];
+  const cornTokenContract = new ethers.Contract(cornTokenAddress, cornTokenAbi, provider);
+  const cornBalance = await cornTokenContract.balanceOf(address);
+  const cornBalanceFormatted = parseFloat(ethers.utils.formatUnits(cornBalance, 18)).toFixed(3);
+  document.getElementById('balance').innerText = cornBalanceFormatted;
+  document.getElementById('balance-display').innerText = cornBalanceFormatted;
+
+  // Update PopCorn Token balance
+  const popCornTokenAddress = '0x6531547b44784dDD8A934fB9fEB92ba582dfeD15';
+  const popCornTokenContract = new ethers.Contract(popCornTokenAddress, cornTokenAbi, provider);
+  const popCornBalance = await popCornTokenContract.balanceOf(address);
+  const popCornBalanceFormatted = parseFloat(ethers.utils.formatUnits(popCornBalance, 18)).toFixed(3);
+  document.getElementById('balance2').innerText = popCornBalanceFormatted;
+  document.getElementById('balance2-display').innerText = popCornBalanceFormatted;
+
+  // Update Butter Token balance
+  const butterTokenAddress = '0x409e02e728418501720d7b1e5d7328ac461ecaae';
+  const butterTokenContract = new ethers.Contract(butterTokenAddress, cornTokenAbi, provider);
+  const butterBalance = await butterTokenContract.balanceOf(address);
+  const butterBalanceFormatted = parseFloat(ethers.utils.formatUnits(butterBalance, 18)).toFixed(3);
+  document.getElementById('balance3').innerText = butterBalanceFormatted;
+  document.getElementById('balance3-display').innerText = butterBalanceFormatted;
+
+  // Enable/disable burn buttons based on CORN balance
+  const cornBalanceNum = parseFloat(cornBalanceFormatted);
+  document.getElementById('burn-1-corn').classList.toggle('enabled', cornBalanceNum >= 1);
+  document.getElementById('burn-3-corn').classList.toggle('enabled', cornBalanceNum >= 3);
+  document.getElementById('burn-5-corn').classList.toggle('enabled', cornBalanceNum >= 5);
+  
+  // Enable/disable mint buttons based on POPCORN balance
+  const popcornBalanceNum = parseFloat(popCornBalanceFormatted);
+  document.getElementById('mint-bronze').classList.toggle('enabled', popcornBalanceNum >= 1);
+  document.getElementById('mint-silver').classList.toggle('enabled', popcornBalanceNum >= 3);
+  document.getElementById('mint-gold').classList.toggle('enabled', popcornBalanceNum >= 5);
+}
+</script>
+</head>
+<body bgcolor="#ffffff" text="#000080">
+
+<b>
+<font size="12"><p align="center">C</font><font size="8">ORN </font>
+<font size="12">H</font><font size="8">UB </font>
+<font size="4">INC.<br>CornHub.eth</font><br>Official Home Page</b>
+<font size="2">&nbsp;</p></font>
+
+<center>
+  "God is just. Work is rewarded with blessing if not money. <br>
+  Luck is the most important thing, but really it's God."<br>
+</center>
+
+<!-- bitcoin countdoun -->
+<div id="bitcoin-halving-countdown" style="text-align: center; margin: 20px;">
+    <h5>Bitcoin Halving Countdown</h5>
+    <div id="countdown" style="font-family: Arial, sans-serif; font-size: 24px; color: #333;"></div>
+</div>
+
+<script>
+    // Set the date and time for the next Bitcoin halving event
+    const halvingDate = new Date('April 14, 2028 14:36:22 UTC').getTime();
+
+    // Update the countdown every second
+    const countdownFunction = setInterval(() => {
+        const now = new Date().getTime();
+        const timeLeft = halvingDate - now;
+
+        // Time calculations for days, hours, minutes, and seconds
+        const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+
+        // Display the result
+        document.getElementById('countdown').innerHTML =
+            days + 'd ' + hours + 'h ' + minutes + 'm ' + seconds + 's ';
+
+        // If the countdown is over, display a message
+        if (timeLeft < 0) {
+            clearInterval(countdownFunction);
+            document.getElementById('countdown').innerHTML = 'The Bitcoin halving has occurred!';
+        }
+    }, 1000);
+</script>
+
+
+<div style="overflow: hidden; margin: 20px auto; width: 90%; max-width: 800px;">
+  <label for="toggle-marquee">Stop Ticker:</label>
+  <input type="checkbox" id="toggle-marquee" onclick="toggleMarquee()">
+  
+  <div id="marquee-container">
+    <div style="white-space: nowrap; animation: scroll1 20s linear infinite;" class="marquee">
+      Corn Token - Balance: <span id="balance"></span> - <a href="https://quickswap.exchange/#/swap?exactField=input&outputCurrency=0xa0c45509036c422ea7c4d4fcac26a9925531d8c3&swapIndex=0&currency0=ETH" target="_blank">Trade Corn</a> - Contract: <a href="https://polygonscan.com/address/0xa0c45509036c422ea7c4d4fcac26a9925531d8c3" target="_blank">0xa0c45509036c422ea7c4d4fcac26a9925531d8c3</a>
+    </div>
+    <div style="white-space: nowrap; animation: scroll2 30s linear infinite;" class="marquee">
+      PopCorn Token - Balance: <span id="balance2"></span> - <a href="https://quickswap.exchange/#/swap?exactField=input&outputCurrency=0x6531547b44784dDD8A934fB9fEB92ba582dfeD15&swapIndex=0&currency0=ETH" target="_blank">Trade PopCorn</a> - Contract: <a href="https://polygonscan.com/address/0x6531547b44784dDD8A934fB9fEB92ba582dfeD15" target="_blank">0x6531547b44784dDD8A934fB9fEB92ba582dfeD15</a>
+    </div>
+    <div style="white-space: nowrap; animation: scroll3 25s linear infinite;" class="marquee">
+      Butter Token - Balance: <span id="balance3"></span> - <a href="https://quickswap.exchange/#/swap?exactField=input&outputCurrency=0x409e02e728418501720d7b1e5d7328ac461ecaae&swapIndex=0&currency0=ETH" target="_blank">Trade Butter</a> - Contract: <a href="https://polygonscan.com/address/0x409e02e728418501720d7b1e5d7328ac461ecaae" target="_blank">0x409e02e728418501720d7b1e5d7328ac461ecaae</a>
+    </div>
+  </div>
+</div>
+<br>
+
+<script>
+  function toggleMarquee() {
+    const isChecked = document.getElementById('toggle-marquee').checked;
+    const marquees = document.querySelectorAll('.marquee');
+    
+    if (isChecked) {
+      marquees.forEach(m => {
+        m.style.animation = 'none';
+        m.style.display = 'inline'; // Center the text
+      });
+    } else {
+      marquees.forEach((m, index) => {
+        m.style.animation = `scroll${index + 1} ${20 + index * 5}s linear infinite`;
+        m.style.display = 'block'; // Reset to block for scrolling
+      });
+    }
+  }
+</script>
+
+<script src="https://widgets.coingecko.com/gecko-coin-price-static-headline-widget.js"></script>
+<gecko-coin-price-static-headline-widget locale="en" transparent-background="true" coin-ids="bitcoin,ethereum,chainlink,milady-cult-coin,curve-dao-token,aavegotchi,heheh" initial-currency="usd"></gecko-coin-price-static-headline-widget>
+
+
+<style>
+@keyframes scroll1 {
+  from { transform: translateX(100%); }
+  to { transform: translateX(-100%); }
+}
+@keyframes scroll2 {
+  from { transform: translateX(100%); }
+  to { transform: translateX(-100%); }
+}
+@keyframes scroll3 {
+  from { transform: translateX(100%); }
+  to { transform: translateX(-100%); }
+}
+</style>
+
+
+<p align="center">
+<center>
+<table border="0" cellspacing="0">
+  <tbody>
+  <tr>
+    <td>
+      <ul>
+        <li style="font-size: 200%"><a href="./message.html">A Message from Tyler</a><br>
+      </ul>
+    </td>
+    <td>
+      <ul>
+        <li style="font-size: 200%"><a href="./gold.html">Gold & Glory</a><br>
+        <font size="2">in Times of Thought Chaos</font></li>
+      </ul>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <ul>
+        <li style="font-size: 200%"><a href="https://www.gallery.so/tylerirl" target="_blank">Visit Tyler's NFT Gallery</a><br>
+        <font size="2">Updated December 24, 2024</font></li>
+      </ul>
+    </td>
+    <td>
+      <ul>
+        <li style="font-size: 200%"><a href="https://quickswap.exchange/#/swap?exactField=input&outputCurrency=0xa0c45509036c422ea7c4d4fcac26a9925531d8c3&swapIndex=0" target="_blank">Buy $CORN Kernels</a><br>
+        <font size="2">Updated February 28, 2023</font></li>
+      </ul>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <ul>
+        <li style="font-size: 200%"><a href="https://polygonscan.com/address/0x1193d3f5d97e9a8a3B4511a718Eda88C21722B44" target="_blank">PopCorn Machine Contract</a><br>
+          <font size="2">Updated Oct 3, 2021</font></li>
+      </ul>
+    </td>
+    <td>
+      <ul>
+        
+        <li style="font-size: 200%"><a href="https://rarible.com/token/0xd07dc4262bcdbf85190c01c996b4c06a461d2430:540112?tab=overview" target="_blank">Buy OG CornHub VIP NFTs</a><br>
+          <font size="2">Updated May 4, 2021</font></li>
+      </ul>
+    </td>
+  </tr>
+  </tbody>
+</table>
+</center>
+<hr>
+<br>
+<center><a href="https://app.transporter.io/?from=polygon&tab=token&to=arbitrum" target="_blank">
+  Bridge CORN to Arbitrum!
+</a></center>
+<p align="center" style="font-size: 1.4em">
+  <span id="wallet-status">To See Token Balances Please Connect Wallet<br>
+  <button id="connect-button" class="connect-button" onclick="connectWallet()">Connect Wallet</button>
+  </span>
+  <span id="balance-info" style="display: none">
+    Current CornHub Token Balances: <br>
+    <span id="balance-display">0</span> CORN | 
+    <span id="balance2-display">0</span> POPCORN | 
+    <span id="balance3-display">0</span> BUTTER 
+  </span>
+</p>
+<br>
+<div id="button-grid" class="button-grid" style="display: none;">
+  <button id="connect-button" class="connect-button" onclick="connectWallet()">Connected</button>
+  <button class="connect-button" onclick="approve()" style="width: 100%;">Approve Corn</button>
+  <button class="connect-button" onclick="approve2()" style="width: 100%;">Approve PopCorn</button>
+  <button id="burn-1-corn" class="connect-button" onclick="burncorn(1)" style="width: 100%;">Burn 1 Corn</button>
+  <button id="burn-3-corn" class="connect-button" onclick="burncorn(3)" style="width: 100%;">Burn 3 Corn</button>
+  <button id="burn-5-corn" class="connect-button" onclick="burncorn(5)" style="width: 100%;">Burn 5 Corn</button>
+  <button id="mint-bronze" class="connect-button" onclick="mintnft(1)" style="width: 100%;">Mint Bronze</button>
+  <button id="mint-silver" class="connect-button" onclick="mintnft(3)" style="width: 100%;">Mint Silver</button>
+  <button id="mint-gold" class="connect-button" onclick="mintnft(5)" style="width: 100%;">Mint Gold</button>
+  <!-- <div class="button-images"></div> -->
+  </div>
+</div>
+
+<style>
+.button-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* Create a 3x3 grid */
+  gap: 10px;
+  max-width: 600px;
+  margin: 20px auto;
+}
+.button-images {
+  grid-column: span 3; /* Make images span across all columns */
+}
+.button-row .connect-button {
+  width: 100%; /* Ensure buttons take full width on mobile */
+}
+</style>
+
+<p align="center">
+
+  <img src="images/moeda-bronze.png" alt="Bronze Kernel" style="width:100px;height:100px;">   
+  <img src="images/moeda.png" alt="Silver Kernel" style="width:100px;height:100px;">
+  <img src="images/moeda-gold.png" alt="Gold Kernel" style="width:100px;height:100px;"><br>
+
+</a>
+<font size="2" style="font-size: 120%">
+Our Father, which art in the blockchain, Hallowed be thy Node.<br>
+Thy Moon will come. Thy hash will be done, on earth, As it is encrypted.<br>
+Give us this day our daily coin. And forgive us our DDoSes, As we forgive them that DDoS against us.<br>
+And lead us not into regulation, But deliver us from fiat currency inflation.<br>
+For thine is the Ledger, The processing power, and the wattage.<br>
+For ever and ever.<br>
+Amen<br>
+</font>
+</p>
+
+<hr>
+<h2 style="text-align: center;">CornHub Community Resources</h2>
+<h6 style="text-align: center;">not financial advice, do your own research</h6>
+
+<div style="display: grid; grid-template-columns: repeat(7, 1fr); gap: 20px; max-width: 90%; margin: 0 auto; justify-items: center;">
+  <div>
+    <h3>CornHub</h3>
+    <p>
+       <a href="https://polygonscan.com/address/0xa0c45509036c422ea7c4d4fcac26a9925531d8c3" target="_blank">CORN Token</a><br>
+       <a href="https://polygonscan.com/address/0x6531547b44784dDD8A934fB9fEB92ba582dfeD15" target="_blank">POPCORN Token</a><br>
+       <a href="https://polygonscan.com/address/0x409e02e728418501720d7b1e5d7328ac461ecaae" target="_blank">BUTTER Token</a><br>
+       <a href="https://polygonscan.com/address/0x1193d3f5d97e9a8a3B4511a718Eda88C21722B44" target="_blank">PopCorn Machine</a><br>
+       <a href="https://opensea.io/collection/cornhub-popcorn-collection" target="_blank">PopCorn Collection</a><br>
+    </p>
+    <h4>Exchanges</h4>
+    <p>
+      <a href="https://www.coinbase.com" target="_blank">Coinbase</a><br>
+      <a href="https://www.kraken.com" target="_blank">Kraken</a><br>
+      <a href="https://www.gemini.com" target="_blank">Gemini</a><br>
+      <a href="https://www.binance.com/en" target="_blank">Binance</a><br>
+   </p>
+   <h4>DEX/AMM</h4>
+      <p>
+        <a href="https://www.uniswap.exchange" target="_blank">Uniswap</a><br>
+        <a href="https://curve.fi/#/ethereum/swap" target="_blank">Curve Fi</a><br>
+        <a href="https://www.sushi.com/ethereum/swap" target="_blank">SushiSwap</a><br>
+        <a href="https://aerodrome.finance" target="_blank">Aerodrome</a><br>
+        <a href="https://quickswap.exchange/#/swap" target="_blank">Quickswap</a><br>
+        <a href="https://raydium.io/swap" target="_blank">Raydium</a><br>
+        <a href="https://hyperfoundation.org" target="_blank">HyperLiquid</a><br>
+        <a href="https://app.camelot.exchange" target="_blank">Camelot</a><br>
+        <a href="https://www.nile.build/" target="_blank">Nile</a><br>
+        <a href="https://gmx.io" target="_blank">GMX</a><br>
+
+      </p>
+    
+  </div>
+  <div>
+    <h3>Wallets</h3>
+    <p>
+      <a href="https://metamask.io" target="_blank">MetaMask</a><br>
+      <a href="https://trezor.io/trezor-suite" target="_blank">Trezor</a><br>
+      <a href="https://www.ledger.com" target="_blank">Ledger</a><br>
+      <a href="https://phantom.com" target="_blank">Phantom</a><br>
+      <a href="https://keyst.one" target="_blank">Keystone</a><br>
+      <a href="https://www.xverse.app" target="_blank">Xverse</a><br>
+      <a href="https://www.myetherwallet.com" target="_blank">MEW Wallet</a><br>
+      <a href="https://safe.global" target="_blank">Safe</a><br>
+    </p>
+    <h4>Aggregators</h4>
+    <p>
+      <a href="https://coinmarketcap.com" target="_blank">CoinMarketCap</a><br>
+      <a href="https://www.coingecko.com" target="_blank">CoinGecko</a><br>
+      <a href="https://debank.com" target="_blank">DeBank</a><br>
+      <a href="https://zapper.xyz" target="_blank">Zapper</a><br>
+      <a href="https://zerion.io" target="_blank">Zerion</a><br>
+      <a href="https://app.step.finance/" target="_blank">Step</a><br>
+      <a href="https://www.cointracker.io" target="_blank">CoinTracker</a><br>
+      <a href="https://koinly.io" target="_blank"> Koinly</a><br>
+      <a href="https://www.nftscan.com/" target="_blank"> NFTScan</a><br>
+
+
+    </p>
+
+    <h4>Explorers</h4>
+    <p>
+      <a href="https://www.blockchain.com/explorer" target="_blank">Bitcoin</a><br>
+      <a href="https://etherscan.io" target="_blank">Ethereum</a><br>
+      <a href="https://ccip.chain.link" target="_blank">Chainlink</a><br>
+      <a href="https://explorer.solana.com" target="_blank">Solana</a><br>
+      <a href="https://arbiscan.io" target="_blank">Arbitrum</a><br>
+      <a href="https://polygonscan.com" target="_blank">Polygon</a><br>
+      <a href="https://basescan.org" target="_blank">Base</a><br>
+      <a href="https://bscscan.com" target="_blank">BNB Chain</a><br>
+      <a href="https://geist-mainnet.explorer.alchemy.com" target="_blank">Geist</a><br>
+
+
+
+    </p>
+  </div>
+  <div>
+    <h3>Media</h3>
+    <p>
+      <a href="https://www.coindesk.com" target="_blank">Coindesk</a><br>
+      <a href="https://decrypt.co" target="_blank">Decrypt</a><br>
+      <a href="https://cointelegraph.com" target="_blank">CoinTelegraph</a><br>
+      <a href="https://cryptoslate.com" target="_blank">CryptoSlate</a><br>
+      <a href="https://www.theblock.co" target="_blank">The Block</a><br>
+      <a href="https://www.ft.com/blockchain" target="_blank">FT Blockchain</a><br>
+    </p>
+    <h4>Social</h4>
+    <p>
+      <a href="https://www.twitter.com" target="_blank">Twitter (𝕏)</a><br>
+      <a href="https://gallery.so" target="_blank">Gallery</a><br>
+      <a href="https://www.lens.xyz" target="_blank">Lens</a><br>
+      <a href="https://hey.xyz" target="_blank">hey.xyz</a><br>
+      <a href="https://poap.xyz" target="_blank">poap</a><br>
+      <a href="https://www.farcaster.xyz" target="_blank">Farcaster</a>
+
+    </p>
+    <h4>Web3 Games</h4>
+    <p>
+      <a href="https://dapp.aavegotchi.com" target="_blank">Aavegotchi</a><br>
+      <a href="https://gv3d.gotchiverse.io" target="_blank">Gotchiverse 3D</a><br>
+      <a href="https://www.playongeist.com" target="_blank">Geist Mainnet</a><br>
+      <a href="https://openseason.games" target="_blank">OpenSeason</a><br>
+      <a href="https://decentraland.org" target="_blank">Decentraland</a><br>
+      <a href="https://piratenation.game" target="_blank">Pirate Nation</a><br>
+      <a href="https://x.com/playgigaverse" target="_blank">Gigaverse</a><br>
+      <a href="https://luchadores.io" target="_blank">Luchadores</a><br>
+
+    </p>
+  </div>
+  <div>
+    <h3>DeFi</h3>
+    <p>
+      <a href="https://app.aave.com" target="_blank">Aave</a><br>
+      <a href="https://compound.finance" target="_blank">Compound</a><br>
+      <a href="https://www.convexfinance.com" target="_blank">Convex</a><br>
+      <a href="https://yearn.fi" target="_blank">yEarn</a><br>
+      <a href="https://synthetix.io" target="_blank">Synthetix</a><br>
+      <a href="https://pooltogether.com" target="_blank">PoolTogether</a><br>
+      <a href="https://ethena.fi" target="_blank">Ethena</a><br>
+      <a href="https://omni.network" target="_blank">Omni Network</a><br>
+      <a href="https://nftx.io" target="_blank">NFTX</a><br>
+      <a href="https://lido.fi/ethereum" target="_blank">Lido</a><br>
+      <a href="https://app.kamino.finance/" target="_blank">Kamino</a><br>
+      <a href="https://app.drift.trade/" target="_blank">Drift</a><br>
+      <a href="https://www.pendle.finance" target="_blank">Pendle</a><br>
+    </p>
+    <h4>Bridges</h4>
+    <p>
+      <a href="https://orbiter.finance/en" target="_blank">Orbiter</a><br>
+      <a href="https://relay.link" target="_blank">Relay.Link</a><br>
+      <a href="https://synapseprotocol.com/" target="_blank">Synapse</a><br>
+      <a href="https://across.to" target="_blank">Across</a><br>
+    </p>
+    <h4>NFT Marketplaces</h4>
+    <p>
+      <a href="https://opensea.io" target="_blank">Opensea</a><br>
+      <a href="https://pro.opensea.io" target="_blank">OpenSea Pro</a><br>
+      <a href="https://www.scatter.art" target="_blank">Scatter</a><br>
+      <a href="https://radder.xyz" target="_blank">Radder</a><br>
+      <a href="https://blur.io" target="_blank">Blur</a><br>
+      <a href="https://magiceden.us" target="_blank">Magic Eden</a><br>
+      <a href="https://rarible.com" target="_blank">Rarible</a><br>
+      <a href="https://superrare.com" target="_blank">SuperRare</a><br>
+      <a href="https://foundation.app" target="_blank">Foundation</a><br>
+    </p>
+  </div>
+  <div>
+    <h3>Networks</h3>
+    <p>
+      <a href="https://ethereum.org" target="_blank">Ethereum</a><br>
+      <a href="https://chain.link" target="_blank">Chainlink</a><br>
+      <a href="https://arbitrum.io" target="_blank">Arbitrum</a><br>
+      <a href="https://stake.link" target="_blank">Stake.Link</a><br>
+      <a href="https://polygon.technology" target="_blank">Polygon</a><br>
+      <a href="https://www.optimism.io" target="_blank">Optimism</a><br>
+      <a href="https://www.base.org" target="_blank">Base</a><br>
+      <a href="https://zksync.io" target="_blank">ZkSync</a><br>
+      <a href="https://linea.build" target="_blank">Linea</a><br>
+      <a href="https://inkonchain.com" target="_blank">Ink</a><br>
+
+
+    </p>
+    <h4>Tokens</h4>
+    <p>
+      <a href="https://dexscreener.com/ethereum/0x0000000000c5dc95539589fbD24BE07c6C14eCa4" target="_blank">Milady Cult</a><br>
+      <a href="https://dexscreener.com/ethereum/0xddc6625feca10438857dd8660c021cd1088806fb" target="_blank">Rad Coin</a><br>
+      <a href="https://mogcoin.xyz" target="_blank">Mog Coin</a><br>
+      <a href="https://heheh.finance" target="_blank">heheh</a><br>
+      <a href="https://ampera.xyz/" target="_blank">Ampera</a><br>
+      <a href="https://anvil.xyz/" target="_blank">Anvil</a><br>
+      <a href="https://thegraph.com" target="_blank">The Graph</a><br>
+      <a href="https://pump.fun/board"target="_blank">Pump.Fun</a><br>
+      <a href="https://tsotchke.net" target="_blank">tsotchke</a><br>
+
+    </p>
+  </div>
+  <div>
+    <h3>Tools</h3>
+    <p>
+      <a href="https://dune.com/home" target="_blank">Dune Analytics</a><br>
+      <a href="https://intel.arkm.com/" target="_blank">Chaintelligence</a><br>
+      <a href="https://dappradar.com" target="_blank">dApp Radar</a><br>
+      <a href="https://etherscan.io/gastracker" target="_blank">Gas Tracker</a><br>
+      <a href="https://dexscreener.com" target="_blank">Dexscreener</a><br>
+      <a href="https://dextools.io/" target="_blank">Dextools</a><br>
+      <a href="https://app.ens.domains" target="_blank">ENS Domains</a><br>
+      <a href="https://app.cindicator.com" target="_blank">Cindicator</a><br>
+      <a href="https://vfat.tools" target="_blank">Yield Farms</a><br>
+      <a href="https://snapshot.box/#/" target="_blank">Snapshot</a><br>
+      <a href="https://cryptofinally.io/start-the-course" target="_blank">DeFi Guide</a><br>
+    </p>
+    <h4>Developer</h4>
+    <p>
+      <a href="https://remix.ethereum.org" target="_blank">Remix ETH</a><br>
+      <a href="https://cryptozombies.io" target="_blank">Crypto Zombies</a><br>
+      <a href="https://chainlist.org" target="_blank">Chain List</a><br>
+      <a href="https://soliditylang.org" target="_blank">Solidity</a><br>
+      <a href="https://github.com/Vectorized/solady" target="_blank">Solady</a><br>
+      <a href="https://vyperlang.org" target="_blank">Vyper</a><br>
+      <a href="https://hardhat.org" target="_blank">Hardhat</a><br>
+      <a href="https://moralis.io/" target="_blank">Moralis</a><br>
+      <a href="https://solidity-by-example.org/" target="_blank">Sol by Example</a><br>
+      <a href="https://www.smartcontract.engineer/" target="_blank">SC Engineer</a><br>
+      <a href="https://book.getfoundry.sh" target="_blank">Foundry</a><br>
+      <a href="https://apeworx.io" target="_blank">Apeworx</a><br>
+    </p>
+  </div>
+  <div>
+    <h3>The New Internet</h3>
+    <p>
+      <a href="https://goldenlight.mirror.xyz" target="_blank">Goldenlight</a><br>
+      <a href="https://www.remilia.org" target="_blank">Remilia</a><br>
+      <a href="https://cult.inc" target="_blank">Cult, INC</a><br>      
+      <a href="https://schizoposters.xyz" target="_blank">Schizoposters</a><br>
+      <a href="https://achievements.remilia.org" target="_blank">Beetle Game</a><br>
+      <a href="https://miladymaker.net" target="_blank">Milady Maker</a><br>
+      <a href="https://miladycraft.net" target="_blank">Miladycraft</a><br>
+      <a href="https://boards.miladychan.org/all/catalog" target="_blank">Miladychan</a><br>
+      <a href="https://miladystation.net" target="_blank">Miladystation</a><br>
+      <a href="https://store.remilia.org" target="_blank">Milady Gift Shop</a><br>
+      <a href="https://house.remilia.org" target="_blank">Remilia House</a><br>
+      <a href="https://remilio.org" target="_blank">Remilio</a><br>
+      <a href="https://yayo.fund" target="_blank">YAYO</a><br>
+      <a href="https://radbro.xyz" target="_blank">Radbro Webring</a><br>
+      <a href="https://sanko.tv" target="_blank">Sanko TV</a><br>
+      <a href="https://www.kemonokaki.net" target="_blank">Kemonokaki</a><br>
+      <a href="https://remilia.ly" target="_blank">Remilia.ly</a><br>
+      <a href="https://pixeladymaker.net" target="_blank">Pixelady</a><br>
+    </p>
+  </div>
+</div>
+
+
+
+<center><h3>Deeper Reading</h3></center>
+<!-- Start Generation Here -->
+<div style="display: flex; justify-content: center; align-items: flex-start; max-width: 90%; margin: 20px auto;">
+  <div style="flex: 1; margin-right: 10px;">
+    <p>
+      <a href="https://blog.lopp.net/bitcoin-2024-annual-review/" target="_blank">Bitcoin 2024 Annual Review</a>
+      <a href="https://www.forbes.com/sites/digital-assets/2024/12/29/the-virus-is-spreading-bitcoin-suddenly-braced-for-a-major-2025-price-move/" target="_blank">The ‘Virus Is Spreading’—Bitcoin Suddenly Braced For A ‘Major’ 2025 Price Move</a>
+      <a href="https://goldenlight.mirror.xyz/4SW-snEQ1fIwhdppbMWIPy771XJHrL-lkQNYupCtB1I" target="_blank">What Remilia Believes In: A New Net Art Manifesto</a>
+      <a href="https://members.delphidigital.io/feed/schizoposters-the-nft-collection-with-the-most-momentum" target="_blank">SchizoPosters: The NFT Collection With the Most Momentum?</a>
+      <a href="https://www.bloomberg.com/news/newsletters/2024-02-15/new-thriller-from-cornell-s-ari-juels-imagines-weaponizing-blockchain" target="_blank">New Thriller [The Oracle] From Cornell's Ari Juels Imagines Weaponizing Blockchain</a>
+      <a href="https://x.com/CharlotteFang77/status/1871713478802825255" target="_blank">Corporate Memo: Remilia 2024 Christmas Missive</a>
+      <a href="https://www.wired.com/story/girls-online-culture/" target="_blank"> Everyone Is a Girl Online</a> 
+      <a href="https://eprint.iacr.org/2023/044.pdf" target="_blank">Complete Knowledge: Preventing Encumbrance of Cryptographic Secrets</a>
+      <a href="https://99bitcoins.com/bitcoin-obituaries/" target="_blank"> Bitcoin Obituaries (Deaths)</a>
+      <a href="https://miladycraft.net" target="_blank">Miladycraft Metaverse</a>
+      <a href="https://pro.opensea.io/collection/radbro-webring" target="_blank">RadBro Webring v2</a>
+      <a href="https://news.curve.fi/curve-elixir-blackrock/" target="_blank">Curve + Elixir + BlackRock: A $533M Bridge Between TradFi and DeFi</a>
+      <a href="https://ir.citi.com/_tpHpW8MfaZ1QXwGmP1JGMGXXI95qXm3IMJzUJScLMb6XIjtOls6EbDehXMR3B_o9Opi7mdc5tQ%3D" target="_blank">Chainlink May Gain Prominence Over Bitcoin - Citi Report</a>
+      <a href="https://www.insurancejournal.com/news/east/2025/01/13/807939.htm" target="_blank">First notice of litigation w/ NFT</a>
+      <a href="https://docs.scatter.art/blog/defending-art" target="_blank">Defending Art</a>
+      <a href="https://blog.chain.link/what-crypto-is-really-about" target="_blank">What Crypto is Really About</a>
+      <a href="https://www.vice.com/en/article/flipper-zero-ban-canada-hacking-car-thefts/" target="_blank">Feds Want to Ban the World’s Cutest Hacking Device</a>
+      <a href="https://www.bitcoinstimulus.net" target="_blank">Bitcoin Stimulus is Now Worth...</a>
+      <a href="https://goldenlight.mirror.xyz/LeUojosmx48SvEfspq1leuRTf7TJfYKJ_TtKpePczzU" target="_blank">Gold & Glory in Times of Thought Chaos</a>
+    </p>
+  </div>
+  <div style="flex: 1; margin-right: 10px;">
+    <p>
+      <a href="https://blog.goodaudience.com/chainlink-the-missing-piece-to-the-god-protocol-fd455dde92ab" target="_blank">Chainlink: The Missing Piece to the God Protocol</a>
+      <a href="https://www.cryptopolitan.com/milady-cult-token-500m-market-cap-whitepaper/" target="_blank">Milady CULT token reaches $500M market cap, launches updated white paper</a>
+      <a href="https://cult.inc/assets/pdf/cultpaper.pdf" target="_blank">Milady CULT Coin: Declassified [wp]</a>
+      <a href="https://www.swift.com/news-events/news/live-trials-digital-asset-transactions-swift-start-2025" target="_blank">Live trials of digital asset transactions on Swift to start in 2025</a>
+      <a href="https://www.ccn.com/news/crypto/vitalik-buterin-war-betting-polymarket/" target="_blank">Vitalik Buterin Sparks Controversy by Supporting War Betting on Polymarket</a>
+      <a href="https://www.cnbc.com/2024/12/05/bitcoin-will-double-to-200000-by-the-end-of-2025-says-standard-chartered.html" target="_blank">Bitcoin will double to $200,000 by the end of 2025, says Standard Chartered</a>
+      <a href="https://goldenlight.mirror.xyz/qrXKqoUvzXEtcbM_hvezCxmJaJn4t6CjAh2kocDzxNA" target="_blank">Dynasty Mindset by Charlotte Fang</a>
+      <a href="https://blog.chain.link/chainlink-banking-capital-markets-announcements/" target="_blank">Chainlink’s Work With Swift, Euroclear, and Major Banking and Capital Markets Institutions</a>
+      <a href="https://medium.com/data-science-in-your-pocket/deepseek-v3-the-best-open-source-llm-727d3421ae38" target="_blank">DeepSeek V3: The best Open-source LLM</a>
+      <a href="https://news.bloomberglaw.com/esg/nft-founder-charlotte-fang-likened-to-cult-leader-in-lawsuit" target="_blank">NFT Founder Likened to 'Cult Leader' in $1.7 Million Lawsuit</a>
+      <a href="https://cirosantilli.com/cool-data-embedded-in-the-bitcoin-blockchain-split" target="_blank">Cool Data Embedded in the Bitcoin Blockchain (Inscription Museum)</a>
+      <a href="https://remiliacorporation.bandcamp.com/album/1" target="_blank">Remilia Records Presents: 𝕭​​​𝕽​​​𝕲 𝖛​​​𝖔​​​𝖑​​​.​​​1</a>
+      <a href="https://blog.chain.link/introducing-chainlink-runtime-environment/" target="_blank">Introducing Chainlink Runtime Environment (CRE): A Major Upgrade to the Chainlink Platform</a>
+      <a href="https://www.dazeddigital.com/life-culture/article/57533/1/serial-experiments-lain-lainpilled-cyberpunk-memes-tiktok" target="_blank">Are you Lainpilled?  How Serial Experiments Lain took over the Memescape</a>
+      <a href="https://ripple.com/ripple-press/ripple-adopts-the-chainlink-standard-to-further-rippleusd-utility-and-access-in-defi/?utm_campaign=&utm_medium=organic_social&utm_source=twitter" target="_blank">Ripple Adopts the Chainlink Standard<a> 
+      </p>
+  </div>
+  <div style="flex: 1;">
+    <p>
+      <a href="https://decrypt.co/243073/miladycraft-metaverse-art-piece-grand-remilia-ball-minecraft" target="_blank">Miladycraft: The Grand Remilia Ball and 'Network Spirituality' in Minecraft</a>
+      <a href="https://www.prnewswire.com/news-releases/donald-j-trump-inspired-world-liberty-financial-adopts-the-chainlink-standard-to-accelerate-the-mass-adoption-of-defi-302305219.html" target="_blank">Donald J. Trump-Inspired World Liberty Financial Adopts the Chainlink Standard To Accelerate the Mass Adoption of DeFi</a>
+      <a href="https://x.com/St3cu/status/1869442830982328458" target="_blank">Schizo Builders Association: Schizo/acc</a>
+      <a href="https://coinmarketcap.com/community/articles/66bea654153e224d0bc70e84/" target="_blank">Embracing the Laugh: How $heheh is Turning Humor Into A Powerful Crypto Project</a>
+      <a href="https://blog.remilia.org/fumo-404/" target="_blank">Milady $FUMO Redux: $FUMO404 Hard Fork</a>
+      <a href="https://www.palladiummag.com/2022/11/04/i-dont-want-to-be-an-internet-person/" target="_blank">I Don't Want to Be an Internet Person</a>
+      <a href="https://www.prnewswire.com/news-releases/chainlink-announces-ccip-private-transactions-enabling-financial-institutions-to-compliantly-connect-private-chains-to-the-multi-chain-economy-302282445.html" target="_blank">Chainlink Announces CCIP Private Transactions, Enabling Financial Institutions To Compliantly Connect Private Chains to the Multi-Chain Economy</a>
+      <a href="https://thepointmag.com/politics/get-in-the-crystal/" target="_blank">Get in the Crystal</a>
+      <a href="https://arxiv.org/pdf/2311.03530" target="_blank">DAO Decentralization: Voting-Bloc Entropy, Bribery, and Dark DAOs</a>
+      <a href="https://www.youtube.com/watch?v=nZi1uEhIVPI" target="_blank">How Banks Are Connecting Their Systems to Blockchains</a>
+      <a href="https://www.mayerbrown.com/en/insights/publications/2024/12/federal-appeals-court-tosses-ofac-sanctions-on-tornado-cash-and-limits-federal-governments-ability-to-police-crypto-transactions" target="_blank">Federal Appeals Court Tosses OFAC Sanctions on Tornado Cash and Limits Federal Government’s Ability to Police Crypto Transactions</a>
+      <a href="https://quarterly.remilia.org/mandate/#footnote-0-0" target="_blank">Submit To Remilia Quarterly</a>
+      <a href="https://www.web3isgoinggreat.com" target="_blank">Web3 is Going Great</a>
+    </p>
+  </div>
+</div>
+<center>
+<video width="600" height="400" controls autoplay loop>
+  <source src="images/cultbw.mp4" type="video/mp4">
+  <!-- <source src="movie.ogg" type="video/ogg"> -->
+  Your browser does not support the video tag.
+</video>
+<img src="images/crosschain.png" width="600" height="400" alt="Level 5 Security">
+</center>
+
+<hr>
+
+<!-- <a class="twitter-timeline" href="https://twitter.com/itsTylerIRL?ref_src=twsrc%5Etfw">Tweets by itsTylerIRL</a> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+<br><hr> -->
+
+<font size="4">
+<p>If you have any comments about our WEB page, you can write us at the address shown above. 
+However, due to the limited number of personnel in our corporate office, we are unable to 
+provide a direct response.</p>
+</font>
+
+<hr>
+
+
+<dl>
+<p align="left"><font size="4"><a href="index.html">Main Page</a></p>  <img src="images/tyler.png" alt="Oh...I see" style="width:150px;height:150px;"><br>
+  <a class="twitter-follow-button"
+  href="https://twitter.com/itsTylerIRL">
+Follow @itsTylerIRL</a>
+<br>
+<p align="left">Copyright &copy; 2025 <b>CornHub Intl Inc.</b></font></p>
+</dl>
+<!-- <br> -->
+
+<div class="affiliated-projects"></div>
+  <div class="project-grid">
+    <div class="project-item">
+      <a href="https://misctyler.github.io/CornHub/oracle"><img src="images/moeda.png" alt="CornHub" style="width:50px;height:50px;"></a>
+    </div>
+    <div class="project-item">
+      <a href="https://cult.inc"><img src="images/cult.png" alt="Milady Cult Coin" style="width:50px;height:50px;"></a>
+    </div>
+    <div class="project-item">
+      <a href="https://radbro.xyz"><img src="images/radbro.png" alt="Radbro Webring" style="width:50px;height:50px;"></a>
+    </div>
+    <div class="project-item">
+      <a href="https://heheh.finance"><img src="images/heheh.gif" alt="Heheh Finance" style="width:50px;height:50px;"></a>
+    </div>
+    <div class="project-item">
+      <a href="https://dapp.aavegotchi.com"><img src="images/gotchi.png" alt="Aavegotchi" style="width:50px;height:50px;"></a>
+    </div>
+  </div>
+</div>
+<style>
+.affiliated-projects {
+  text-align: center;
+  margin: 20px 0;
+}
+.project-grid {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin: 10px 0;
+}
+.project-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+}
+</style>
+
+</body>
+</html>
