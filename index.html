@@ -444,50 +444,7 @@ async function updateBalances() {
 </table>
 </center>
 <hr>
-
-<div style="text-align: center;">
-  <br>
-  <section id="blurb" style="font-size: 1.4em; font-family: 'YourFontFamily';">
-    <a style="color:#000080;">
-      <a href="https://app.transporter.io/?from=polygon&tab=token&to=arbitrum" target="_blank">
-        [BRIDGE]<br><br>
-      </a>
-    </a>
-    <span>
-      <!-- <a href="https://app.uniswap.org/explore/tokens/arbitrum/0x872348f097cfa396edba3313b89aff9930d0b847" style="color:#000080;">[ BUY CORN ]</a><br> -->
-
-      
-    </span>
-    <a id="ca" style="text-align:center;color:#000080;cursor:pointer;" onclick="copyToClipboard('0x872348f097cfa396edba3313b89aff9930d0b847')" data-tooltip-id="tooltip" data-tooltip-content="Click to copy" data-tooltip-class-name="max-sm:hidden">
-      ARBITRUM ADDRESS: 
-      <span class="contract-address" style="overflow-wrap:break-word;font-family:monospace;color:#000080;">[0x872348f097cfa396edba3313b89aff9930d0b847]</span><br>
-      <a id="ca" style="text-align:center;color:#000080;cursor:pointer;" onclick="copyToClipboard('0xa0c45509036c422ea7c4d4fcac26a9925531d8c3')" data-tooltip-id="tooltip" data-tooltip-content="Click to copy" data-tooltip-class-name="max-sm:hidden">
-        POLYGON  ADDRESS: 
-        <span class="contract-address" style="overflow-wrap:break-word;font-family:monospace;color:#000080;" >[0xa0c45509036c422ea7c4d4fcac26a9925531d8c3]</span><br><br>
-    </a>
-    <div id="linkies" style="display:flex;justify-content:space-evenly">
-      <span>
-        <a href="https://app.uniswap.org/explore/tokens/arbitrum/0x872348f097cfa396edba3313b89aff9930d0b847" style="color:#000080;">[ UNISWAP ]</a>
-      </span>
-      <span>
-        <a href="https://arbiscan.io/address/0x872348f097cfa396edba3313b89aff9930d0b847" style="color:#000080;">[ ARBISCAN ]</a>
-      </span>
-      <span>
-        <a href="https://polygonscan.com/address/0xa0c45509036c422ea7c4d4fcac26a9925531d8c3" style="color:#000080;">[ POLYGONSCAN ]</a>
-      </span>
-    </div>
-  </section>
-
-  <script>
-    function copyToClipboard(text) {
-      navigator.clipboard.writeText(text).then(function() {
-        alert('Contract address copied to clipboard');
-      }, function(err) {
-        console.error('Could not copy text: ', err);
-      });
-    }
-  </script>
-
+<br>
   <p align="center" style="font-size: 1.4em">
     <span id="wallet-status">To See Token Balances Please Connect Wallet<br>
     <button id="connect-button" class="connect-button" onclick="connectWallet()">Connect Wallet</button>
@@ -533,6 +490,52 @@ async function updateBalances() {
     <img src="images/moeda.png" alt="Silver Kernel" style="width:100px;height:100px;">
     <img src="images/moeda-gold.png" alt="Gold Kernel" style="width:100px;height:100px;"><br>
   </p>
+
+  <div style="text-align: center;">
+    <br>
+    <section id="blurb" style="font-size: 1.4em; font-family: 'YourFontFamily';">
+      <a style="color:#000080;">
+        <a href="https://app.transporter.io/?from=polygon&tab=token&to=arbitrum" target="_blank">
+          [BRIDGE]<br><br>
+        </a>
+      </a>
+      <span>
+        <!-- <a href="https://app.uniswap.org/explore/tokens/arbitrum/0x872348f097cfa396edba3313b89aff9930d0b847" style="color:#000080;">[ BUY CORN ]</a><br> -->
+  
+        
+      </span>
+      <a id="ca" style="text-align:center;color:#000080;cursor:pointer;" onclick="copyToClipboard('0x872348f097cfa396edba3313b89aff9930d0b847')" data-tooltip-id="tooltip" data-tooltip-content="Click to copy" data-tooltip-class-name="max-sm:hidden">
+        ARBITRUM ADDRESS: 
+        <span class="contract-address" style="overflow-wrap:break-word;font-family:monospace;color:#000080;">[0x872348f097cfa396edba3313b89aff9930d0b847]</span><br>
+        <a id="ca" style="text-align:center;color:#000080;cursor:pointer;" onclick="copyToClipboard('0xa0c45509036c422ea7c4d4fcac26a9925531d8c3')" data-tooltip-id="tooltip" data-tooltip-content="Click to copy" data-tooltip-class-name="max-sm:hidden">
+          POLYGON  ADDRESS: 
+          <span class="contract-address" style="overflow-wrap:break-word;font-family:monospace;color:#000080;" >[0xa0c45509036c422ea7c4d4fcac26a9925531d8c3]</span><br><br>
+      </a>
+      <div id="linkies" style="display:flex;justify-content:space-evenly">
+        <span>
+          <a href="https://app.uniswap.org/explore/tokens/arbitrum/0x872348f097cfa396edba3313b89aff9930d0b847" style="color:#000080;">[ UNISWAP ]</a>
+        </span>
+        <span>
+          <a href="https://arbiscan.io/address/0x872348f097cfa396edba3313b89aff9930d0b847" style="color:#000080;">[ ARBISCAN ]</a>
+        </span>
+        <span>
+          <a href="https://polygonscan.com/address/0xa0c45509036c422ea7c4d4fcac26a9925531d8c3" style="color:#000080;">[ POLYGONSCAN ]</a>
+        </span>
+      </div>
+    </section>
+  
+    <script>
+      function copyToClipboard(text) {
+        navigator.clipboard.writeText(text).then(function() {
+          alert('Contract address copied to clipboard');
+        }, function(err) {
+          console.error('Could not copy text: ', err);
+        });
+      }
+    </script>
+
+    <br>
+
 
   <p align="center" style="font-size: 120%;">
     Our Father, which art in the blockchain, Hallowed be thy Node.<br>
