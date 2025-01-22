@@ -500,24 +500,17 @@ async function updateBalances() {
         const provider = new ethers.providers.Web3Provider(window.ethereum);
         const signer = provider.getSigner();
 
-        // dynamically fetch the user's wallet address
         const senderAddress = await signer.getAddress();
 
-        // get the amount from the input box
         const amountInput = document.getElementById("amountInput").value;
         if (!amountInput || isNaN(amountInput) || amountInput <= 0) {
           alert("Please enter a valid amount to bridge.");
           return;
         }
 
-        // convert amount to token's decimal format (e.g., 18 decimals)
         const decimals = 18;
         const amount = ethers.utils.parseUnits(amountInput, decimals);
-
-        // bridge contract address
         const contractAddress = "0x849c5ED5a80F5B408Dd4969b78c2C8fdf0565Bfe";
-
-        // dynamically encode data with sender's address and amount
         const recipientContract = "0xa0c45509036c422ea7c4d4fcac26a9925531d8c3";
         const bridgeMethodId = "0x96f4e9f9"; // method ID for the bridge function
 
@@ -528,13 +521,11 @@ async function updateBalances() {
 
         const data = bridgeMethodId + encodedData.slice(2); // slice(2) to remove "0x" prefix
 
-        // transaction parameters
         const tx = {
           to: contractAddress,
           data,
         };
 
-        // request transaction signature and send
         const response = await signer.sendTransaction(tx);
 
         alert(`Transaction sent! Tx Hash: ${response.hash}`);
@@ -545,7 +536,6 @@ async function updateBalances() {
       }
     };
 
-    // attach click event to the button
     document
       .getElementById("sendTransaction")
       .addEventListener("click", sendTransaction);
