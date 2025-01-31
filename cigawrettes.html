@@ -1,0 +1,414 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html><head><title>CORNHUB INTL INC.</title>
+<meta content="text/html; charset=unicode" http-equiv="Content-Type">
+<meta name="GENERATOR" content="MSHTML 8.00.6001.18828">
+<link rel="icon" type="image/png" href="images/favicon-32x32 2.png" sizes="32x32">
+<link rel="icon" type="image/png" href="images/favicon-16x16 2.png" sizes="16x16">
+<style>
+table {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+td {
+  width: 50%;
+  padding: 10px;
+  vertical-align: top;
+}
+body {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+img {
+  max-width: 100%;
+  height: auto;
+}
+a {
+  text-decoration: none;
+  color: #000080;
+}
+a:visited {
+  color: #000080;
+}
+.wallet-connect {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+}
+.connect-button {
+  background-color: #000080;
+  border: none;
+  color: white;
+  padding: 12px 24px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+}
+.connect-button:hover {
+  background-color: #0000a0;
+  transform: translateY(-2px);
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+.connect-button.connected {
+  background-color: #4040ff;
+  color: white;
+}
+.connect-button.enabled {
+  background-color: #4040ff;
+}
+.balance-table {
+  margin: 20px auto;
+  border-collapse: collapse;
+  width: 90%;
+  max-width: 800px;
+  table-layout: fixed;
+}
+.balance-table th, .balance-table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: center;
+  font-size: clamp(10px, 1.5vw, 14px);
+}
+.balance-table th {
+  background-color: #000080;
+  color: white;
+}
+.balance-table td:last-child {
+  font-family: monospace;
+  padding: 0;
+  height: 40px;
+  position: relative;
+  overflow: hidden;
+}
+.balance-table td:last-child a {
+  position: absolute;
+  width: 100%;
+  animation: marquee 15s linear infinite;
+  white-space: nowrap;
+}
+.balance-table td:last-child a:nth-child(2) {
+  animation-delay: 5s;
+}
+.balance-table td:last-child a:nth-child(3) {
+  animation-delay: 10s;
+}
+@keyframes marquee {
+  0% { transform: translateY(100%); }
+  5% { transform: translateY(0); }
+  28% { transform: translateY(0); }
+  33% { transform: translateY(-100%); }
+  100% { transform: translateY(-100%); }
+}
+</style>
+<script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/5.7.2/ethers.umd.min.js"></script>
+
+<script src="script.js"></script>
+
+<script>
+window.addEventListener('load', async () => {
+  if (typeof window.ethereum !== 'undefined') {
+    // Check if already connected to Polygon network
+    const polygonChainId = '0x89'; // Chain ID for Polygon Mainnet
+    const currentChainId = await window.ethereum.request({ method: 'eth_chainId' });
+    
+    if (currentChainId !== polygonChainId) {
+      try {
+        // Request network switch to Polygon
+        await window.ethereum.request({
+          method: 'wallet_switchEthereumChain',
+          params: [{ chainId: polygonChainId }],
+        });
+      } catch (switchError) {
+        // If network not added, add it
+        if (switchError.code === 4902) {
+          try {
+            await window.ethereum.request({
+              method: 'wallet_addEthereumChain',
+              params: [{
+                chainId: polygonChainId,
+                chainName: 'Polygon Mainnet',
+                nativeCurrency: {
+                  name: 'MATIC',
+                  symbol: 'MATIC',
+                  decimals: 18
+                },
+                rpcUrls: ['https://polygon-rpc.com/'],
+                blockExplorerUrls: ['https://polygonscan.com/']
+              }]
+            });
+          } catch (addError) {
+            console.error('Failed to add Polygon network:', addError);
+          }
+        }
+      }
+    }
+    
+    // Connect wallet
+    try {
+      await window.ethereum.request({ method: 'eth_requestAccounts' });
+      const button = document.getElementById('connect-button');
+      button.textContent = 'Connected';
+      button.classList.add('connected');
+      document.getElementById('button-grid').style.display = 'grid';
+      document.getElementById('wallet-status').style.display = 'none';
+      document.getElementById('balance-info').style.display = 'block';
+      updateBalances();
+    } catch (error) {
+      console.error('User denied account access');
+    }
+  } else {
+    alert('Please install MetaMask!');
+  }
+});
+
+async function connectWallet() {
+  if (typeof window.ethereum !== 'undefined') {
+    try {
+      await window.ethereum.request({ method: 'eth_requestAccounts' });
+      const button = document.getElementById('connect-button');
+      button.textContent = 'Connected';
+      button.classList.add('connected');
+      document.getElementById('button-grid').style.display = 'grid';
+      document.getElementById('wallet-status').style.display = 'none';
+      document.getElementById('balance-info').style.display = 'block';
+      updateBalances();
+    } catch (error) {
+      console.error('User denied account access');
+    }
+  } else {
+    alert('Please install MetaMask!');
+  }
+}
+
+async function updateBalances() {
+  const provider = new ethers.providers.Web3Provider(window.ethereum);
+  const signer = provider.getSigner();
+  const address = await signer.getAddress();
+
+  // Update Corn Token balance
+  const cornTokenAddress = '0xa0c45509036c422ea7c4d4fcac26a9925531d8c3';
+  const cornTokenAbi = ['function balanceOf(address) view returns (uint256)'];
+  const cornTokenContract = new ethers.Contract(cornTokenAddress, cornTokenAbi, provider);
+  const cornBalance = await cornTokenContract.balanceOf(address);
+  const cornBalanceFormatted = parseFloat(ethers.utils.formatUnits(cornBalance, 18)).toFixed(3);
+  document.getElementById('balance').innerText = cornBalanceFormatted;
+  document.getElementById('balance-display').innerText = cornBalanceFormatted;
+
+  // Update PopCorn Token balance
+  const popCornTokenAddress = '0x6531547b44784dDD8A934fB9fEB92ba582dfeD15';
+  const popCornTokenContract = new ethers.Contract(popCornTokenAddress, cornTokenAbi, provider);
+  const popCornBalance = await popCornTokenContract.balanceOf(address);
+  const popCornBalanceFormatted = parseFloat(ethers.utils.formatUnits(popCornBalance, 18)).toFixed(3);
+  document.getElementById('balance2').innerText = popCornBalanceFormatted;
+  document.getElementById('balance2-display').innerText = popCornBalanceFormatted;
+
+  // Update Butter Token balance
+  const butterTokenAddress = '0x409e02e728418501720d7b1e5d7328ac461ecaae';
+  const butterTokenContract = new ethers.Contract(butterTokenAddress, cornTokenAbi, provider);
+  const butterBalance = await butterTokenContract.balanceOf(address);
+  const butterBalanceFormatted = parseFloat(ethers.utils.formatUnits(butterBalance, 18)).toFixed(3);
+  document.getElementById('balance3').innerText = butterBalanceFormatted;
+  document.getElementById('balance3-display').innerText = butterBalanceFormatted;
+
+  // Enable/disable burn buttons based on CORN balance
+  const cornBalanceNum = parseFloat(cornBalanceFormatted);
+  document.getElementById('burn-1-corn').classList.toggle('enabled', cornBalanceNum >= 1);
+  document.getElementById('burn-3-corn').classList.toggle('enabled', cornBalanceNum >= 3);
+  document.getElementById('burn-5-corn').classList.toggle('enabled', cornBalanceNum >= 5);
+  
+  // Enable/disable mint buttons based on POPCORN balance
+  const popcornBalanceNum = parseFloat(popCornBalanceFormatted);
+  document.getElementById('mint-bronze').classList.toggle('enabled', popcornBalanceNum >= 1);
+  document.getElementById('mint-silver').classList.toggle('enabled', popcornBalanceNum >= 3);
+  document.getElementById('mint-gold').classList.toggle('enabled', popcornBalanceNum >= 5);
+}
+</script>
+</head>
+<body bgcolor="#ffffff" text="#000080">
+<div class="wallet-connect">
+  <button id="connect-button" class="connect-button" onclick="connectWallet()">Connect Wallet</button>
+</div>
+<b>
+<font size="12"><p align="center">C</font><font size="8">ORN </font>
+<font size="12">H</font><font size="8">UB </font>
+<font size="4">INC.<br>CornHub.eth</font><br>Official Home Page</b>
+<font size="2">&nbsp;</p></font>
+
+<center>
+  "God is just. Work is rewarded with blessing if not money. <br>
+  Luck is the most important thing, but really it's God."<br>
+</center>
+
+<div style="overflow: hidden; margin: 20px auto; width: 90%; max-width: 800px;">
+  <label for="toggle-marquee">Stop Ticker:</label>
+  <input type="checkbox" id="toggle-marquee" onclick="toggleMarquee()">
+  
+  <div id="marquee-container">
+    <div style="white-space: nowrap; animation: scroll1 20s linear infinite;" class="marquee">
+      Corn Token - Balance: <span id="balance"></span> - <a href="https://quickswap.exchange/#/swap?exactField=input&outputCurrency=0xa0c45509036c422ea7c4d4fcac26a9925531d8c3&swapIndex=0&currency0=ETH" target="_blank">Trade Corn</a> - Contract: <a href="https://polygonscan.com/address/0xa0c45509036c422ea7c4d4fcac26a9925531d8c3" target="_blank">0xa0c45509036c422ea7c4d4fcac26a9925531d8c3</a>
+    </div>
+    <div style="white-space: nowrap; animation: scroll2 30s linear infinite;" class="marquee">
+      PopCorn Token - Balance: <span id="balance2"></span> - <a href="https://quickswap.exchange/#/swap?exactField=input&outputCurrency=0x6531547b44784dDD8A934fB9fEB92ba582dfeD15&swapIndex=0&currency0=ETH" target="_blank">Trade PopCorn</a> - Contract: <a href="https://polygonscan.com/address/0x6531547b44784dDD8A934fB9fEB92ba582dfeD15" target="_blank">0x6531547b44784dDD8A934fB9fEB92ba582dfeD15</a>
+    </div>
+    <div style="white-space: nowrap; animation: scroll3 25s linear infinite;" class="marquee">
+      Butter Token - Balance: <span id="balance3"></span> - <a href="https://quickswap.exchange/#/swap?exactField=input&outputCurrency=0x409e02e728418501720d7b1e5d7328ac461ecaae&swapIndex=0&currency0=ETH" target="_blank">Trade Butter</a> - Contract: <a href="https://polygonscan.com/address/0x409e02e728418501720d7b1e5d7328ac461ecaae" target="_blank">0x409e02e728418501720d7b1e5d7328ac461ecaae</a>
+    </div>
+  </div>
+</div>
+<br>
+
+<script>
+  function toggleMarquee() {
+    const isChecked = document.getElementById('toggle-marquee').checked;
+    const marquees = document.querySelectorAll('.marquee');
+    
+    if (isChecked) {
+      marquees.forEach(m => {
+        m.style.animation = 'none';
+        m.style.display = 'inline'; // Center the text
+      });
+    } else {
+      marquees.forEach((m, index) => {
+        m.style.animation = `scroll${index + 1} ${20 + index * 5}s linear infinite`;
+        m.style.display = 'block'; // Reset to block for scrolling
+      });
+    }
+  }
+</script>
+
+<script src="https://widgets.coingecko.com/gecko-coin-price-static-headline-widget.js"></script>
+<gecko-coin-price-static-headline-widget locale="en" transparent-background="true" coin-ids="bitcoin,ethereum,chainlink,milady-cult-coin,curve-dao-token,aavegotchi,heheh" initial-currency="usd"></gecko-coin-price-static-headline-widget>
+
+
+<style>
+@keyframes scroll1 {
+  from { transform: translateX(100%); }
+  to { transform: translateX(-100%); }
+}
+@keyframes scroll2 {
+  from { transform: translateX(100%); }
+  to { transform: translateX(-100%); }
+}
+@keyframes scroll3 {
+  from { transform: translateX(100%); }
+  to { transform: translateX(-100%); }
+}
+</style>
+</a>
+
+
+<section id="cigawrettes-gallery-section" style="margin-top: 40px;">
+  <h3>Cigawrettes Gallery</h3>
+  <table id="cigawrettes-gallery" style="width: 100%; border-collapse: collapse;"></table>
+</section>
+
+<script>
+async function loadCigawrettesGallery() {
+  try {
+      // This endpoint should return a JSON array of jpg filenames in /images/cigawrettes/
+      const response = await fetch('/api/cigawrettes'); 
+      const images = await response.json();
+
+      const galleryTable = document.getElementById('cigawrettes-gallery');
+      let row;
+      let cellIndex = 0;
+      const columns = 4; // Number of columns per row
+
+      images.forEach((imgFile, index) => {
+          if (cellIndex === 0) {
+              row = galleryTable.insertRow(-1);
+          }
+          const cell = row.insertCell(-1);
+          cell.style.border = "1px solid #333";
+          cell.style.padding = "10px";
+          cell.style.textAlign = "center";
+
+          cell.innerHTML = `
+              <img src="/images/cigawrettes/${imgFile}" style="max-width: 200px; display: block; margin: 0 auto;" />
+              <p>${imgFile}</p>
+          `;
+
+          cellIndex++;
+          if (cellIndex >= columns) {
+              cellIndex = 0;
+          }
+      });
+  } catch (error) {
+      console.error('Failed to load cigawrettes gallery:', error);
+  }
+}
+
+document.addEventListener('DOMContentLoaded', loadCigawrettesGallery);
+</script>
+
+
+
+<hr>
+
+<font size="4">
+  <p>If you have any comments about our WEB page, you can write us at the address shown above. 
+    However, due to the limited number of personnel in our corporate office, we are unable to 
+    provide a direct response.</p>
+    </font>
+    
+    <hr>
+    
+    
+    <dl>
+    <p align="left"><font size="4"><a href="index.html">Main Page</a></p>  <img src="images/tyler.png" alt="Oh...I see" style="width:150px;height:150px;"><br>
+      <a class="twitter-follow-button"
+      href="https://twitter.com/itsTylerIRL">
+    Follow @itsTylerIRL</a>
+    <br>
+    <p align="left">Copyright &copy; 2025 <b>CornHub Intl Inc.</b></font></p>
+    </dl>
+    <br>
+    
+    <div class="affiliated-projects"></div>
+      <div class="project-grid">
+        <div class="project-item">
+          <a href="https://misctyler.github.io/CornHub/oracle"><img src="images/moeda.png" alt="CornHub" style="width:50px;height:50px;"></a>
+        </div>
+        <div class="project-item">
+          <a href="https://cult.inc"><img src="images/cult.png" alt="Milady Cult Coin" style="width:50px;height:50px;"></a>
+        </div>
+        <div class="project-item">
+          <a href="https://radbro.xyz"><img src="images/radbro.png" alt="Radbro Webring" style="width:50px;height:50px;"></a>
+        </div>
+        <div class="project-item">
+          <a href="https://heheh.finance"><img src="images/heheh.gif" alt="Heheh Finance" style="width:50px;height:50px;"></a>
+        </div>
+        <div class="project-item">
+          <a href="https://dapp.aavegotchi.com"><img src="images/gotchi.png" alt="Aavegotchi" style="width:50px;height:50px;"></a>
+        </div>
+      </div>
+    </div>
+    <style>
+    .affiliated-projects {
+      text-align: center;
+      margin: 20px 0;
+    }
+    .project-grid {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      margin: 10px 0;
+    }
+    .project-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 5px;
+    }
+    </style><br>
+    
+    </body>
+    </html>
+    
