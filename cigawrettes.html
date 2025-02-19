@@ -313,7 +313,7 @@ async function updateBalances() {
 async function loadCigawrettesGallery() {
   try {
       // This endpoint should return a JSON array of jpg filenames in /images/cigawrettes/
-      const response = await fetch('/api/cigawrettes'); 
+      const response = await fetch('/images/cigawrettes'); 
       const images = await response.json();
 
       const galleryTable = document.getElementById('cigawrettes-gallery');
